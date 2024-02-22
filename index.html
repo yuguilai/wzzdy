@@ -6,14 +6,15 @@
 
     <script>
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then((registration) => {
-                console.log('Service Worker registered with scope:', registration.scope);
-            }).catch((error) => {
-                console.error('Service Worker registration failed:', error);
-            });
-        }
-
+        /*
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('./sw.js').then((registration) => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    }).catch((error) => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+                }
+        */
         if (navigator.userAgent.indexOf("QQ/") != -1 || navigator.userAgent.indexOf("MicroMessenger") != -1) {
             window.location.replace(window.location.origin + "/wzzdy/openurl.html?url=" + window.location.href)
         }
@@ -92,6 +93,10 @@
         .mychip[selected] {
             border-width: unset !important;
         }
+
+        :not(:defined) {
+            visibility: hidden;
+        }
     </style>
 
 
@@ -108,7 +113,7 @@
 
         <mdui-layout-main class="example-layout-main" style="padding: 64px 0px 0px;">
 
-            <mdui-card style="display:none" variant="outlined" style="margin: 20px 0 20px 0">
+            <mdui-card style="visibility:hidden" variant="outlined" style="margin: 20px 0 20px 0">
 
                 <mdui-segmented-button-group full-width selects="single" style="margin: 10px 10px;">
                     <mdui-segmented-button value="zsf" type="button"
