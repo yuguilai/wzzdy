@@ -1,0 +1,121 @@
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link crossorigin="" rel="shortcut icon" type="image/x-icon" href="./logo-200x200.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script>
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch((error) => {
+                console.error('Service Worker registration failed:', error);
+            });
+        }
+
+        var url = window.location.href.split(/\?(.+)/)[1];
+
+        if (url) {
+            if (url.includes("SmobaLaunch_") == false) {
+                window.location.replace(window.location.origin + "/wzzdy/")
+            }
+        } else {
+            window.location.replace(window.location.origin + "/wzzdy/")
+        }
+
+    </script>
+
+    <title>王者自定义房间加入</title>
+    <style data-emotion="css" data-s="">
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.09) 74%, rgba(0, 156, 238, 0.3));
+        }
+
+        .mytext {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 22px;
+            text-align: center;
+        }
+
+        .button {
+            color: rgb(255, 255, 255);
+            background: rgb(15, 136, 235);
+            border-radius: 999999px;
+            font-size: 18px;
+            font-weight: 700;
+            width: 240px;
+            height: 42px;
+            border: none;
+            margin-left: -120px;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+            z-index: 1;
+            margin: 10px 0;
+            cursor: pointer
+        }
+
+        .button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+
+<body>
+    <p class="mytext">如果加入失败可尝试点击其他阵营加入</p>
+    <button class="button" onclick="addblue()">加入蓝方阵营</button>
+    <button class="button" onclick="addred()">加入红方阵营</button>
+    <button class="button" onclick="home()">跳转主页</button>
+
+    <script>
+
+        function seturl(campid) {
+            var url = window.url
+            var gamesplit = window.url.split('SmobaLaunch_')
+            if (gamesplit) {
+                var index = url.indexOf("SmobaLaunch_")
+                var gameurl = url.substring(0, index);
+                var game_base64data = gamesplit[1]
+                var gamejson = JSON.parse(atob(game_base64data))
+                delete gamejson.AddPos
+                gamejson.AddType = "0"
+                gamejson.campid = campid.toString()
+                var gamedata = JSON.stringify(gamejson)
+                var url = "https://h5.nes.smoba.qq.com/pvpesport.web.user/#/launch-game-mp-qq?" + gameurl + "SmobaLaunch_" + btoa(gamedata)
+                return url
+            }
+            window.location.replace(window.location.origin + "/wzzdy/")
+            return
+        }
+
+        function addblue() {
+            var url = seturl(1)
+            window.location.href = url
+        }
+
+
+        function addred() {
+            var url = seturl(2)
+            window.location.href = url
+        }
+
+        function home() {
+            window.location.replace(window.location.origin + "/wzzdy/")
+        }
+
+    </script>
+
+</body>
+
+</html>

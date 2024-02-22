@@ -1,0 +1,180 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <script>
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch((error) => {
+                console.error('Service Worker registration failed:', error);
+            });
+        }
+
+        var url = window.location.href.split(/url=(.+)/)[1];
+        if (url) {
+            if (navigator.userAgent.indexOf("QQ/") == -1 && navigator.userAgent.indexOf("MicroMessenger") == -1) {
+                window.location.replace(url)
+            }
+        } else {
+            window.location.replace(window.location.origin + "/wzzdy/")
+        }
+
+    </script>
+
+    <title>请使用浏览器打开</title>
+    <link crossorigin="" rel="shortcut icon" type="image/x-icon" href="./logo-200x200.png">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="false" name="twcClient" id="twcClient">
+    <meta name="aplus-touch" content="1">
+    <style>
+        body,
+        html {
+            width: 100%;
+            height: 100%
+        }
+
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            background-color: #fff
+        }
+
+        #browser img {
+            width: 50px;
+        }
+
+        #browser {
+            margin: 0px 10px;
+            text-align: center;
+        }
+
+        #contens {
+            font-weight: bold;
+            color: #2466f4;
+            margin: -285px 0px 10px;
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 125px;
+        }
+
+        .top-bar-guidance {
+            font-size: 15px;
+            color: #fff;
+            height: 70%;
+            line-height: 1.8;
+            padding-left: 20px;
+            padding-top: 20px;
+            background: url(banner.png) center top/contain no-repeat
+        }
+
+        .top-bar-guidance .icon-safari {
+            width: 25px;
+            height: 25px;
+            vertical-align: middle;
+            margin: 0 .2em
+        }
+
+        .app-download-tip {
+            margin: 0 auto;
+            width: 290px;
+            text-align: center;
+            font-size: 15px;
+            color: #2466f4;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcAQMAAACak0ePAAAABlBMVEUAAAAdYfh+GakkAAAAAXRSTlMAQObYZgAAAA5JREFUCNdjwA8acEkAAAy4AIE4hQq/AAAAAElFTkSuQmCC) left center/auto 15px repeat-x
+        }
+
+        .app-download-tip .guidance-desc {
+            background-color: #fff;
+            padding: 0 5px
+        }
+
+        .app-download-tip .icon-sgd {
+            width: 25px;
+            height: 25px;
+            vertical-align: middle;
+            margin: 0 .2em
+        }
+
+        .app-download-btn {
+            display: block;
+            width: 214px;
+            height: 40px;
+            line-height: 40px;
+            margin: 18px auto 0 auto;
+            text-align: center;
+            font-size: 18px;
+            color: #2466f4;
+            border-radius: 20px;
+            border: .5px #2466f4 solid;
+            text-decoration: none
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-bar-guidance">
+        <p>点击右上角<img src="3dian.png" class="icon-safari">在 浏览器 打开</p>
+        <p>苹果设备<img src="iphone.png" class="icon-safari">安卓设备<img src="android.png" class="icon-safari">↗↗↗</p>
+    </div>
+
+    <div id="contens">
+        <p><br /><br /></p>
+        <p>微信或QQ内访问不可打开游戏链接</p>
+        <p><br /></p>
+        <p>请按提示在浏览器内打开来体验全部功能</p>
+    </div>
+
+    <div class="app-download-tip">
+        <span class="guidance-desc">链接</span>
+    </div>
+    <p><br /></p>
+    <div class="app-download-tip">
+        <span class="guidance-desc">点击右上角<img src="3dian.png" class="icon-sgd"> or 复制网址自行打开</span>
+    </div>
+
+    <a class="app-download-btn" id="copy">点此复制本站网址</a>
+
+    <script>
+
+        function 复制文本(str) {
+            // 创建一个范围对象
+            const range = document.createRange();
+            // 创建一个新的文本节点
+            const textNode = document.createTextNode(str);
+            document.body.append(textNode)
+            // 将文本节点添加到范围中
+            range.selectNodeContents(textNode);
+            // 获取当前选择
+            const selection = window.getSelection();
+            // 移除之前选中内容
+            if (selection.rangeCount > 0) selection.removeAllRanges();
+            // 将范围添加到选择中
+            selection.addRange(range);
+            // 执行复制命令
+            document.execCommand('copy');
+            // 移除范围，清空选择
+            selection.removeAllRanges();
+            textNode.remove()
+            alert("复制成功")
+        }
+
+        document.getElementById("copy").onclick = function () {
+            复制文本(url)
+        }
+        document.getElementsByClassName("guidance-desc")[0].textContent = url
+
+    </script>
+
+    <body>
+
+</html>

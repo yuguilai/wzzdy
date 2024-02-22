@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JSON提取和整合</title>
+    <meta charset="UTF-8">
+    <link crossorigin="" rel="shortcut icon" type="image/x-icon" href="./logo-200x200.png">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+</head>
+
+<body>
+    <h1>JSON提取和整合</h1>
+    <label for="jsonInput">输入JSON字符串: </label>
+    <input type="text" id="jsonInput">
+    <button onclick="extractAndMerge()">提取和整合</button>
+    <button onclick="copyjson()">复制</button>
+    <button onclick="openjson()">跳转数据源</button>
+    <div id="output"></div>
+
+    <script>
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch((error) => {
+                console.error('Service Worker registration failed:', error);
+            });
+        }
+
+        function extractAndMerge() {
+            const jsonInput = document.getElementById("jsonInput").value;
+            const originalJson = JSON.parse(jsonInput);
+
+            function extractAndMergeJsonList(jsonList) {
+                const extractedJson = {};
+
+                jsonList.forEach((originalJson) => {
+                    let id_str = originalJson.ename.toString() + "|";
+                    let name = originalJson.cname;
+                    let type2_str = originalJson.hero_type2 || "";
+                    let type_str = originalJson.hero_type.toString() + (type2_str ? "|" : "");
+
+                    extractedJson[name] = id_str + type_str + type2_str;
+                });
+
+                return extractedJson;
+            }
+
+
+            const extractedJson = extractAndMergeJsonList(originalJson)
+
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerText = JSON.stringify(extractedJson);
+        }
+
+        function copyjson() {
+            const outputDiv = document.getElementById("output");
+            // 创建一个范围对象
+            const range = document.createRange();
+            range.selectNodeContents(outputDiv);
+            // 获取当前选择
+            const selection = window.getSelection();
+            // 移除之前选中内容
+            if (selection.rangeCount > 0) selection.removeAllRanges();
+            // 将范围添加到选择中
+            selection.addRange(range);
+            // 执行复制命令
+            document.execCommand('copy');
+            // 移除范围，清空选择
+            selection.removeAllRanges();
+            alert("复制成功")
+        }
+
+        function openjson() {
+            window.location.href = "https://pvp.qq.com/web201605/js/herolist.json"
+        }
+    </script>
+</body>
+
+</html>

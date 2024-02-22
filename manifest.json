@@ -1,0 +1,16 @@
+{
+    "short_name": "王者自定义房间",
+    "name": "王者自定义房间",
+    "description": "自由创建王者自定义房间",
+    "icons": [
+        {
+            "src": "./logo-200x200.png",
+            "type": "image/png",
+            "sizes": "200x200"
+        }
+    ],
+    "start_url": "https://huajicloud.gitee.io/wzzdy/",
+    "background_color": "#FFFFFF",
+    "theme_color": "#FFFFFF",
+    "display": "fullscreen"
+}

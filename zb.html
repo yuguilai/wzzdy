@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <script>
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch((error) => {
+                console.error('Service Worker registration failed:', error);
+            });
+        }
+
+        if (navigator.userAgent.indexOf("QQ/") != -1 || navigator.userAgent.indexOf("MicroMessenger") != -1) {
+            window.location.replace(window.location.origin + "/wzzdy/openurl.html?url=" + window.location.href)
+        }
+    </script>
+
+    <link crossorigin="" rel="shortcut icon" type="image/x-icon" href="./logo-200x200.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>王者主播房间开启</title>
+    <style data-emotion="css" data-s="">
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.09) 74%, rgba(0, 156, 238, 0.3));
+        }
+
+        .mytext {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 22px;
+            text-align: center;
+        }
+
+        .button {
+            color: rgb(255, 255, 255);
+            background: rgb(15, 136, 235);
+            border-radius: 999999px;
+            font-size: 18px;
+            font-weight: 700;
+            width: 240px;
+            height: 42px;
+            border: none;
+            margin-left: -120px;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+            z-index: 1;
+            margin: 10px 0;
+            cursor: pointer
+        }
+
+        .button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+
+<body>
+    <p class="mytext">请开启脚本后点击开启 脚本进群746855036</p>
+    <button class="button" onclick="startzsf()">开启正式服</button>
+    <button class="button" onclick="starttyf()">开启体验服</button>
+    <button class="button" onclick="home()">跳转主页</button>
+
+    <script>
+        // 默认JSON内容
+        var json = {
+            "createType": 2,
+            "mapID": 20011,
+            "mapType": 1,
+            "roomName": "room",
+            "teamerNum": 10,
+            "platType": 2,
+            "campid": 1,
+            "AddPos": 0,
+            "AddType": 2,
+        };
+
+        function startzsf() {
+            var Rand = Math.random()
+            var mineId = Math.round(Rand * 100000000)
+            json.ullExternUid = mineId
+            json.ullRoomid = mineId
+            // 将json转换为字符串
+            var jsonString = JSON.stringify(json);
+            // 对json字符串进行base64编码
+            var base64Data = btoa(jsonString);
+            // 构建最终的链接
+            var link = "tencentmsdk1104466820://?gamedata=SmobaLaunch_" + base64Data;
+            // 打开链接
+            window.location.href = link;
+        }
+
+        function starttyf() {
+            var Rand = Math.random()
+            var mineId = Math.round(Rand * 100000000)
+            json.ullExternUid = mineId
+            json.ullRoomid = mineId
+            // 将json转换为字符串
+            var jsonString = JSON.stringify(json);
+            // 对json字符串进行base64编码
+            var base64Data = btoa(jsonString);
+            // 构建最终的链接
+            var link = "tencentmsdk1104791911://?gamedata=SmobaLaunch_" + base64Data;
+            // 打开链接
+            window.location.href = link;
+        }
+
+        function home() {
+            window.location.replace(window.location.origin + "/wzzdy/")
+        }
+
+    </script>
+</body>
+
+</html>
