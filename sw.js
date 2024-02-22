@@ -1,4 +1,4 @@
-const cacheName = 'my-pwa-v3.1';
+const cacheName = 'my-pwa-v3.2';
 const urlsToCache = [
     './',
     './manifest.json',
