@@ -1898,11 +1898,6 @@ function 加载自定义配置() {
                 menuItem.onclick = function () {
                     localStorage.setItem("customs", item_str)
                     document.querySelectorAll(".myedit")[2].value = item_str;
-                    mdui.snackbar({
-                        message: "选择成功 请关闭弹窗查看",
-                        action: "我知道了",
-                        onActionClick: () => console.log("click action button")
-                    });
                 }
                 // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
                 menudoc.appendChild(menuItem);
