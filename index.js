@@ -1,6 +1,6 @@
 window.onload = function () {
     document.getElementsByTagName("mdui-card")[0].style.visibility = "unset"
-    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.1"
+    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.2"
 }
 
 if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
@@ -708,34 +708,14 @@ for (item in mydatajson[0]) {
     })(item);
 }
 
-var herodialog=document.querySelector(".example-dialog")
+var herodialog = document.querySelector(".example-dialog")
 document.querySelectorAll(".myedit")[1].onclick = function () {
-    const loadherolist = window.loadherolist
-    if (loadherolist == true) {
-        herodialog.open = true
-    } else {
-        mdui.snackbar({
-            message: "加载中",
-            action: "我知道了",
-            onActionClick: () => console.log("click action button")
-        });
-        loadherolist(10)
-    }
+    加载英雄配置()
 }
 
-var customdialog=document.querySelector(".custom-dialog")
+var customdialog = document.querySelector(".custom-dialog")
 document.querySelectorAll(".myedit")[2].onclick = function () {
-    const loadmenu = window.loadmenu
-    if (loadmenu == true) {
-        customdialog.open = true
-    } else {
-        mdui.snackbar({
-            message: "加载中",
-            action: "我知道了",
-            onActionClick: () => console.log("click action button")
-        });
-        loadmenu()
-    }
+    加载自定义配置()
 }
 
 function loadherolist(batchSize = 10) {
@@ -767,6 +747,12 @@ function loadherolist(batchSize = 10) {
         } else {
             window.loadherolist = true
             herodialog.open = true
+            var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
+            try {
+                选择英雄名(heros_json[document.querySelectorAll(".myedit")[1].value])
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
 
@@ -822,18 +808,52 @@ function 选择英雄名(str) {
 }
 
 function 加载英雄配置() {
-    if (localStorage.getItem("custom_heros")) {
+    var menudoc = document.querySelectorAll(".mymenu")[1]
 
-        var childnodes = document.querySelectorAll(".mymenu")[1].childNodes
+    var ismenu
+    if (herodialog.open == true) {
+        ismenu = true
+        menudoc = document.getElementsByClassName("herobutton")[0].parentElement.getElementsByClassName("mymenu")[0]
+    }
 
-        for (let index = 0; index < childnodes.length; index++) {
-            const element = childnodes[index];
-            element.remove()
-            index--
+    var childnodes = menudoc.childNodes
+    var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
+
+
+    for (let index = 0; index < childnodes.length; index++) {
+        const element = childnodes[index];
+        element.remove()
+        index--
+    }
+
+    if (ismenu != true) {
+        // 创建新的 mdui-menu-item 元素  
+        var menuItem = document.createElement('mdui-menu-item');
+        // 设置文本内容  
+        menuItem.textContent = "管理配置";
+        menuItem.onclick = function () {
+            const loadherolist = window.loadherolist
+            if (loadherolist == true) {
+                try {
+                    选择英雄名(heros_json[document.querySelectorAll(".myedit")[1].value])
+                } catch (e) {
+                    console.log(e)
+                }
+                herodialog.open = true
+            } else {
+                mdui.snackbar({
+                    message: "加载中",
+                    action: "我知道了",
+                    onActionClick: () => console.log("click action button")
+                });
+                loadherolist(10)
+            }
         }
 
-        var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
+        menudoc.appendChild(menuItem);
+    }
 
+    if (localStorage.getItem("custom_heros")) {
         if (Object.keys(heros_json).length == 0) {
             mdui.snackbar({
                 message: "你还没有保存任何配置",
@@ -842,6 +862,11 @@ function 加载英雄配置() {
             });
             return
         }
+
+        var childnodes = document.getElementsByClassName("myherolist")[0].childNodes
+        childnodes.forEach(element => {
+            element.selected = false
+        });
 
         for (item in heros_json) {
             // 使用闭包解决
@@ -853,39 +878,20 @@ function 加载英雄配置() {
                 menuItem.onclick = function () {
                     localStorage.setItem("banheros", item_str)
                     document.querySelectorAll(".myedit")[1].value = item_str;
-                    选择英雄名(heros_json[item_str])
-                    mdui.snackbar({
-                        message: "选择成功 请关闭弹窗查看",
-                        action: "我知道了",
-                        onActionClick: () => console.log("click action button")
-                    });
                 }
                 // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
-                document.querySelectorAll(".mymenu")[1].appendChild(menuItem);
+                menudoc.appendChild(menuItem);
             })(item);
         }
+
     } else {
         mdui.snackbar({
             message: "你还没有保存任何配置",
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
-        return
     }
 
-}
-
-
-if (localStorage.getItem("banheros")) {
-    if (localStorage.getItem("custom_heros")) {
-        var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
-        try {
-            选择英雄名(heros_json[localStorage.getItem("banheros")])
-        } catch {
-            localStorage.clear()
-            window.location.reload()
-        }
-    }
 }
 
 
@@ -1295,6 +1301,12 @@ function loadmenu() {
             document.getElementsByClassName("xvanshou_red")[0].getElementsByTagName("mdui-list")[0].style.display = ""
             window.loadmenu = true
             customdialog.open = true
+            var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
+            try {
+                选择自定义配置(custom_json[document.querySelectorAll(".myedit")[2].value])
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
 
@@ -1809,32 +1821,57 @@ function makejson(HeroList, bxList, ygList, fytList, sjList, gjjson) {
     return jsondo;
 }
 
-if (localStorage.getItem("customs")) {
-    if (localStorage.getItem("custom_cof")) {
-        var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
-        try {
-            选择自定义配置(custom_json[localStorage.getItem("customs")])
-        } catch {
-            localStorage.clear()
-            window.location.reload()
-        }
-    }
-}
 
 
 function 加载自定义配置() {
-    if (localStorage.getItem("custom_cof")) {
+    var menudoc = document.querySelectorAll(".mymenu")[2]
 
-        var childnodes = customButton[0].parentElement.getElementsByTagName("mdui-menu")[0].childNodes
+    var ismenu
+    if (customdialog.open == true) {
+        ismenu = true
+        menudoc = document.getElementsByClassName("custombutton")[0].parentElement.getElementsByClassName("mymenu")[0]
+    }
+
+    var childnodes = menudoc.childNodes
+    var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
 
 
-        for (let index = 0; index < childnodes.length; index++) {
-            const element = childnodes[index];
-            element.remove()
-            index--
+    for (let index = 0; index < childnodes.length; index++) {
+        const element = childnodes[index];
+        element.remove()
+        index--
+    }
+
+    if (ismenu != true) {
+        // 创建新的 mdui-menu-item 元素  
+        var menuItem = document.createElement('mdui-menu-item');
+        // 设置文本内容  
+        menuItem.textContent = "管理配置";
+        menuItem.onclick = function () {
+
+            const loadmenu = window.loadmenu
+            if (loadmenu == true) {
+                try {
+                    选择自定义配置(custom_json[document.querySelectorAll(".myedit")[2].value])
+                } catch (e) {
+                    console.log(e)
+                }
+                customdialog.open = true
+            } else {
+                mdui.snackbar({
+                    message: "加载中",
+                    action: "我知道了",
+                    onActionClick: () => console.log("click action button")
+                });
+                loadmenu()
+            }
+
         }
 
-        var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
+        menudoc.appendChild(menuItem);
+    }
+
+    if (localStorage.getItem("custom_cof")) {
 
         if (Object.keys(custom_json).length == 0) {
             mdui.snackbar({
@@ -1860,7 +1897,6 @@ function 加载自定义配置() {
                 menuItem.textContent = item_str;
                 menuItem.onclick = function () {
                     localStorage.setItem("customs", item_str)
-                    选择自定义配置(custom_json[item_str])
                     document.querySelectorAll(".myedit")[2].value = item_str;
                     mdui.snackbar({
                         message: "选择成功 请关闭弹窗查看",
@@ -1869,7 +1905,7 @@ function 加载自定义配置() {
                     });
                 }
                 // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
-                customButton[0].parentElement.getElementsByTagName("mdui-menu")[0].appendChild(menuItem);
+                menudoc.appendChild(menuItem);
             })(item);
         }
     } else {
@@ -2233,7 +2269,6 @@ function 选择自定义配置(json) {
     document.getElementsByClassName("setmode")[2].value = sjvalue
 
     var myjson = JSON.parse(json.myjson)
-
     edittt = document.getElementsByClassName("suijitest")[0].getElementsByTagName("mdui-text-field")
     if (json.adjson) {
         var ccc = json.adjson
@@ -2356,6 +2391,7 @@ function 选择自定义配置(json) {
 
 
 var customButton = document.getElementsByClassName("custombutton")
+
 customButton[0].onclick = function () {
     加载自定义配置()
 }
