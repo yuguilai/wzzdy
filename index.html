@@ -126,8 +126,19 @@
                         name></mdui-text-field>
                     <mdui-menu class="mymenu" submenu-trigger="click hover">
                 </mdui-dropdown>
-                <mdui-text-field label="禁用英雄列表" readonly variant="outlined" class="myedit"></mdui-text-field>
-                <mdui-text-field label="自定义配置" readonly variant="outlined" class="myedit"></mdui-text-field>
+
+                <mdui-dropdown trigger="click" placement="auto">
+                    <mdui-text-field slot="trigger" label="禁用英雄列表" readonly variant="outlined" class="myedit"
+                        type="text" name></mdui-text-field>
+                    <mdui-menu class="mymenu" submenu-trigger="click hover">
+                </mdui-dropdown>
+
+                <mdui-dropdown trigger="click" placement="auto">
+                    <mdui-text-field slot="trigger" label="自定义配置" readonly variant="outlined" class="myedit" type="text"
+                        name></mdui-text-field>
+                    <mdui-menu class="mymenu" submenu-trigger="click hover">
+                </mdui-dropdown>
+
                 <mdui-text-field label="有效时间(分钟)" clearable variant="outlined" class="myedit"></mdui-text-field>
 
                 <mdui-button class="mybutton">启动</mdui-button>
