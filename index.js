@@ -3,6 +3,12 @@ window.onload = function () {
     document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.2"
 }
 
+const tip1 = "没有配置 请先点击管理配置新建配置"
+const tip2 = "没有配置 请先新建配置"
+const tip3 = "导入成功 请自行保存方案"
+const tip4 = "请输入想要修改的方案名"
+const tip5 = "你必须要选择一个方案"
+
 if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
     // 创建<span>元素  
     var span = document.createElement('span');
@@ -153,7 +159,7 @@ function 生成链接(func) {
     } else {
         mdui.alert({
             headline: "提示",
-            description: "地图id获取失败 请检查地图名称后重新尝试",
+            description: "地图模式获取失败 请选择地图模式名称后重新尝试",
             confirmText: "我知道了",
             onConfirm: () => console.log("confirmed"),
         });
@@ -169,7 +175,7 @@ function 生成链接(func) {
     if (mapid[3] && mapid[3] == true) {
         mdui.alert({
             headline: "提示",
-            description: "当前地图未开启 请重新选择",
+            description: "当前地图模式未开启 请重新选择",
             confirmText: "我知道了",
             onConfirm: () => console.log("confirmed"),
         });
@@ -709,11 +715,48 @@ for (item in mydatajson[0]) {
 }
 
 var herodialog = document.querySelector(".example-dialog")
+
+var herotip = null
+
+herodialog.querySelector("mdui-button").onclick = function () {
+    if (herotip == null) {
+        herotip = mdui.confirm({
+            headline: "提示",
+            description: "确认关闭吗 更改了配置必须要新建或保存才能生效",
+            confirmText: "确认",
+            cancelText: "取消",
+            onConfirm: () => {
+                herodialog.open = false
+                herotip = null
+            },
+            onCancel: () => console.log("canceled"),
+        });
+    }
+}
+
 document.querySelectorAll(".myedit")[1].onclick = function () {
     加载英雄配置()
 }
 
 var customdialog = document.querySelector(".custom-dialog")
+var customtip = null
+
+customdialog.querySelector("mdui-button").onclick = function () {
+    if (customtip == null) {
+        customtip = mdui.confirm({
+            headline: "提示",
+            description: "确认关闭吗 更改了配置必须要新建或保存才能生效",
+            confirmText: "确认",
+            cancelText: "取消",
+            onConfirm: () => {
+                customdialog.open = false
+                customtip = null
+            },
+            onCancel: () => console.log("canceled"),
+        });
+    }
+}
+
 document.querySelectorAll(".myedit")[2].onclick = function () {
     加载自定义配置()
 }
@@ -813,7 +856,7 @@ function 加载英雄配置() {
     var ismenu
     if (herodialog.open == true) {
         ismenu = true
-        menudoc = document.getElementsByClassName("herobutton")[0].parentElement.getElementsByClassName("mymenu")[0]
+        menudoc = herodialog.getElementsByClassName("mymenu")[0]
     }
 
     var childnodes = menudoc.childNodes
@@ -856,37 +899,51 @@ function 加载英雄配置() {
     if (localStorage.getItem("custom_heros")) {
         if (Object.keys(heros_json).length == 0) {
             mdui.snackbar({
-                message: "你还没有保存任何配置",
+                message: tip1,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
             return
         }
 
-        var childnodes = document.getElementsByClassName("myherolist")[0].childNodes
-        childnodes.forEach(element => {
-            element.selected = false
-        });
-
-        for (item in heros_json) {
-            // 使用闭包解决
-            (function (item_str) {
-                // 创建新的 mdui-menu-item 元素  
-                var menuItem = document.createElement('mdui-menu-item');
-                // 设置文本内容  
-                menuItem.textContent = item_str;
-                menuItem.onclick = function () {
-                    localStorage.setItem("banheros", item_str)
-                    document.querySelectorAll(".myedit")[1].value = item_str;
-                }
-                // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
-                menudoc.appendChild(menuItem);
-            })(item);
+        if (ismenu != true) {
+            for (item in heros_json) {
+                // 使用闭包解决
+                (function (item_str) {
+                    // 创建新的 mdui-menu-item 元素  
+                    var menuItem = document.createElement('mdui-menu-item');
+                    // 设置文本内容  
+                    menuItem.textContent = item_str;
+                    menuItem.onclick = function () {
+                        localStorage.setItem("banheros", item_str)
+                        document.querySelectorAll(".myedit")[1].value = item_str;
+                    }
+                    // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
+                    menudoc.appendChild(menuItem);
+                })(item);
+            }
+        } else {
+            for (item in heros_json) {
+                // 使用闭包解决
+                (function (item_str) {
+                    // 创建新的 mdui-menu-item 元素  
+                    var menuItem = document.createElement('mdui-menu-item');
+                    // 设置文本内容  
+                    menuItem.textContent = item_str;
+                    menuItem.onclick = function () {
+                        localStorage.setItem("banheros", item_str)
+                        document.querySelectorAll(".myedit")[1].value = item_str;
+                        选择英雄名(heros_json[document.querySelectorAll(".myedit")[1].value])
+                    }
+                    // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
+                    menudoc.appendChild(menuItem);
+                })(item);
+            }
         }
 
     } else {
         mdui.snackbar({
-            message: "你还没有保存任何配置",
+            message: tip1,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
@@ -996,7 +1053,7 @@ heroButton[3].onclick = function () {
             try {
                 选择英雄名(value)
                 mdui.snackbar({
-                    message: "导入成功 请自行保存方案",
+                    message: tip3,
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
                 });
@@ -1037,14 +1094,14 @@ heroButton[4].onclick = function () {
             });
         } else {
             mdui.snackbar({
-                message: "你必须要选择一个方案",
+                message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
         mdui.snackbar({
-            message: "你还没有自定义方案",
+            message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
@@ -1057,7 +1114,7 @@ heroButton[5].onclick = function () {
         if (editvalue) {
             mdui.prompt({
                 headline: "提示",
-                description: "请输入想要修改的方案名",
+                description: tip4,
                 confirmText: "确认",
                 cancelText: "取消",
                 onConfirm: (value) => {
@@ -1077,14 +1134,14 @@ heroButton[5].onclick = function () {
             });
         } else {
             mdui.snackbar({
-                message: "你必须要选择一个方案",
+                message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
         mdui.snackbar({
-            message: "你还没有自定义方案",
+            message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
@@ -1139,14 +1196,14 @@ heroButton[8].onclick = function () {
             });
         } else {
             mdui.snackbar({
-                message: "你必须要选择一个方案",
+                message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
         mdui.snackbar({
-            message: "你还没有自定义方案",
+            message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
@@ -1829,7 +1886,7 @@ function 加载自定义配置() {
     var ismenu
     if (customdialog.open == true) {
         ismenu = true
-        menudoc = document.getElementsByClassName("custombutton")[0].parentElement.getElementsByClassName("mymenu")[0]
+        menudoc = customdialog.getElementsByClassName("mymenu")[0]
     }
 
     var childnodes = menudoc.childNodes
@@ -1875,37 +1932,50 @@ function 加载自定义配置() {
 
         if (Object.keys(custom_json).length == 0) {
             mdui.snackbar({
-                message: "你还没有保存任何配置",
+                message: tip1,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
             return
         }
 
-        var alldoc = customButton[0].parentElement.getElementsByTagName("mdui-select")
-
-        for (let index = 0; index < alldoc.length; index++) {
-            alldoc[index].value = alldoc[index].defvalue
-        }
-
-        for (item in custom_json) {
-            // 使用闭包解决
-            (function (item_str) {
-                // 创建新的 mdui-menu-item 元素  
-                var menuItem = document.createElement('mdui-menu-item');
-                // 设置文本内容  
-                menuItem.textContent = item_str;
-                menuItem.onclick = function () {
-                    localStorage.setItem("customs", item_str)
-                    document.querySelectorAll(".myedit")[2].value = item_str;
-                }
-                // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
-                menudoc.appendChild(menuItem);
-            })(item);
+        if (ismenu != true) {
+            for (item in custom_json) {
+                // 使用闭包解决
+                (function (item_str) {
+                    // 创建新的 mdui-menu-item 元素  
+                    var menuItem = document.createElement('mdui-menu-item');
+                    // 设置文本内容  
+                    menuItem.textContent = item_str;
+                    menuItem.onclick = function () {
+                        localStorage.setItem("customs", item_str)
+                        document.querySelectorAll(".myedit")[2].value = item_str;
+                    }
+                    // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
+                    menudoc.appendChild(menuItem);
+                })(item);
+            }
+        } else {
+            for (item in custom_json) {
+                // 使用闭包解决
+                (function (item_str) {
+                    // 创建新的 mdui-menu-item 元素  
+                    var menuItem = document.createElement('mdui-menu-item');
+                    // 设置文本内容  
+                    menuItem.textContent = item_str;
+                    menuItem.onclick = function () {
+                        localStorage.setItem("customs", item_str)
+                        document.querySelectorAll(".myedit")[2].value = item_str;
+                        选择自定义配置(custom_json[document.querySelectorAll(".myedit")[2].value])
+                    }
+                    // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
+                    menudoc.appendChild(menuItem);
+                })(item);
+            }
         }
     } else {
         mdui.snackbar({
-            message: "你还没有保存任何配置",
+            message: tip1,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
@@ -2255,6 +2325,11 @@ function 选择自定义配置(json) {
         return
     }
 
+    var alldoc = customdialog.getElementsByTagName("mdui-select")
+    for (let index = 0; index < alldoc.length; index++) {
+        alldoc[index].value = alldoc[index].defvalue
+    }
+
     var yxvalue = json.yxtype
     var bxvalue = json.bxtype
     var sjvalue = json.sjtype
@@ -2464,7 +2539,7 @@ customButton[3].onclick = function () {
             try {
                 选择自定义配置(JSON.parse(value))
                 mdui.snackbar({
-                    message: "导入成功 请自行保存方案",
+                    message: tip3,
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
                 });
@@ -2509,14 +2584,14 @@ customButton[4].onclick = function () {
             });
         } else {
             mdui.snackbar({
-                message: "你必须要选择一个方案",
+                message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
         mdui.snackbar({
-            message: "你还没有自定义方案",
+            message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
@@ -2529,7 +2604,7 @@ customButton[5].onclick = function () {
         if (editvalue) {
             mdui.prompt({
                 headline: "提示",
-                description: "请输入想要修改的方案名",
+                description: tip4,
                 confirmText: "确认",
                 cancelText: "取消",
                 onConfirm: (value) => {
@@ -2558,14 +2633,14 @@ customButton[5].onclick = function () {
             });
         } else {
             mdui.snackbar({
-                message: "你必须要选择一个方案",
+                message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
         mdui.snackbar({
-            message: "你还没有自定义方案",
+            message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
@@ -2579,14 +2654,14 @@ customButton[6].onclick = function () {
             document.getElementsByClassName("suijitest")[0].open = true
         } else {
             mdui.snackbar({
-                message: "你必须要选择一个方案",
+                message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
         mdui.snackbar({
-            message: "你还没有自定义方案",
+            message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
@@ -2624,14 +2699,14 @@ customButton[7].onclick = function () {
             });
         } else {
             mdui.snackbar({
-                message: "你必须要选择一个方案",
+                message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
         mdui.snackbar({
-            message: "你还没有自定义方案",
+            message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
@@ -2646,8 +2721,7 @@ customButton[8].onclick = function () {
         confirmText: "确认",
         cancelText: "取消",
         onConfirm: () => {
-            var alldoc = this.parentElement.getElementsByTagName("mdui-select")
-
+            var alldoc = customdialog.getElementsByTagName("mdui-select")
             for (let index = 0; index < alldoc.length; index++) {
                 alldoc[index].value = alldoc[index].defvalue
             }
