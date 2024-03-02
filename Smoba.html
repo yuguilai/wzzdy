@@ -78,7 +78,28 @@
     <button class="button" onclick="addred()">加入红方阵营</button>
     <button class="button" onclick="home()">跳转主页</button>
 
+    <script src="myjson.js"></script>
+
     <script>
+
+        var tipdoc = document.querySelector(".mytext")
+        var tiptext = "如果加入失败可尝试点击其他阵营加入"
+
+        var mapnametable = {};
+        var maptable = mydatajson[0]
+
+        for (const key in maptable) {
+            const valueArray = maptable[key];
+            mapnametable[valueArray[0]] = key;
+        }
+
+        var gamejson = JSON.parse(atob(game_base64data))
+        var banheros = gamejson.banHerosCamp1
+        var mapid = gamejson.mapID
+        var mapname = mapnametable[mapid]
+        tipdoc.innerText = tiptext + "\n地图模式:" + mapname
+        console.log(mapname)
+        var custom = gamejson.customDefineItems
 
         function seturl(campid) {
             var url = window.url
