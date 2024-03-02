@@ -332,7 +332,16 @@ allbutton[0].onclick = function () {
         });
         return
     }
-    生成链接()
+    if (navigator.onLine) {
+        生成链接()
+    } else {
+        mdui.alert({
+            headline: "提示",
+            description: "当然无网络 无法复制 请检查网络链接",
+            confirmText: "我知道了",
+            onConfirm: () => console.log("confirmed"),
+        });
+    }
 }
 
 allbutton[1].onclick = function () {
