@@ -1,4 +1,4 @@
-const cacheName = 'my-pwa-v3.64';
+const cacheName = 'my-pwa-v3.65';
 const urlsToCache = [
     './',
     './index.html',
@@ -17,7 +17,8 @@ const urlsToCache = [
     './logo-200x200.png',
     'https://unpkg.zhimg.com/mdui@2.0.3/mdui.css',
     'https://unpkg.zhimg.com/mdui@2.0.3/mdui.global.js',
-    './index.js'
+    './index.js',
+    './myjson.js'
 ];
 
 self.addEventListener('install', function (event) {
