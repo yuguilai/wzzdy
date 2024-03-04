@@ -25,6 +25,15 @@
             window.location.replace(window.location.origin + "/wzzdy/")
         }
 
+        var gamesplit = window.url.split('SmobaLaunch_')
+        if (gamesplit) {
+            var index = url.indexOf("SmobaLaunch_")
+            var gameurl = url.substring(0, index);
+            var game_base64data = gamesplit[1]
+        } else {
+            window.location.replace(window.location.origin + "/wzzdy/")
+        }
+
     </script>
 
     <title>王者自定义房间加入</title>
@@ -73,7 +82,7 @@
 </head>
 
 <body>
-    <p class="mytext">如果加入失败可尝试点击其他阵营加入</p>
+    <p class="mytext"></p>
     <button class="button" onclick="addblue()">加入蓝方阵营</button>
     <button class="button" onclick="addred()">加入红方阵营</button>
     <button class="button" onclick="home()">跳转主页</button>
@@ -102,22 +111,13 @@
         var custom = gamejson.customDefineItems
 
         function seturl(campid) {
-            var url = window.url
-            var gamesplit = window.url.split('SmobaLaunch_')
-            if (gamesplit) {
-                var index = url.indexOf("SmobaLaunch_")
-                var gameurl = url.substring(0, index);
-                var game_base64data = gamesplit[1]
-                var gamejson = JSON.parse(atob(game_base64data))
-                delete gamejson.AddPos
-                gamejson.AddType = "0"
-                gamejson.campid = campid.toString()
-                var gamedata = JSON.stringify(gamejson)
-                var url = "https://h5.nes.smoba.qq.com/pvpesport.web.user/#/launch-game-mp-qq?" + gameurl + "SmobaLaunch_" + btoa(gamedata)
-                return url
-            }
-            window.location.replace(window.location.origin + "/wzzdy/")
-            return
+            var gamejson = JSON.parse(atob(game_base64data))
+            delete gamejson.AddPos
+            gamejson.AddType = "0"
+            gamejson.campid = campid.toString()
+            var gamedata = JSON.stringify(gamejson)
+            var url = "https://h5.nes.smoba.qq.com/pvpesport.web.user/#/launch-game-mp-qq?" + gameurl + "SmobaLaunch_" + btoa(gamedata)
+            return url
         }
 
         function addblue() {
