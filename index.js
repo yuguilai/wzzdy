@@ -81,10 +81,10 @@ function checkGameMode(modeName, serverType) {
     const maptip3 = "当前地图模式暂时只在正式服开启 请重新选择"
     const maptip4 = "当前地图模式暂时只在体验服开启 请重新选择"
 
-    if(serverType === 'tyf' && modeName!="5v5") {
+    if (serverType === 'tyf' && modeName.includes("5v5") != true) {
         mdui.alert({
             headline: "提示",
-            description: "体验服暂时只支持5v5自定义房间 其他模式已被和谐 请重新选择",
+            description: "体验服暂时只支持5v5类型的自定义房间 其他模式已被和谐 请重新选择",
             confirmText: "我知道了",
             onConfirm: () => console.log("confirmed"),
         });
