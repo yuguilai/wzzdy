@@ -80,6 +80,17 @@ function checkGameMode(modeName, serverType) {
     const maptip2 = "当前地图模式只在星期五到星期天开放 请重新选择"
     const maptip3 = "当前地图模式暂时只在正式服开启 请重新选择"
     const maptip4 = "当前地图模式暂时只在体验服开启 请重新选择"
+
+    if(serverType === 'tyf' && modeName!="5v5") {
+        mdui.alert({
+            headline: "提示",
+            description: "体验服暂时只支持5v5自定义房间 其他模式已被和谐 请重新选择",
+            confirmText: "我知道了",
+            onConfirm: () => console.log("confirmed"),
+        });
+        return true
+    }
+
     const gameModes = [
         {
             keyword: "觉醒",
