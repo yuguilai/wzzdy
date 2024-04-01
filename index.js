@@ -81,6 +81,9 @@ function checkGameMode(modeName, serverType) {
     const maptip3 = "当前地图模式暂时只在正式服开启 请重新选择"
     const maptip4 = "当前地图模式暂时只在体验服开启 请重新选择"
 
+
+    /*
+    //暂时没用的代码
     if (serverType === 'tyf' && modeName.includes("5v5") != true) {
         mdui.alert({
             headline: "提示",
@@ -90,6 +93,7 @@ function checkGameMode(modeName, serverType) {
         });
         return true
     }
+    */
 
     const gameModes = [
         {
@@ -333,6 +337,14 @@ function 生成链接(func) {
 
 }
 
+function processLink(link) {
+    // 截取 api.s1f.top/ 后的内容
+    const afterDomain = link.split('//api.s1f.top/')[1];
+    // 将所有 / 替换为.
+    const replacedContent = afterDomain.replace(/\//g, ".");
+    return replacedContent;
+}
+
 
 allbutton[0].onclick = function () {
     if (work_message != "null") {
@@ -348,7 +360,7 @@ allbutton[0].onclick = function () {
     } else {
         mdui.alert({
             headline: "提示",
-            description: "当然无网络 无法复制 请检查网络链接",
+            description: "无网络 无法复制 请检查网络链接",
             confirmText: "我知道了",
             onConfirm: () => console.log("confirmed"),
         });
@@ -381,7 +393,7 @@ allbutton[1].onclick = function () {
             xhr.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     var murl = JSON.parse(this.responseText).data.url
-                    murl = murl.split("/u/")[1];
+                    murl = processLink(murl);
                     work_message = "null"
                     mdui.confirm({
                         headline: "提示",
@@ -407,7 +419,7 @@ allbutton[1].onclick = function () {
                 xhr.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         var murl = JSON.parse(this.responseText).data.url
-                        murl = murl.split("/u/")[1];
+                        murl = processLink(murl);
                         work_message = "null"
                         mdui.confirm({
                             headline: "提示",
@@ -454,7 +466,7 @@ allbutton[1].onclick = function () {
                 xhr.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         var murl = JSON.parse(this.responseText).data.url
-                        murl = murl.split("/u/")[1];
+                        murl = processLink(murl);
                         work_message = "null"
                         mdui.confirm({
                             headline: "提示",
@@ -610,7 +622,7 @@ allbutton[5].onclick = function () {
                         xhr.onreadystatechange = function () {
                             if (this.readyState == 4 && this.status == 200) {
                                 var murl = JSON.parse(this.responseText).data.url
-                                murl = murl.split("/u/")[1];
+                                murl = processLink(murl);
                                 work_message = "null"
                                 mdui.confirm({
                                     headline: "提示",
