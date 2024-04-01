@@ -67,7 +67,8 @@
                 // 替换最后一个字符为其他字符
                 url = url.slice(0, -1);
             }
-            url = "https://api.s1f.top/u/" + url
+            url = url.replace(/\./g, '/');
+            url = "https://api.s1f.top/" + url
             iframe = document.querySelector("iframe")
             iframe.src = url
 
