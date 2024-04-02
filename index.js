@@ -647,6 +647,8 @@ allbutton[5].onclick = function () {
                         work_message = "null"
                         return
                     }
+                } else {
+                    alert("发生错误 可能是作者登录凭证掉了 你可以自行部署")
                 }
             }
         },
