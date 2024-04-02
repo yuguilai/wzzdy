@@ -1315,6 +1315,8 @@ function loadmenu() {
             document.getElementsByClassName("xvanshou_red")[0].getElementsByTagName("mdui-list")[0].style.display = ""
             window.loadmenu = true
             customdialog.open = true
+            document.getElementsByClassName("blueheronum")[0].value = "1"
+            document.getElementsByClassName("redheronum")[0].value = "1"
             var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
             try {
                 选择自定义配置(custom_json[document.querySelectorAll(".myedit")[2].value])
@@ -1445,9 +1447,6 @@ document.getElementsByClassName("redheronum")[0].addEventListener("change", func
 
     }
 })
-
-document.getElementsByClassName("blueheronum")[0].value = "1"
-document.getElementsByClassName("redheronum")[0].value = "1"
 
 // Fisher-Yates 洗牌算法
 function shuffleArray(array) {
