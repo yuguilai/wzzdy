@@ -60,6 +60,12 @@
     <link rel="stylesheet" href="https://unpkg.zhimg.com/mdui@2.0.3/mdui.css">
     <script src="https://unpkg.zhimg.com/mdui@2.0.3/mdui.global.js"></script>
 
+    <script>
+        if (localStorage.getItem("wzzdy_mythemecolor") && localStorage.getItem("wzzdy_mythemecolor") != "null") {
+            mdui.setColorScheme(localStorage.getItem("wzzdy_mythemecolor"))
+        } 
+    </script>
+
     <link rel="manifest" href="./manifest.json" />
 
 
@@ -98,6 +104,96 @@
         }
     </style>
 
+    <style>
+        .color-label {
+            cursor: default;
+            color: rgb(var(--mdui-color-on-surface-variant));
+        }
+
+
+        .color-preset {
+            display: flex;
+            padding: .5rem 0rem
+        }
+
+        .color-preset div {
+            cursor: pointer;
+            box-sizing: border-box;
+            width: 1.875rem;
+            height: 1.875rem;
+            border-radius: var(--mdui-shape-corner-extra-small);
+            border: .0625rem solid rgb(var(--mdui-color-outline))
+        }
+
+        .color-preset div+div {
+            margin-left: .5rem
+        }
+
+        .color-preset .red {
+            background-color: #bb1614
+        }
+
+        .color-preset .purple {
+            background-color: #9a25ae
+        }
+
+        .color-preset .blue {
+            background-color: #0061a4
+        }
+
+        .color-preset .green {
+            background-color: #006e1c
+        }
+
+        .color-preset .yellow {
+            background-color: #695f00
+        }
+
+        .color-preset .grey {
+            background-color: #006874
+        }
+
+        .color-custom {
+            cursor: pointer;
+            box-sizing: border-box;
+            width: 1.875rem;
+            height: 1.875rem;
+            border-radius: var(--mdui-shape-corner-extra-small);
+            border: .0625rem solid rgb(var(--mdui-color-outline));
+            margin: .5rem 0rem
+        }
+
+
+        .color-label:not(:first-child) {
+            margin-top: .5rem
+        }
+
+        .color-wallpaper {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            background-size: cover;
+            background-position: center;
+            text-shadow: white .1em .1em .2em;
+            height: 8.5rem;
+            border-radius: var(--mdui-shape-corner-extra-small);
+            border: .0625rem solid rgb(var(--mdui-color-outline));
+            margin: .5rem 0rem
+        }
+
+        .color-wallpaper input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0;
+            cursor: pointer
+        }
+    </style>
+
 
 </head>
 
@@ -107,6 +203,10 @@
         <mdui-top-app-bar class="example-top-app-bar" variant="small"
             style="position: absolute; top: 0px; right: 0px; left: 0px;">
             <mdui-top-app-bar-title>加载中</mdui-top-app-bar-title>
+
+
+            <mdui-button variant="text" name value type="button"
+                onclick='document.querySelector(".zhutudia").open=true'>更改配色</mdui-button>
         </mdui-top-app-bar>
 
 
@@ -326,6 +426,29 @@
 
     <script src="myjson.js"></script>
     <script defer src="index.js"></script>
+
+    <mdui-dialog close-on-overlay-click="" class="zhutudia">
+        <mdui-top-app-bar slot="header" variant="small">
+
+            <mdui-top-app-bar-title>更改配色</mdui-top-app-bar-title>
+            <mdui-button class="colorbutton">还原</mdui-button>
+            <mdui-button variant="text" name="" value="" type="button"
+                onclick='document.querySelector(".zhutudia").open=false'>关闭</mdui-button>
+        </mdui-top-app-bar>
+
+        <div class="color-label">预设颜色</div>
+        <div class="color-preset">
+            <div class="red"></div>
+            <div class="purple"></div>
+            <div class="blue"></div>
+            <div class="green"></div>
+            <div class="yellow"></div>
+            <div class="grey"></div>
+        </div>
+        <div class="color-label">自选颜色</div><input type="color" class="color-custom">
+        <div class="color-label">从壁纸提取颜色</div>
+        <div class="color-wallpaper">请选择一张壁纸 <input type="file" accept="image/png, image/jpeg" class="color-img"></div>
+    </mdui-dialog>
 
 
 </body>
