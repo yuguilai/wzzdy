@@ -63,6 +63,11 @@ if (localStorage.getItem("mytimer")) {
     document.querySelectorAll(".myedit")[3].value = "6000"
 }
 
+if (localStorage.getItem("wzzdy_mycustomthemecolor")) {
+    document.getElementsByClassName("color-custom")[0].value = localStorage.getItem("wzzdy_mycustomthemecolor")
+}
+
+
 var allbutton = document.querySelectorAll(".mybutton")
 var work_message = "null"
 
@@ -2742,4 +2747,119 @@ function entclick() {
         onActionClick: () => console.log("click action button")
     });
 
+}
+
+function getHexBackgroundColor(element) {
+    // 获取元素的 background-color
+    var computedStyles = window.getComputedStyle(element);
+    var backgroundColor = computedStyles.getPropertyValue('background-color');
+
+    // 检查是否为 RGB 或 RGBA 格式，如果是，转换为十六进制
+    if (backgroundColor.match(/^rgb/) || backgroundColor.match(/^rgba/)) {
+        // 提取 RGB 值
+        var rgbValues = backgroundColor.match(/\d+/g).map(Number);
+        // 转换为十六进制
+        var hexColor = rgbValues.map(function (value) {
+            return ('0' + value.toString(16)).slice(-2);
+        }).join('');
+        backgroundColor = '#' + hexColor;
+    }
+
+    return backgroundColor;
+}
+
+var colordoc = document.getElementsByClassName("color-preset")[0].childNodes
+
+colordoc.forEach(element => {
+    element.onclick = function () {
+
+        if (color_message != "null") {
+            mdui.snackbar({
+                message: color_message,
+                action: "我知道了",
+                onActionClick: () => console.log("click action button")
+            });
+            return
+        }
+
+        color = getHexBackgroundColor(this)
+        localStorage.setItem("wzzdy_mythemecolor", color)
+        mdui.setColorScheme(color)
+    }
+});
+
+document.getElementsByClassName("color-custom")[0].addEventListener('input', function () {
+
+    if (color_message != "null") {
+        mdui.snackbar({
+            message: color_message,
+            action: "我知道了",
+            onActionClick: () => console.log("click action button")
+        });
+        return
+    }
+
+    color = this.value;
+    localStorage.setItem("wzzdy_mycustomthemecolor", color)
+    localStorage.setItem("wzzdy_mythemecolor", color)
+    mdui.setColorScheme(color)
+});
+
+color_message = "null"
+
+document.getElementsByClassName('color-img')[0].addEventListener('input', function () {
+
+    if (color_message != "null") {
+        mdui.snackbar({
+            message: color_message,
+            action: "我知道了",
+            onActionClick: () => console.log("click action button")
+        });
+        return
+    }
+
+    if (this.files && this.files[0]) {
+        color_message = "正在从壁纸提取颜色中 请耐心等待"
+        const file = this.files[0];
+
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            const image = new Image();
+            const blobUrl = URL.createObjectURL(file);
+            image.src = blobUrl;
+            mdui.getColorFromImage(image).then(color => {
+                //清理blob
+                URL.revokeObjectURL(blobUrl);
+                //清空选择 防止重复选择不触发
+                document.getElementsByClassName('color-img')[0].value = ""
+                localStorage.setItem("wzzdy_mythemecolor", color)
+                mdui.setColorScheme(color)
+                color_message = "null"
+                mdui.snackbar({
+                    message: "从壁纸设置主题成功",
+                    action: "我知道了",
+                    onActionClick: () => console.log("click action button")
+                });
+            });
+
+        };
+
+        reader.readAsDataURL(file); // 开始读取文件内容
+    }
+})
+
+document.getElementsByClassName("colorbutton")[0].onclick=function() {
+
+    if (color_message != "null") {
+        mdui.snackbar({
+            message: color_message,
+            action: "我知道了",
+            onActionClick: () => console.log("click action button")
+        });
+        return
+    }
+    
+    localStorage.setItem("wzzdy_mythemecolor","null")
+    mdui.removeColorScheme()
 }
