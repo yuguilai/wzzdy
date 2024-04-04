@@ -1175,7 +1175,6 @@ heroButton[8].onclick = function () {
 }
 
 function createMenuItems(settingsDoc, values, isdata) {
-    settingsDoc.value = 1;
     var index = 1
     values.forEach(element => {
         // 使用闭包解决
@@ -1195,11 +1194,19 @@ function createMenuItems(settingsDoc, values, isdata) {
         })(element, index);
         index = index + 1
     });
-    if (isdata) {
-        settingsDoc.value = isdata;
-    }
-    //存储默认值
-    settingsDoc.defvalue = settingsDoc.value
+
+    //防止设置value无效
+    setTimeout(function () {
+        if (isdata) {
+            settingsDoc.value = isdata;
+        } else {
+            settingsDoc.value = 1;
+        }
+        //存储默认值
+        settingsDoc.defvalue = settingsDoc.value
+    }, 500);
+
+
     return settingsDoc
 }
 
@@ -2849,7 +2856,7 @@ document.getElementsByClassName('color-img')[0].addEventListener('input', functi
     }
 })
 
-document.getElementsByClassName("colorbutton")[0].onclick=function() {
+document.getElementsByClassName("colorbutton")[0].onclick = function () {
 
     if (color_message != "null") {
         mdui.snackbar({
@@ -2859,7 +2866,7 @@ document.getElementsByClassName("colorbutton")[0].onclick=function() {
         });
         return
     }
-    
-    localStorage.setItem("wzzdy_mythemecolor","null")
+
+    localStorage.setItem("wzzdy_mythemecolor", "null")
     mdui.removeColorScheme()
 }
