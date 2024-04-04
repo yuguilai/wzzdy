@@ -680,18 +680,16 @@ for (item in mydatajson[0]) {
 
 var herodialog = document.querySelector(".example-dialog")
 
-var herotip = null
 
 herodialog.querySelector("mdui-button").onclick = function () {
-    if (herotip == null) {
-        herotip = mdui.confirm({
+    if (herodialog.open == true) {
+        mdui.confirm({
             headline: "提示",
             description: "确认关闭吗 更改了配置必须要新建或保存才能生效",
             confirmText: "确认",
             cancelText: "取消",
             onConfirm: () => {
                 herodialog.open = false
-                herotip = null
             },
             onCancel: () => console.log("canceled"),
         });
@@ -703,18 +701,16 @@ document.querySelectorAll(".myedit")[1].onclick = function () {
 }
 
 var customdialog = document.querySelector(".custom-dialog")
-var customtip = null
 
 customdialog.querySelector("mdui-button").onclick = function () {
-    if (customtip == null) {
-        customtip = mdui.confirm({
+    if (customdialog.open == true) {
+        mdui.confirm({
             headline: "提示",
             description: "确认关闭吗 更改了配置必须要新建或保存才能生效",
             confirmText: "确认",
             cancelText: "取消",
             onConfirm: () => {
                 customdialog.open = false
-                customtip = null
             },
             onCancel: () => console.log("canceled"),
         });
