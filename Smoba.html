@@ -118,15 +118,15 @@
 
         var mycustom_json = {
             "英雄属性": {
-                "经验": [
+                "初始等级": [
                     ["0", "51", "56", "61", "66", "28", "71", "76", "81", "86"],
                     ["1级", "4级", "5级", "8级", "10级", "12级", "15级"]
                 ],
-                "法术加成": [
+                "法术攻击": [
                     ["1", "52", "57", "62", "67", "29", "72", "77", "82", "87"],
                     ["无加成", "加10%", "加25%", "加50%", "加75%", "加100%"]
                 ],
-                "物理加成": [
+                "物理攻击": [
                     ["2", "53", "58", "63", "68", "30", "73", "78", "83", "88"],
                     ["无加成", "加10%", "加25%", "加50%", "加75%", "加100%"]
                 ],
@@ -217,7 +217,7 @@
                         ["19:2", "105:1", "104:1"],
                         ["19:2", "105:1", "104:2"],
                     ],
-                    ["摧毁水晶", "摧毁任意一个一塔", "摧毁任意一个二塔", "摧毁任意一个三塔", "3个总击败", "20个总击败", "30个总击败", "40个总击败", "1个助攻", "5个助攻", "10个助攻"]
+                    ["摧毁任意一个一塔", "摧毁任意一个二塔", "摧毁任意一个三塔", "3个总击败", "20个总击败", "30个总击败", "40个总击败", "1个助攻", "5个助攻", "10个助攻"]
                 ],
             },
         }
@@ -330,27 +330,28 @@
 
 
                     const allcustom_str_mkey_table = []
+                    let finalTrueResult = null;
+
                     for (let i = 0; i < keytable.length; i++) {
 
                         const element = keytable[i];
 
-                        const result = getTargetArrayValue(element, keyValuePairs)
-                        if (result != false) {
-                            if (result !== true) {
-                                const foundElement = valuetable[result];
-                                allcustom_str_mkey_table.push(i + ":" + foundElement)
-                                console.log(foundElement);
-                            } else {
-                                const foundElement = valuetable[i];
-                                allcustom_str_mkey_table.push(i + ":" + foundElement)
-                                console.log(foundElement);
-                            }
+                        const result = getTargetArrayValue(element, keyValuePairs);
 
+                        //i代表当前循环次数 可以通过i判断蓝红方
+                        if (result === true) {
+                            finalTrueResult = i + ":" + valuetable[i];
+                        } else if (result !== false) {
+                            const foundElement = i + ":" + valuetable[result];
+                            allcustom_str_mkey_table.push(foundElement);
                         }
 
-
-
                     }
+
+                    if (finalTrueResult !== null) {
+                        allcustom_str_mkey_table.push(finalTrueResult);
+                    }
+
 
                     if (allcustom_str_mkey_table.length > 0) {
                         allcustom_str_table[mkey] = allcustom_str_mkey_table
@@ -462,7 +463,7 @@
                 mergedHeroData[attrString].push(heroIndex);
             }
 
-            let SideOutput = "英雄属性：\n";
+            let SideOutput = "英雄属性配置\n";
             for (const attributes in mergedHeroData) {
 
                 const attrObj = JSON.parse(attributes);
@@ -473,7 +474,7 @@
 
                 const allpostr = checkArrayValue(blueIndices, mergedHeroData[attributes])
                 if (checkArrayValue([...blueIndices, ...redIndices], mergedHeroData[attributes])) {
-                    SideOutput += `位置全部 ：`;
+                    SideOutput += `全部位置：`;
                     SideOutput += customSideOutput.trim() + "\n";
                     break
                 }
@@ -483,10 +484,10 @@
                 const bluepostr = checkArrayValue(blueIndices, mergedHeroData[attributes])
                 if (bluepostr) {
                     if (bluepostr.length == param) {
-                        SideOutput += `蓝方位置全部 ：`;
+                        SideOutput += `蓝方全部位置：`;
                         SideOutput += customSideOutput.trim() + "\n";
                     } else {
-                        SideOutput += `蓝方位置 ${bluepostr.join(' ')}：`;
+                        SideOutput += `蓝方位置 ${bluepostr.join(' ')}: `;
                         SideOutput += customSideOutput.trim() + "\n";
                     }
 
@@ -495,10 +496,10 @@
                 const redpostr = checkArrayValue(redIndices, mergedHeroData[attributes])
                 if (redpostr) {
                     if (redpostr.length == param) {
-                        SideOutput += `红方位置全部 ：`;
+                        SideOutput += `红方全部位置：`;
                         SideOutput += customSideOutput.trim() + "\n";
                     } else {
-                        SideOutput += `红方位置 ${redpostr.join(' ')}：`;
+                        SideOutput += `红方位置 ${redpostr.join(' ')}: `;
                         SideOutput += customSideOutput.trim() + "\n";
                     }
 
@@ -550,7 +551,7 @@
                         }
                     }
                 }
-                let Output = `${attr}：\n`;
+                let Output = `${attr}配置\n`;
                 if (blueLineOutput != redLineOutput) {
                     Output += `蓝方: ${blueLineOutput.trim()}\n`;
                     Output += `红方: ${redLineOutput.trim()}`;
@@ -564,7 +565,7 @@
 
             // 解析胜利条件
             const victoryCondition = json["胜利条件"];
-            let victoryCondOutput = "胜利条件：\n";
+            let victoryCondOutput = "胜利条件: ";
             if (victoryCondition["胜利条件"]) {
                 victoryCondOutput += `${victoryCondition["胜利条件"][0].split(":")[1]}\n`;
                 result["胜利条件"] = victoryCondOutput.trim();
