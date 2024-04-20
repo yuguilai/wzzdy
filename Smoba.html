@@ -101,14 +101,14 @@
 
         for (const key in maptable) {
             const valueArray = maptable[key];
-            mapnametable[valueArray[0]] = key;
+            mapnametable[valueArray[0]] = [key, valueArray[2]];
         }
 
 
         var gamejson = JSON.parse(atob(game_base64data))
         var banheros = gamejson.banHerosCamp1
         var mapid = gamejson.mapID
-        var mapname = mapnametable[mapid]
+        var mapname = mapnametable[mapid][0]
         tipdoc.innerText = tiptext + "\n地图模式:" + mapname
         console.log(mapname)
         var custom = gamejson.customDefineItems
@@ -178,26 +178,26 @@
             },
             "防御塔属性": {
                 "攻击力": [
-                    ["13", "22", "41", "48"],
+                    [["13", "22"], ["41", "48"]],
                     ["无加成", "加25%", "加50%", "加100%"]
                 ],
                 "攻击范围": [
-                    ["15", "24", "43", "50"],
+                    [["15", "24"], ["43", "50"]],
                     ["无加成", "加25%", "加50%"]
                 ],
                 "血量": [
-                    ["14", "23", "42", "49"],
-                    ["无加成", "加25%", "加50%"]
+                    [["14", "23"], ["42", "49"]],
+                    ["无加成", "加25%", "加50%", "加100%"]
                 ],
             },
             "水晶属性": {
                 "攻击力": [
                     ["16", "44"],
-                    ["无加成", "加25%", "加50%"]
+                    ["无加成", "加25%", "加50%", "加100%"]
                 ],
                 "血量": [
                     ["17", "45"],
-                    ["无加成", "加25%", "加50%"]
+                    ["无加成", "加25%", "加50%", "加100%"]
                 ],
             },
             "胜利条件": {
@@ -302,6 +302,7 @@
         function viewcustom() {
             if (custom.length == 0) {
                 alert("无自定义配置")
+                return
             }
             const keyValuePairs = {};
             custom.forEach(item => {
@@ -361,7 +362,7 @@
 
             console.log(allcustom_str);
 
-            alert(parseJsonData(allcustom_str));
+            alert(parseJsonData(allcustom_str), mapnametable[mapid][1] / 2);
 
         }
 
@@ -376,7 +377,7 @@
             let redIndices = [];
 
             if (typeof param === 'undefined') {
-                param = 3
+                param = 5
             }
             blueIndices = Array.from({ length: param }, (_, i) => i + 1);
             redIndices = Array.from({ length: param }, (_, i) => i + 1 + param);
@@ -518,6 +519,8 @@
                     return;
                 }
 
+                console.log(entries)
+
                 // 检查相同属性
                 const mergedAttrData = {};
                 entries.forEach(([key, value]) => {
@@ -578,6 +581,7 @@
         function viewbanhero() {
             if (banheros.length == 0) {
                 alert("无禁用英雄配置")
+                return
             }
             let allheros = mydatajson[1]
             const banheros_name = []
