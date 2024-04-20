@@ -1,6 +1,6 @@
 window.onload = function () {
     document.getElementsByTagName("mdui-card")[0].style.visibility = "unset"
-    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.3"
+    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.4"
 }
 
 const tip1 = "没有配置 请先点击管理配置新建配置"
@@ -57,12 +57,6 @@ if (localStorage.getItem("customs")) {
     document.querySelectorAll(".myedit")[2].value = localStorage.getItem("customs")
 }
 
-if (localStorage.getItem("mytimer")) {
-    document.querySelectorAll(".myedit")[3].value = localStorage.getItem("mytimer")
-} else {
-    document.querySelectorAll(".myedit")[3].value = "6000"
-}
-
 if (localStorage.getItem("wzzdy_mycustomthemecolor")) {
     document.getElementsByClassName("color-custom")[0].value = localStorage.getItem("wzzdy_mycustomthemecolor")
 }
@@ -73,7 +67,7 @@ var work_message = "null"
 
 function 打开链接(url) {
     window.location.href = url
-    mdui.snackbar({
+    mdui_snackbar({
         message: "启动成功 如没反应请检查是否安装相关应用或尝试在浏览器打开",
         action: "我知道了",
         onActionClick: () => console.log("click action button")
@@ -164,7 +158,7 @@ function 生成链接(func) {
     } else if (mode == "tyf") {
         url = "tencentmsdk1104791911://?gamedata=SmobaLaunch_"
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: "你必须选择一个游戏",
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -291,14 +285,8 @@ function 生成链接(func) {
         }
     }
 
+    alljson.firstCountDownTime = "6666666666"
 
-    var mytime = edittab[3].value
-
-    if (mytime) {
-        alljson.firstCountDownTime = mytime
-    } else {
-        alljson.firstCountDownTime = "6000"
-    }
 
     var Rand = Math.random()
     var mineId = Math.round(Rand * 1000000000000000000)
@@ -353,7 +341,7 @@ function processLink(link) {
 
 allbutton[0].onclick = function () {
     if (work_message != "null") {
-        mdui.snackbar({
+        mdui_snackbar({
             message: work_message,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -375,7 +363,7 @@ allbutton[0].onclick = function () {
 allbutton[1].onclick = function () {
     let value = document.getElementsByTagName("mdui-segmented-button-group")[0].value
     if (work_message != "null") {
-        mdui.snackbar({
+        mdui_snackbar({
             message: work_message,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -454,7 +442,7 @@ allbutton[1].onclick = function () {
             onConfirm: (value) => {
                 var gamedata = value.split('gamedata=')[1]
                 if (typeof gamedata == "undefined" || gamedata == "") {
-                    mdui.snackbar({
+                    mdui_snackbar({
                         message: "输入链接有误",
                         action: "我知道了",
                         onActionClick: () => console.log("click action button")
@@ -505,16 +493,12 @@ allbutton[2].onclick = function () {
     });
 }
 
-document.querySelectorAll(".myedit")[3].addEventListener("change", function () {
-    localStorage.setItem("mytimer", this.value)
-})
-
 document.getElementsByTagName("mdui-segmented-button-group")[0].addEventListener("change", function () {
     localStorage.setItem("gamemode", this.value)
 })
 
 document.querySelectorAll(".myedit")[0].onclick = function () {
-    mdui.snackbar({
+    mdui_snackbar({
         message: "可向下滑动查看更多模式",
         action: "我知道了",
         onActionClick: () => console.log("click action button")
@@ -553,7 +537,7 @@ allbutton[5].onclick = function () {
                 // 去除后面的内容以及可能存在的查询参数
                 roomID = pathPart.split('?')[0].split('&')[0]
             } catch {
-                mdui.snackbar({
+                mdui_snackbar({
                     message: "输入链接有误",
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
@@ -611,7 +595,7 @@ allbutton[5].onclick = function () {
                         const game_data = findstr + btoa(JSON.stringify(game_json))
                         console.log(game_data)
 
-                        mdui.snackbar({
+                        mdui_snackbar({
                             message: "已获取到数据 请耐心等待 正在请求生成短链中",
                             action: "我知道了",
                             onActionClick: () => console.log("click action button")
@@ -644,7 +628,7 @@ allbutton[5].onclick = function () {
                         }
 
                     } else {
-                        mdui.snackbar({
+                        mdui_snackbar({
                             message: "获取失败 请检查是否满员",
                             action: "我知道了",
                             onActionClick: () => console.log("click action button")
@@ -771,11 +755,15 @@ document.getElementsByClassName("heromode")[0].addEventListener("change", functi
         let mvalue = mydatajson[1][value]
         if (mvalue.includes(defvalue)) {
             element.style.display = ""
+            element.isshow = true
         } else {
             element.style.display = "none"
+            element.isshow = false
         }
     });
 
+    //清空数据
+    search_heroedit.value = ""
 })
 
 var heroButton = document.getElementsByClassName("herobutton")
@@ -825,8 +813,10 @@ function 加载英雄配置() {
 
     for (let index = 0; index < childnodes.length; index++) {
         const element = childnodes[index];
-        element.remove()
-        index--
+        if (element.className != "search_edit") {
+            element.remove()
+            index--
+        }
     }
 
     if (ismenu != true) {
@@ -834,6 +824,7 @@ function 加载英雄配置() {
         var menuItem = document.createElement('mdui-menu-item');
         // 设置文本内容  
         menuItem.textContent = "管理配置";
+        menuItem.isadd = true
         menuItem.onclick = function () {
             const loadherolist = window.loadherolist
             if (loadherolist == true) {
@@ -844,7 +835,7 @@ function 加载英雄配置() {
                 }
                 herodialog.open = true
             } else {
-                mdui.snackbar({
+                mdui_snackbar({
                     message: "加载中",
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
@@ -858,7 +849,7 @@ function 加载英雄配置() {
 
     if (localStorage.getItem("custom_heros")) {
         if (Object.keys(heros_json).length == 0) {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: tip1,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
@@ -902,7 +893,7 @@ function 加载英雄配置() {
         }
 
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: tip1,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -931,7 +922,7 @@ function 复制文本(str) {
     // 移除范围，清空选择
     selection.removeAllRanges();
     textNode.remove()
-    mdui.snackbar({
+    mdui_snackbar({
         message: "复制成功",
         action: "我知道了",
         onActionClick: () => console.log("click action button")
@@ -989,7 +980,7 @@ heroButton[1].onclick = function () {
             document.querySelectorAll(".myedit")[1].value = value;
 
             加载英雄配置()
-            mdui.snackbar({
+            mdui_snackbar({
                 message: "新建配置成功",
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
@@ -1012,13 +1003,13 @@ heroButton[3].onclick = function () {
         onConfirm: (value) => {
             try {
                 选择英雄名(value)
-                mdui.snackbar({
+                mdui_snackbar({
                     message: tip3,
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
                 });
             } catch {
-                mdui.snackbar({
+                mdui_snackbar({
                     message: "输入配置有误",
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
@@ -1044,7 +1035,7 @@ heroButton[4].onclick = function () {
                     localStorage.setItem("custom_heros", JSON.stringify(heros_json))
                     localStorage.setItem("banheros", "")
                     document.querySelectorAll(".myedit")[1].value = ""
-                    mdui.snackbar({
+                    mdui_snackbar({
                         message: "删除配置成功",
                         action: "我知道了",
                         onActionClick: () => console.log("click action button")
@@ -1053,14 +1044,14 @@ heroButton[4].onclick = function () {
                 onCancel: () => console.log("canceled"),
             });
         } else {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -1084,7 +1075,7 @@ heroButton[5].onclick = function () {
                     localStorage.setItem("banheros", value)
                     document.querySelectorAll(".myedit")[1].value = value
                     加载英雄配置()
-                    mdui.snackbar({
+                    mdui_snackbar({
                         message: "重命名配置成功",
                         action: "我知道了",
                         onActionClick: () => console.log("click action button")
@@ -1093,14 +1084,14 @@ heroButton[5].onclick = function () {
                 onCancel: () => console.log("canceled"),
             });
         } else {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -1111,7 +1102,7 @@ heroButton[5].onclick = function () {
 heroButton[6].onclick = function () {
     var childnodes = document.getElementsByClassName("myherolist")[0].childNodes
     childnodes.forEach(element => {
-        if (element.style.display == "none") {
+        if (element.isshow == false) {
             return
         }
         element.selected = true
@@ -1121,7 +1112,7 @@ heroButton[6].onclick = function () {
 heroButton[7].onclick = function () {
     var childnodes = document.getElementsByClassName("myherolist")[0].childNodes
     childnodes.forEach(element => {
-        if (element.style.display == "none") {
+        if (element.isshow == false) {
             return
         }
         if (element.selected == true) {
@@ -1146,7 +1137,7 @@ heroButton[8].onclick = function () {
                     var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
                     heros_json[editvalue] = 英雄名;
                     localStorage.setItem("custom_heros", JSON.stringify(heros_json))
-                    mdui.snackbar({
+                    mdui_snackbar({
                         message: "保存配置成功",
                         action: "我知道了",
                         onActionClick: () => console.log("click action button")
@@ -1155,14 +1146,14 @@ heroButton[8].onclick = function () {
                 onCancel: () => console.log("canceled"),
             });
         } else {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -1219,20 +1210,6 @@ function createList(str, doc) {
     return list;
 }
 
-// 定义一次性的 slotchange 事件处理程序
-function onSlotChange() {
-    // 在这里可以访问 shadowRoot 中的元素
-    var menuElement = this.querySelector("mdui-menu");
-
-    if (menuElement) {
-        // 找到 mdui-menu 后注销事件监听器
-        this.removeEventListener('slotchange', onSlotChange);
-        // 这里可以处理 mdui-menu 元素
-        menuElement.style.maxHeight = '50vh';
-        menuElement.style.overflow = 'auto';
-    }
-}
-
 function createSelectMenu(str, doc, ismultiple) {
     // 创建 mdui-select 元素
     var select = document.createElement('mdui-select');
@@ -1246,9 +1223,6 @@ function createSelectMenu(str, doc, ismultiple) {
 
 
     doc.appendChild(select)
-
-    select.shadowRoot.addEventListener('slotchange', onSlotChange);
-
 
     // 返回创建的 mdui-select 元素
     return select;
@@ -1861,8 +1835,10 @@ function 加载自定义配置() {
 
     for (let index = 0; index < childnodes.length; index++) {
         const element = childnodes[index];
-        element.remove()
-        index--
+        if (element.className != "search_edit") {
+            element.remove()
+            index--
+        }
     }
 
     if (ismenu != true) {
@@ -1870,6 +1846,7 @@ function 加载自定义配置() {
         var menuItem = document.createElement('mdui-menu-item');
         // 设置文本内容  
         menuItem.textContent = "管理配置";
+        menuItem.isadd = true
         menuItem.onclick = function () {
 
             const loadmenu = window.loadmenu
@@ -1881,7 +1858,7 @@ function 加载自定义配置() {
                 }
                 customdialog.open = true
             } else {
-                mdui.snackbar({
+                mdui_snackbar({
                     message: "加载中",
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
@@ -1897,7 +1874,7 @@ function 加载自定义配置() {
     if (localStorage.getItem("custom_cof")) {
 
         if (Object.keys(custom_json).length == 0) {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: tip1,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
@@ -1940,7 +1917,7 @@ function 加载自定义配置() {
             }
         }
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: tip1,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -2472,7 +2449,7 @@ customButton[1].onclick = function () {
             localStorage.setItem("customs", value)
             document.querySelectorAll(".myedit")[2].value = value;
             加载自定义配置()
-            mdui.snackbar({
+            mdui_snackbar({
                 message: "新建配置成功",
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
@@ -2504,13 +2481,13 @@ customButton[3].onclick = function () {
         onConfirm: (value) => {
             try {
                 选择自定义配置(JSON.parse(value))
-                mdui.snackbar({
+                mdui_snackbar({
                     message: tip3,
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
                 });
             } catch {
-                mdui.snackbar({
+                mdui_snackbar({
                     message: "输入配置有误",
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
@@ -2540,7 +2517,7 @@ customButton[4].onclick = function () {
                     edittt[1].value = ""
                     edittt[2].value = ""
                     edittt[3].value = ""
-                    mdui.snackbar({
+                    mdui_snackbar({
                         message: "删除配置成功",
                         action: "我知道了",
                         onActionClick: () => console.log("click action button")
@@ -2549,14 +2526,14 @@ customButton[4].onclick = function () {
                 onCancel: () => console.log("canceled"),
             });
         } else {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -2589,7 +2566,7 @@ customButton[5].onclick = function () {
                     localStorage.setItem("customs", value)
                     document.querySelectorAll(".myedit")[2].value = value
                     加载自定义配置()
-                    mdui.snackbar({
+                    mdui_snackbar({
                         message: "重命名配置成功",
                         action: "我知道了",
                         onActionClick: () => console.log("click action button")
@@ -2598,14 +2575,14 @@ customButton[5].onclick = function () {
                 onCancel: () => console.log("canceled"),
             });
         } else {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -2619,14 +2596,14 @@ customButton[6].onclick = function () {
         if (editvalue) {
             document.getElementsByClassName("suijitest")[0].open = true
         } else {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -2655,7 +2632,7 @@ customButton[7].onclick = function () {
                         sjtype: document.getElementsByClassName("setmode")[2].value,
                     }
                     localStorage.setItem("custom_cof", JSON.stringify(custom_json))
-                    mdui.snackbar({
+                    mdui_snackbar({
                         message: "保存配置成功",
                         action: "我知道了",
                         onActionClick: () => console.log("click action button")
@@ -2664,14 +2641,14 @@ customButton[7].onclick = function () {
                 onCancel: () => console.log("canceled"),
             });
         } else {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: tip5,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
             });
         }
     } else {
-        mdui.snackbar({
+        mdui_snackbar({
             message: tip2,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -2691,7 +2668,7 @@ customButton[8].onclick = function () {
             for (let index = 0; index < alldoc.length; index++) {
                 alldoc[index].value = alldoc[index].defvalue
             }
-            mdui.snackbar({
+            mdui_snackbar({
                 message: "还原成功",
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
@@ -2744,7 +2721,7 @@ function entclick() {
     custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"] = [edittt[0].value, edittt[1].value, edittt[2].value, edittt[3].value]
     localStorage.setItem("custom_cof", JSON.stringify(custom_json))
     document.getElementsByClassName("suijitest")[0].open = false;
-    mdui.snackbar({
+    mdui_snackbar({
         message: "保存成功",
         action: "我知道了",
         onActionClick: () => console.log("click action button")
@@ -2777,7 +2754,7 @@ colordoc.forEach(element => {
     element.onclick = function () {
 
         if (color_message != "null") {
-            mdui.snackbar({
+            mdui_snackbar({
                 message: color_message,
                 action: "我知道了",
                 onActionClick: () => console.log("click action button")
@@ -2794,7 +2771,7 @@ colordoc.forEach(element => {
 document.getElementsByClassName("color-custom")[0].addEventListener('input', function () {
 
     if (color_message != "null") {
-        mdui.snackbar({
+        mdui_snackbar({
             message: color_message,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -2813,7 +2790,7 @@ color_message = "null"
 document.getElementsByClassName('color-img')[0].addEventListener('input', function () {
 
     if (color_message != "null") {
-        mdui.snackbar({
+        mdui_snackbar({
             message: color_message,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -2839,7 +2816,7 @@ document.getElementsByClassName('color-img')[0].addEventListener('input', functi
                 localStorage.setItem("wzzdy_mythemecolor", color)
                 mdui.setColorScheme(color)
                 color_message = "null"
-                mdui.snackbar({
+                mdui_snackbar({
                     message: "从壁纸设置主题成功",
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
@@ -2855,7 +2832,7 @@ document.getElementsByClassName('color-img')[0].addEventListener('input', functi
 document.getElementsByClassName("colorbutton")[0].onclick = function () {
 
     if (color_message != "null") {
-        mdui.snackbar({
+        mdui_snackbar({
             message: color_message,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
@@ -2865,4 +2842,63 @@ document.getElementsByClassName("colorbutton")[0].onclick = function () {
 
     localStorage.setItem("wzzdy_mythemecolor", "null")
     mdui.removeColorScheme()
+}
+
+function bindsearch(view) {
+    view.addEventListener("input", function () {
+        childnodes = view.parentElement.getElementsByTagName("mdui-menu-item");
+        for (let i = 0; i < childnodes.length; i++) {
+            if (childnodes[i].isadd == true) {
+                continue
+            }
+            let value = childnodes[i].textContent;
+            if (value.includes(this.value)) {
+                childnodes[i].style.display = "";
+            } else {
+                childnodes[i].style.display = "none";
+            }
+        }
+    })
+    view.parentElement.parentElement.addEventListener("closed", function () {
+        childnodes = view.parentElement.getElementsByTagName("mdui-menu-item");
+        //退出清空输入框
+        view.value = ""
+
+        for (let i = 0; i < childnodes.length; i++) {
+            childnodes[i].style.display = "";
+        }
+
+    })
+}
+
+const allsearchview = document.getElementsByClassName("search_edit");
+for (let i = 0; i < allsearchview.length; i++) {
+    bindsearch(allsearchview[i]);
+}
+
+
+const search_heroedit = document.getElementsByClassName("search_heroedit")[0];
+search_heroedit.addEventListener("input", function () {
+
+    const view = search_heroedit
+    let childnodes = view.parentElement.getElementsByClassName("myherolist")[0].childNodes;
+    for (let i = 0; i < childnodes.length; i++) {
+        if (childnodes[i].isshow == false) {
+            continue
+        }
+        let value = childnodes[i].textContent;
+        if (value.includes(view.value)) {
+            childnodes[i].style.display = "";
+        } else {
+            childnodes[i].style.display = "none";
+        }
+    }
+})
+
+var mysnackbar = false;
+function mdui_snackbar(args) {
+    if (mysnackbar && mysnackbar.style.display != "none") {
+        mysnackbar.remove()
+    }
+    mysnackbar = mdui.snackbar(args);
 }
