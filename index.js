@@ -116,7 +116,7 @@ function checkGameMode(modeName, serverType) {
             tip: maptip3,
         },
         {
-            keyword: "0ban",
+            keyword: "随机征兆",
             isOpen: (serverType) => serverType === 'zsf',
             tip: maptip3,
         },
