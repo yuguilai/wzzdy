@@ -57,8 +57,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 
-    <link rel="stylesheet" href="https://unpkg.zhimg.com/mdui@2.0.3/mdui.css">
-    <script src="https://unpkg.zhimg.com/mdui@2.0.3/mdui.global.js"></script>
+    <link rel="stylesheet" href="https://unpkg.zhimg.com/mdui@2.1.1/mdui.css">
+    <script src="https://unpkg.zhimg.com/mdui@2.1.1/mdui.global.js"></script>
 
     <script>
         if (localStorage.getItem("wzzdy_mythemecolor") && localStorage.getItem("wzzdy_mythemecolor") != "null") {
@@ -83,6 +83,7 @@
         .mymenu {
             margin: 0 10px 0 10px;
             max-height: 50vh;
+            width: 30vw;
             overflow: auto;
         }
 
@@ -101,6 +102,11 @@
 
         :not(:defined) {
             visibility: hidden;
+        }
+
+        mdui-select::part(menu) {
+            max-height: 50vh;
+            overflow: auto;
         }
     </style>
 
@@ -225,21 +231,25 @@
                     <mdui-text-field slot="trigger" label="地图模式" readonly variant="outlined" class="myedit" type="text"
                         name></mdui-text-field>
                     <mdui-menu class="mymenu" submenu-trigger="click hover">
+                        <mdui-text-field variant="outlined" label="搜索内容" clearable type="text" class="search_edit"
+                            name></mdui-text-field></mdui-menu>
                 </mdui-dropdown>
 
                 <mdui-dropdown trigger="click" placement="auto">
                     <mdui-text-field slot="trigger" label="禁用英雄列表" readonly variant="outlined" class="myedit"
                         type="text" name></mdui-text-field>
                     <mdui-menu class="mymenu" submenu-trigger="click hover">
+                        <mdui-text-field variant="outlined" label="搜索内容" clearable type="text" class="search_edit"
+                            name></mdui-text-field></mdui-menu>
                 </mdui-dropdown>
 
                 <mdui-dropdown trigger="click" placement="auto">
                     <mdui-text-field slot="trigger" label="自定义配置" readonly variant="outlined" class="myedit" type="text"
                         name></mdui-text-field>
                     <mdui-menu class="mymenu" submenu-trigger="click hover">
+                        <mdui-text-field variant="outlined" label="搜索内容" clearable type="text" class="search_edit"
+                            name></mdui-text-field></mdui-menu>
                 </mdui-dropdown>
-
-                <mdui-text-field label="有效时间(分钟)" clearable variant="outlined" class="myedit"></mdui-text-field>
 
                 <mdui-button class="mybutton">启动</mdui-button>
                 <mdui-button class="mybutton">复制链接</mdui-button>
@@ -281,6 +291,9 @@
                         <mdui-radio value="5">射手</mdui-radio>
                         <mdui-radio value="6">辅助</mdui-radio>
                     </mdui-radio-group>
+
+                    <mdui-text-field variant="outlined" label="搜索内容" clearable type="text" class="search_heroedit"
+                        name></mdui-text-field>
 
                     <div class="myherolist"></div>
 
