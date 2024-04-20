@@ -348,19 +348,19 @@ allbutton[0].onclick = function () {
         });
         return
     }
-    if (navigator.onLine) {
-        生成链接()
-    } else {
+    生成链接()
+}
+
+allbutton[1].onclick = function () {
+    if (navigator.onLine == false) {
         mdui.alert({
             headline: "提示",
             description: "无网络 无法复制 请检查网络链接",
             confirmText: "我知道了",
             onConfirm: () => console.log("confirmed"),
         });
+        return
     }
-}
-
-allbutton[1].onclick = function () {
     let value = document.getElementsByTagName("mdui-segmented-button-group")[0].value
     if (work_message != "null") {
         mdui_snackbar({
