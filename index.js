@@ -1164,17 +1164,18 @@ heroButton[8].onclick = function () {
 }
 
 function createMenuItems(settingsDoc, values, isdata) {
+    if (isdata) {
+        settingsDoc.value = isdata;
+        settingsDoc.defvalue = settingsDoc.value
+        return settingsDoc
+    }
     var index = 1
     values.forEach(element => {
         // 使用闭包解决
         (function (item_str, index) {
             // 创建新的 mdui-menu-item 元素  
             var menuItem = document.createElement('mdui-menu-item');
-            if (isdata) {
-                menuItem.value = item_str;
-            } else {
-                menuItem.value = index
-            }
+            menuItem.value = index
             menuItem.textContent = item_str
             menuItem.onclick = function () {
             }
@@ -1185,12 +1186,7 @@ function createMenuItems(settingsDoc, values, isdata) {
     });
 
     settingsDoc.updateComplete.then(() => {
-        if (isdata) {
-            settingsDoc.value = isdata;
-        } else {
-            settingsDoc.value = 1;
-        }
-        //存储默认值
+        settingsDoc.value = 1;
         settingsDoc.defvalue = settingsDoc.value
     });
     return settingsDoc
