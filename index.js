@@ -551,93 +551,95 @@ allbutton[5].onclick = function () {
             xhr.send();
             work_message = "正在请求复制链接中 请稍等"
             xhr.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var mdata = JSON.parse(this.responseText)
-                    if (mdata.gamedata) {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        var mdata = JSON.parse(this.responseText)
+                        if (mdata.gamedata) {
 
-                        const findstr = 'SmobaLaunch_'
-                        var game_json = JSON.parse(atob(mdata.gamedata.split(findstr)[1]));
-                        const comm_fields = mdata.comm_fields
-                        var banheros = []
-                        var custom_params = mdata.battle_custom_params
+                            const findstr = 'SmobaLaunch_'
+                            var game_json = JSON.parse(atob(mdata.gamedata.split(findstr)[1]));
+                            const comm_fields = mdata.comm_fields
+                            var banheros = []
+                            var custom_params = mdata.battle_custom_params
 
-                        for (let index = 0; index < comm_fields.length; index++) {
-                            const element = comm_fields[index];
-                            if (element.name.includes("hero")) {
-                                const allow_heros = element.value
+                            for (let index = 0; index < comm_fields.length; index++) {
+                                const element = comm_fields[index];
+                                if (element.name.includes("hero")) {
+                                    const allow_heros = element.value
 
-                                console.log(allow_heros)
+                                    console.log(allow_heros)
 
-                                const allheros = mydatajson[1]
+                                    const allheros = mydatajson[1]
 
-                                for (let key in allheros) {
-                                    const element = allheros[key];
-                                    const myvalue = element.split('|', 1)[0];
-                                    if (allow_heros.includes(myvalue) != true) {
-                                        banheros.push(myvalue)
+                                    for (let key in allheros) {
+                                        const element = allheros[key];
+                                        const myvalue = element.split('|', 1)[0];
+                                        if (allow_heros.includes(myvalue) != true) {
+                                            banheros.push(myvalue)
+                                        }
                                     }
+
                                 }
-
                             }
-                        }
 
-                        if (banheros.length > 0) {
-                            game_json.banHerosCamp1 = banheros
-                            game_json.banHerosCamp2 = banheros
-                        }
-
-                        if (custom_params) {
-                            game_json.customDefineItems = custom_params
-                        }
-
-                        console.log(game_json)
-
-                        const game_data = findstr + btoa(JSON.stringify(game_json))
-                        console.log(game_data)
-
-                        mdui_snackbar({
-                            message: "已获取到数据 请耐心等待 正在请求生成短链中",
-                            action: "我知道了",
-                            onActionClick: () => console.log("click action button")
-                        });
-
-                        var url = "?gamedata=" + game_data
-                        var fxurl = encodeURIComponent(window.location.origin + "/wzzdy/open.html?openurl=" + url)
-                        apiurl = "https://api.s1f.top/short_link?url=" + fxurl
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('GET', apiurl, true);
-                        xhr.send();
-                        work_message = "正在请求复制链接中 请稍等"
-                        xhr.onreadystatechange = function () {
-                            if (this.readyState == 4 && this.status == 200) {
-                                var murl = JSON.parse(this.responseText).data.url
-                                murl = processLink(murl);
-                                work_message = "null"
-                                mdui.confirm({
-                                    headline: "提示",
-                                    description: "已获取到数据 是否复制链接并打开？",
-                                    confirmText: "确认",
-                                    cancelText: "取消",
-                                    onConfirm: () => {
-                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
-                                        打开链接(window.location.origin + "/wzzdy/data.html?" + murl)
-                                    },
-                                    onCancel: () => console.log("canceled"),
-                                });
+                            if (banheros.length > 0) {
+                                game_json.banHerosCamp1 = banheros
+                                game_json.banHerosCamp2 = banheros
                             }
-                        }
 
+                            if (custom_params) {
+                                game_json.customDefineItems = custom_params
+                            }
+
+                            console.log(game_json)
+
+                            const game_data = findstr + btoa(JSON.stringify(game_json))
+                            console.log(game_data)
+
+                            mdui_snackbar({
+                                message: "已获取到数据 请耐心等待 正在请求生成短链中",
+                                action: "我知道了",
+                                onActionClick: () => console.log("click action button")
+                            });
+
+                            var url = "?gamedata=" + game_data
+                            var fxurl = encodeURIComponent(window.location.origin + "/wzzdy/open.html?openurl=" + url)
+                            apiurl = "https://api.s1f.top/short_link?url=" + fxurl
+                            var xhr = new XMLHttpRequest();
+                            xhr.open('GET', apiurl, true);
+                            xhr.send();
+                            work_message = "正在请求复制链接中 请稍等"
+                            xhr.onreadystatechange = function () {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    var murl = JSON.parse(this.responseText).data.url
+                                    murl = processLink(murl);
+                                    work_message = "null"
+                                    mdui.confirm({
+                                        headline: "提示",
+                                        description: "已获取到数据 是否复制链接并打开？",
+                                        confirmText: "确认",
+                                        cancelText: "取消",
+                                        onConfirm: () => {
+                                            复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                                            打开链接(window.location.origin + "/wzzdy/data.html?" + murl)
+                                        },
+                                        onCancel: () => console.log("canceled"),
+                                    });
+                                }
+                            }
+
+                        } else {
+                            mdui_snackbar({
+                                message: "获取失败 请检查是否满员",
+                                action: "我知道了",
+                                onActionClick: () => console.log("click action button")
+                            });
+                            work_message = "null"
+                            return
+                        }
                     } else {
-                        mdui_snackbar({
-                            message: "获取失败 请检查是否满员",
-                            action: "我知道了",
-                            onActionClick: () => console.log("click action button")
-                        });
-                        work_message = "null"
-                        return
+                        alert("发生错误 可能是作者登录凭证掉了 你可以自行部署")
                     }
-                } else {
-                    alert("发生错误 可能是作者登录凭证掉了 你可以自行部署")
                 }
             }
         },
@@ -1182,8 +1184,7 @@ function createMenuItems(settingsDoc, values, isdata) {
         index = index + 1
     });
 
-    //防止设置value无效
-    setTimeout(function () {
+    settingsDoc.updateComplete.then(() => {
         if (isdata) {
             settingsDoc.value = isdata;
         } else {
@@ -1191,9 +1192,7 @@ function createMenuItems(settingsDoc, values, isdata) {
         }
         //存储默认值
         settingsDoc.defvalue = settingsDoc.value
-    }, 500);
-
-
+    });
     return settingsDoc
 }
 
@@ -1956,7 +1955,7 @@ function 判断出线数值(myvalue) {
     } else if (isdkl && iszd && isfyl != true) {
         bxmode = 3
         //3 4
-    } else if (isdkl != true && iszd && isfyl != true) {
+    } else if (isdkl != true && iszd != true && isfyl) {
         bxmode = 4
         //31 5
     } else if (isdkl && iszd != true && isfyl) {
@@ -1968,6 +1967,7 @@ function 判断出线数值(myvalue) {
     } else if (isdkl && iszd && isfyl) {
         return "null"
     }
+    console.log(bxmode)
     return bxmode
 }
 
