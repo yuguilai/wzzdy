@@ -1963,7 +1963,6 @@ function 判断出线数值(myvalue) {
     } else if (isdkl && iszd && isfyl) {
         return "null"
     }
-    console.log(bxmode)
     return bxmode
 }
 
