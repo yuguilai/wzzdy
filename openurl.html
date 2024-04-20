@@ -12,14 +12,9 @@
                 console.error('Service Worker registration failed:', error);
             });
         }
-
-        var url = window.location.href.split(/url=(.+)/)[1];
-        if (url) {
-            if (navigator.userAgent.indexOf("QQ/") == -1 && navigator.userAgent.indexOf("MicroMessenger") == -1) {
-                window.location.replace(url)
-            }
-        } else {
-            window.location.replace(window.location.origin + "/wzzdy/")
+        
+        if (window.self !== window.top) {
+            const url = window.top.location.href;
         }
 
     </script>
