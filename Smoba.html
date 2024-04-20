@@ -104,6 +104,9 @@
             mapnametable[valueArray[0]] = [key, valueArray[2]];
         }
 
+        //补全 因为0ban没用所以只写在这里
+        mapnametable[20910] = ["5v5征兆0ban位", 10];
+
 
         var gamejson = JSON.parse(atob(game_base64data))
         var banheros = gamejson.banHerosCamp1
