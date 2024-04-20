@@ -1,4 +1,4 @@
-const cacheName = 'my-pwa-v3.84';
+const cacheName = 'my-pwa-v3.85';
 const urlsToCache = [
     './',
     './index.html',
@@ -15,8 +15,8 @@ const urlsToCache = [
     './android.png',
     './banner.png',
     './logo-200x200.png',
-    'https://unpkg.zhimg.com/mdui@2.0.3/mdui.css',
-    'https://unpkg.zhimg.com/mdui@2.0.3/mdui.global.js',
+    'https://unpkg.zhimg.com/mdui@2.1.1/mdui.css',
+    'https://unpkg.zhimg.com/mdui@2.1.1/mdui.global.js',
     './index.js',
     './myjson.js'
 ];
