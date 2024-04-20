@@ -2768,17 +2768,18 @@ colordoc.forEach(element => {
     }
 });
 
-document.getElementsByClassName("color-custom")[0].addEventListener('input', function () {
-
+document.getElementsByClassName('color-custom')[0].addEventListener('click', function (event) {
     if (color_message != "null") {
         mdui_snackbar({
             message: color_message,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
-        return
+        event.preventDefault()
     }
+});
 
+document.getElementsByClassName("color-custom")[0].addEventListener('input', function () {
     color = this.value;
     localStorage.setItem("wzzdy_mycustomthemecolor", color)
     localStorage.setItem("wzzdy_mythemecolor", color)
@@ -2787,16 +2788,19 @@ document.getElementsByClassName("color-custom")[0].addEventListener('input', fun
 
 color_message = "null"
 
-document.getElementsByClassName('color-img')[0].addEventListener('input', function () {
-
+document.getElementsByClassName('color-img')[0].addEventListener('click', function (event) {
     if (color_message != "null") {
         mdui_snackbar({
             message: color_message,
             action: "我知道了",
             onActionClick: () => console.log("click action button")
         });
+        event.preventDefault()
         return
     }
+});
+
+document.getElementsByClassName('color-img')[0].addEventListener('input', function () {
 
     if (this.files && this.files[0]) {
         color_message = "正在从壁纸提取颜色中 请耐心等待"
