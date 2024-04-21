@@ -366,12 +366,13 @@
 
             console.log(allcustom_str);
 
-            alert(parseJsonData(allcustom_str), mapnametable[mapid][1] / 2);
+            alert(parseJsonData(allcustom_str, mapnametable[mapid][1] / 2));
 
         }
 
         function parseJsonData(json, param) {
             console.log(json)
+            console.log(param)
             const result = {};
 
             // 解析英雄属性
