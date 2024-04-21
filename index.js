@@ -13,7 +13,7 @@ if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
     // 创建<span>元素  
     var span = document.createElement('span');
     // 设置<span>元素的文本内容  
-    span.innerHTML = '<span slot="description">全新版的lua修改脚本已经上线 使用脚本可以实现直接邀请好友(不用滴滴) 以及不用10人开房间 添加人机 以及可以像主播一样实时在游戏内设置房间自定义配置(也支持娱乐模式在游戏内实时编辑自定义配置）完全免费 理论支持正式服/体验服 点击下方我知道了 查看教程<br>提示 ：开启脚本有风险 请酌情开启 仅支持安卓</span>';
+    span.innerHTML = '<span slot="description">全新版的lua修改脚本已经上线 使用脚本可以实现直接邀请好友(不用滴滴) 以及不用10人开房间 添加人机 以及可以像主播一样实时在游戏内设置房间自定义配置(也支持娱乐模式在游戏内实时编辑自定义配置）完全免费 点击下方我知道了 查看教程<br>提示 ：开启脚本有风险 请酌情开启 仅支持安卓</span>';
     mdui.alert({
         headline: "提示",
         description: span,
@@ -29,6 +29,15 @@ if (localStorage.getItem("wzzdy_freetip") != "0.1") {
         description: "本网页完全免费 如果你是购买得到的 你可能被骗了",
         confirmText: "我知道了",
         onConfirm: () => localStorage.setItem("wzzdy_freetip", "0.1"),
+    });
+}
+
+if (localStorage.getItem("wzzdy_createtip") != "0.1") {
+    mdui.alert({
+        headline: "提示",
+        description: "建议点击网页内「分享房间教程」按钮来查看文字教程 现在又可在训练营内加载界面打开网页建房来绕过开房限制了 如果使用赛宝开房遇到恶意卡房 可尝试本网页内的赛宝还原 将赛宝链接转换为网页链接分享",
+        confirmText: "我知道了",
+        onConfirm: () => localStorage.setItem("wzzdy_createtip", "0.1"),
     });
 }
 
@@ -374,8 +383,8 @@ allbutton[1].onclick = function () {
             xhr.open('GET', apiurl, true);
             xhr.send();
             work_message = "正在请求复制链接中 请稍等"
-            xhr.onerror = function() {
-                work_message = "null"  
+            xhr.onerror = function () {
+                work_message = "null"
                 mdui.alert({
                     headline: "提示",
                     description: "出现错误 无法请求 请检查网络",
@@ -409,8 +418,8 @@ allbutton[1].onclick = function () {
                 xhr.open('GET', apiurl, true);
                 xhr.send();
                 work_message = "正在请求复制链接中 请稍等"
-                xhr.onerror = function() {
-                    work_message = "null"  
+                xhr.onerror = function () {
+                    work_message = "null"
                     mdui.alert({
                         headline: "提示",
                         description: "出现错误 无法请求 请检查网络",
@@ -465,8 +474,8 @@ allbutton[1].onclick = function () {
                 xhr.open('GET', apiurl, true);
                 xhr.send();
                 work_message = "正在请求复制链接中 请稍等"
-                xhr.onerror = function() {
-                    work_message = "null"  
+                xhr.onerror = function () {
+                    work_message = "null"
                     mdui.alert({
                         headline: "提示",
                         description: "出现错误 无法请求 请检查网络",
@@ -665,6 +674,35 @@ allbutton[5].onclick = function () {
     });
 }
 
+function createTooltip(title, content) {
+    // 创建 mdui-tooltip 元素
+    const tooltip = document.createElement('mdui-tooltip');
+
+    const tooltipContent = document.createElement('div');
+    tooltipContent.setAttribute('slot', 'content');
+
+    const tooltipTitle = document.createElement('div');
+    tooltipTitle.style.fontSize = '1.4em';
+    tooltipTitle.textContent = title;
+
+    if (content) {
+        const tooltipText = document.createElement('div');
+        tooltipText.textContent = content;
+        tooltipContent.appendChild(tooltipTitle);
+        tooltipContent.appendChild(tooltipText);
+    } else {
+        // 如果没有附加内容，只添加标题
+        tooltipContent.appendChild(tooltipTitle);
+    }
+
+    //内容添加到工具提示中
+    tooltip.appendChild(tooltipContent);
+
+    // 返回创建的工具提示元素
+    return tooltip;
+}
+
+
 
 for (item in mydatajson[0]) {
     // 使用闭包解决
@@ -676,6 +714,14 @@ for (item in mydatajson[0]) {
         menuItem.onclick = function () {
             localStorage.setItem("mapmode", item_str)
             document.querySelectorAll(".myedit")[0].value = item_str;
+        }
+
+        if (item_str.includes("征召")) {
+            // 创建 mdui-tooltip 元素
+            const tooltip = createTooltip("注意","征召不可以添加人机哦 可选择其他模式");
+            tooltip.appendChild(menuItem);
+            document.querySelectorAll(".mymenu")[0].appendChild(tooltip);
+            return
         }
         // 将新创建的元素添加到 DOM 中，例如添加到 body 中  
         document.querySelectorAll(".mymenu")[0].appendChild(menuItem);
