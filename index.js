@@ -678,6 +678,8 @@ function createTooltip(title, content) {
     // 创建 mdui-tooltip 元素
     const tooltip = document.createElement('mdui-tooltip');
 
+    tooltip.trigger = "click"
+
     const tooltipContent = document.createElement('div');
     tooltipContent.setAttribute('slot', 'content');
 
@@ -718,7 +720,7 @@ for (item in mydatajson[0]) {
 
         if (item_str.includes("征召")) {
             // 创建 mdui-tooltip 元素
-            const tooltip = createTooltip("注意","征召不可以添加人机哦 可选择其他模式");
+            const tooltip = createTooltip("注意", "征召不可以添加人机哦 不建议开启");
             tooltip.appendChild(menuItem);
             document.querySelectorAll(".mymenu")[0].appendChild(tooltip);
             return
