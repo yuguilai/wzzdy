@@ -717,7 +717,6 @@ for (item in mydatajson[0]) {
             if (item_str.includes("征召")) {
                 mdui_snackbar({
                     message: "征召不可以添加人机哦",
-                    action: "我知道了",
                     onActionClick: () => console.log("click action button")
                 });
             }
