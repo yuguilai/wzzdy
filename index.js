@@ -714,13 +714,20 @@ for (item in mydatajson[0]) {
         // 设置文本内容  
         menuItem.textContent = item_str;
         menuItem.onclick = function () {
+            if (item_str.includes("征召")) {
+                mdui_snackbar({
+                    message: "征召不可以添加人机哦",
+                    action: "我知道了",
+                    onActionClick: () => console.log("click action button")
+                });
+            }
             localStorage.setItem("mapmode", item_str)
             document.querySelectorAll(".myedit")[0].value = item_str;
         }
 
         if (item_str.includes("征召")) {
             // 创建 mdui-tooltip 元素
-            const tooltip = createTooltip("注意", "征召不可以添加人机哦 不建议开启");
+            const tooltip = createTooltip("注意", "征召不可以添加人机哦");
             tooltip.appendChild(menuItem);
             document.querySelectorAll(".mymenu")[0].appendChild(tooltip);
             return
