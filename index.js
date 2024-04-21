@@ -352,15 +352,6 @@ allbutton[0].onclick = function () {
 }
 
 allbutton[1].onclick = function () {
-    if (navigator.onLine == false) {
-        mdui.alert({
-            headline: "提示",
-            description: "无网络 无法复制 请检查网络链接",
-            confirmText: "我知道了",
-            onConfirm: () => console.log("confirmed"),
-        });
-        return
-    }
     let value = document.getElementsByTagName("mdui-segmented-button-group")[0].value
     if (work_message != "null") {
         mdui_snackbar({
@@ -383,6 +374,15 @@ allbutton[1].onclick = function () {
             xhr.open('GET', apiurl, true);
             xhr.send();
             work_message = "正在请求复制链接中 请稍等"
+            xhr.onerror = function() {
+                work_message = "null"  
+                mdui.alert({
+                    headline: "提示",
+                    description: "出现错误 无法请求 请检查网络",
+                    confirmText: "我知道了",
+                    onConfirm: () => console.log("confirmed"),
+                });
+            }
             xhr.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     var murl = JSON.parse(this.responseText).data.url
@@ -409,6 +409,15 @@ allbutton[1].onclick = function () {
                 xhr.open('GET', apiurl, true);
                 xhr.send();
                 work_message = "正在请求复制链接中 请稍等"
+                xhr.onerror = function() {
+                    work_message = "null"  
+                    mdui.alert({
+                        headline: "提示",
+                        description: "出现错误 无法请求 请检查网络",
+                        confirmText: "我知道了",
+                        onConfirm: () => console.log("confirmed"),
+                    });
+                }
                 xhr.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         var murl = JSON.parse(this.responseText).data.url
@@ -456,6 +465,15 @@ allbutton[1].onclick = function () {
                 xhr.open('GET', apiurl, true);
                 xhr.send();
                 work_message = "正在请求复制链接中 请稍等"
+                xhr.onerror = function() {
+                    work_message = "null"  
+                    mdui.alert({
+                        headline: "提示",
+                        description: "出现错误 无法请求 请检查网络",
+                        confirmText: "我知道了",
+                        onConfirm: () => console.log("confirmed"),
+                    });
+                }
                 xhr.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         var murl = JSON.parse(this.responseText).data.url
