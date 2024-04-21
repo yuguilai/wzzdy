@@ -247,10 +247,13 @@
         function checkArrayValue(sourceArray, targetArray) {
             let keys = []
             for (const item of sourceArray) {
-                keys.push(item)
-                if (targetArray.includes(item.toString()) == false) {
-                    return false;
+                if (targetArray.includes(item.toString())) {
+                    keys.push(item)
                 }
+            }
+
+            if (keys.length == 0) {
+                return false
             }
 
             return keys;
@@ -464,7 +467,8 @@
                 mergedHeroData[attrString].push(heroIndex);
             }
 
-            let SideOutput = "英雄属性配置\n";
+            let SideOutput = "";
+
             for (const attributes in mergedHeroData) {
 
                 const attrObj = JSON.parse(attributes);
@@ -473,11 +477,13 @@
                     customSideOutput += `${key}·${attrObj[key].join(', ')} `;
                 }
 
-                const allpostr = checkArrayValue(blueIndices, mergedHeroData[attributes])
-                if (checkArrayValue([...blueIndices, ...redIndices], mergedHeroData[attributes])) {
-                    SideOutput += `全部位置：`;
-                    SideOutput += customSideOutput.trim() + "\n";
-                    break
+                const allpostr = checkArrayValue([...blueIndices, ...redIndices], mergedHeroData[attributes])
+                if (allpostr) {
+                    if (allpostr.length == param * 2) {
+                        SideOutput += `全部阵营: `;
+                        SideOutput += customSideOutput.trim() + "\n";
+                        break
+                    }
                 }
 
                 console.log(mergedHeroData)
@@ -485,22 +491,23 @@
                 const bluepostr = checkArrayValue(blueIndices, mergedHeroData[attributes])
                 if (bluepostr) {
                     if (bluepostr.length == param) {
-                        SideOutput += `蓝方全部位置：`;
+                        SideOutput += `蓝方全部位置: `;
                         SideOutput += customSideOutput.trim() + "\n";
                     } else {
-                        SideOutput += `蓝方位置 ${bluepostr.join(' ')}: `;
+                        SideOutput += `蓝方位置 ${bluepostr.join(' ')} : `;
                         SideOutput += customSideOutput.trim() + "\n";
                     }
 
                 }
 
-                const redpostr = checkArrayValue(redIndices, mergedHeroData[attributes])
+                const redpostr = checkArrayValue(redIndices, mergedHeroData[attributes]);
                 if (redpostr) {
                     if (redpostr.length == param) {
-                        SideOutput += `红方全部位置：`;
+                        SideOutput += `红方全部位置: `;
                         SideOutput += customSideOutput.trim() + "\n";
                     } else {
-                        SideOutput += `红方位置 ${redpostr.join(' ')}: `;
+                        //重设位置 从1开始
+                        SideOutput += `红方位置 ${redpostr.map(num => num - param).join(' ')} : `;
                         SideOutput += customSideOutput.trim() + "\n";
                     }
 
@@ -511,7 +518,49 @@
             }
 
             if (Object.keys(heroAttributes).length > 0) {
-                result["英雄属性"] = SideOutput.trim();
+
+                if (SideOutput.includes("全部阵营") == false) {
+                    // 提取行并去除空行
+                    const lines = SideOutput.trim().split('\n').filter(line => line);
+
+                    // 解析每一行，提取信息
+                    const parsedData = lines.map(line => {
+                        const position = line.split(': ')[0];
+                        const positionNumbers = position.match(/\d+/g); // 提取所有数字
+                        let lastNumber
+                        if (line.includes("全部位置")) {
+                            //全部位置始终排在最前
+                            lastNumber = 9999
+                        } else {
+                            lastNumber = parseInt(positionNumbers[positionNumbers.length - 1]); // 选择最后一个数字
+                        }
+                        const side = position.split('位置')[0]; // 蓝方或红方
+
+                        return {
+                            side,
+                            location: lastNumber,
+                            line: line,
+                        };
+                    });
+
+                    // 先按蓝方和红方排序，然后按位置数字排序
+                    const sortedData = parsedData.sort((a, b) => {
+                        if (a.side.includes('蓝方') && b.side.includes('红方')) {
+                            return -1; // 蓝方在红方前面
+                        }
+                        if (a.side.includes('红方') && b.side.includes('蓝方')) {
+                            return 1; // 红方在蓝方后面
+                        }
+
+                        // 如果相同方，则按位置数字排序
+                        return a.location - b.location;
+                    });
+
+                    SideOutput = sortedData.map(item => `${item.line}`).join('\n');
+                }
+
+
+                result["英雄属性"] = `英雄属性配置\n${SideOutput.trim()}`;
             }
 
             // 解析其他属性（兵线、水晶、防御塔、野怪）
@@ -544,6 +593,7 @@
                 for (const attrData in mergedAttrData) {
                     const attrKeys = mergedAttrData[attrData].join(', ');
                     const attrObj = JSON.parse(attrData);
+                    console.log(mergedAttrData)
                     for (const side in attrObj) {
                         if (side === "0") {
                             blueLineOutput += `${attrKeys}: ${attrObj[side].split(":")[1]} `
