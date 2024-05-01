@@ -1,4 +1,4 @@
-const cacheName = 'my-pwa-v3.98';
+const cacheName = 'my-pwa-v4.0';
 const urlsToCache = [
     './',
     './index.html',
@@ -8,12 +8,8 @@ const urlsToCache = [
     './openurl.html',
     './data.html',
     './Smoba.html',
-    './opentyf.html',
+    './opengame.html',
     './zb.html',
-    './3dian.png',
-    './iphone.png',
-    './android.png',
-    './banner.png',
     './logo-200x200.png',
     'https://unpkg.zhimg.com/mdui@2.1.1/mdui.css',
     'https://unpkg.zhimg.com/mdui@2.1.1/mdui.global.js',
