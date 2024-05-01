@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <head>
+        <meta charset="UTF-8">
+        <link crossorigin="" rel="shortcut icon" type="image/x-icon" href="./logo-200x200.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>跳转链接中...</title>
+    </head>
+</head>
+
+<body>
+    <iframe id="fullscreen-iframe"
+        style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;border: none;margin: 0;padding: 0;overflow: hidden;z-index: 999999;"></iframe>
+
+    <script>
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch((error) => {
+                console.error('Service Worker registration failed:', error);
+            });
+        }
+
+        var url = window.location.href.split(/\?(.+)/)[1];
+        if (url) {
+            // 判断最后一个字符是否为等号
+            if (url.endsWith("=")) {
+                // 替换最后一个字符为其他字符
+                url = url.slice(0, -1);
+            }
+            url = url.replace(/\./g, '/');
+            url = "https://api.s1f.top/" + url
+            iframe = document.querySelector("iframe")
+            iframe.src = url
+
+
+            iframe.onload = function () {
+                setTimeout(function () {
+                    //检测是否在同域
+                    try {
+                        var iframeUrl = iframe.contentWindow.location.href;
+                        console.log('IFrame URL:', iframeUrl);
+                        var iframeTitle = iframe.contentDocument.title;
+                        // 设置当前网页的title为iframe的title
+                        document.title = iframeTitle;
+                    } catch (error) {
+                        console.error(error);
+                        alert("超时未跳转 请检查链接或网络情况 正在跳转至主页")
+                        window.location.replace(window.location.origin + "/wzzdy/")
+                    }
+                }, 2000);
+            };
+
+        } else {
+            window.location.replace(window.location.origin + "/wzzdy/")
+        }
+
+    </script>
+
+</body>
+
+</html>
