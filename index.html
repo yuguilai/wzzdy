@@ -17,7 +17,7 @@
         if (navigator.userAgent.indexOf("QQ/") !== -1 || navigator.userAgent.indexOf("MicroMessenger") !== -1) {
             document.write('<iframe id="fullscreen-iframe" src="about:blank" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 999999;"></iframe>');
             const iframe = document.getElementById("fullscreen-iframe");
-            iframe.src=window.location.origin + "/wzzdy/openurl.html";
+            iframe.src = window.location.origin + "/wzzdy/openurl.html";
         }
 
         var issupport = 'any' in Promise;
@@ -276,6 +276,8 @@
                         <mdui-button slot="trigger" variant="filled" name value type="buttn"
                             class="herobutton">选择方案</mdui-button>
                         <mdui-menu class="mymenu" submenu-trigger="click hover">
+                            <mdui-text-field variant="outlined" label="搜索内容" clearable type="text" class="search_edit"
+                                name></mdui-text-field></mdui-menu>
                     </mdui-dropdown>
                     <mdui-button variant="filled" name value type="buttn" class="herobutton">新建方案</mdui-button>
                     <mdui-button variant="filled" name value type="buttn" class="herobutton">复制方案</mdui-button>
@@ -317,6 +319,8 @@
                         <mdui-button slot="trigger" variant="filled" name value type="buttn"
                             class="custombutton">选择方案</mdui-button>
                         <mdui-menu class="mymenu" submenu-trigger="click hover">
+                            <mdui-text-field variant="outlined" label="搜索内容" clearable type="text" class="search_edit"
+                                name></mdui-text-field></mdui-menu>
                     </mdui-dropdown>
                     <mdui-button variant="filled" name value type="buttn" class="custombutton">新建方案</mdui-button>
                     <mdui-button variant="filled" name value type="buttn" class="custombutton">复制方案</mdui-button>
@@ -328,10 +332,13 @@
                     <mdui-button variant="filled" name value type="buttn" class="custombutton">还原</mdui-button>
 
                     <mdui-dialog class="suijitest" headline="提示"
-                        description='示例随机生成数据： {"1":[1,2,3,4,5]} 代表第一个选项 并且随机1-5 {"1,4,5":[1,2,3,4,5]} 代表第一个选项下第四和第五个选择 随机从1-5选择 最后两个内容要求必须json结构 该功能可能导致无法启动 请酌情使用'><mdui-text-field
+                    description='随机生成数据数组value类型为 生效选项位置:随机生成范围:随机生成位置(不填写则默认全部) 例如在随机生成数据填入 ["1:1,2,3,4,5:5,6,7"] 代表随机第一个选项 随机生成数据1到5 只生效于位置5 6 7 随机打乱数据数组value类型为 生效选项位置:随机打乱位置(不填写则默认全部) 填入 ["1,2,3:2,3,4"] 代表第一个选项到第三个选项 从位置2到位置4随机打乱数据 随机打乱位置的设置仅支持英雄属性 最后两个内容要求必须json数组结构 该功能可能导致无法启动 请酌情使用'><mdui-text-field
                             variant="filled" type="text" name="" style="padding-top: 10px;" clearable
                             label="地图模式"></mdui-text-field><mdui-text-field variant="filled" type="text" name=""
-                            clearable style="padding-top: 10px;" label="禁用英雄"></mdui-text-field><mdui-text-field
+                            clearable style="padding-top: 10px;" label="禁用英雄"></mdui-text-field>
+                            <p class="extratip"></p>
+
+                            <mdui-text-field
                             variant="filled" type="text" name="" style="padding-top: 10px;" clearable
                             label="随机生成数据"></mdui-text-field><mdui-text-field variant="filled" type="text" name=""
                             clearable style="padding-top: 10px;" label="随机打乱数据"></mdui-text-field><mdui-button
