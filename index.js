@@ -1,6 +1,6 @@
 window.onload = function () {
     document.getElementsByTagName("mdui-card")[0].style.visibility = "unset"
-    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.5"
+    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.6"
 }
 
 const tip1 = "没有配置 请先点击管理配置新建配置"
@@ -23,21 +23,21 @@ if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
     localStorage.setItem("wzzdy_xgluatip", "0.1")
 }
 
-if (localStorage.getItem("wzzdy_freetip") != "0.1") {
+if (localStorage.getItem("wzzdy_freetip") != "0.2") {
     mdui.alert({
         headline: "提示",
-        description: "本网页完全免费 如果你是购买得到的 你可能被骗了",
+        description: "本网页完全免费 如果你是购买得到的 你可能被骗了 本网页开源自 https://gitee.com/huajicloud/wzzdy/",
         confirmText: "我知道了",
-        onConfirm: () => localStorage.setItem("wzzdy_freetip", "0.1"),
+        onConfirm: () => localStorage.setItem("wzzdy_freetip", "0.2"),
     });
 }
 
-if (localStorage.getItem("wzzdy_createtip") != "0.1") {
+if (localStorage.getItem("wzzdy_createtip") != "0.2") {
     mdui.alert({
         headline: "提示",
-        description: "建议点击网页内「分享房间教程」按钮来查看文字教程 现在又可在训练营内加载界面打开网页建房来绕过开房限制了 如果使用赛宝开房遇到恶意卡房 可尝试本网页内的赛宝还原 将赛宝链接转换为网页链接分享",
+        description: "建议点击网页内「分享房间教程」按钮来查看文字教程 现在又可在训练营内加载界面打开网页建房来绕过开房限制了 如果使用赛宝开房遇到恶意卡房 可尝试 在训练营卡房后进入赛宝房间 这样可以邀请QQ好友 或尝试本网页内的赛宝还原 将赛宝链接转换为网页链接分享",
         confirmText: "我知道了",
-        onConfirm: () => localStorage.setItem("wzzdy_createtip", "0.1"),
+        onConfirm: () => localStorage.setItem("wzzdy_createtip", "0.2"),
     });
 }
 
@@ -237,9 +237,10 @@ function 生成链接(func) {
             }
             try {
                 var custom_json = makejson(json_herolist, json_bxlist, json_yglist, json_fytlist, json_sjlist, mysjson)
-            } catch {
-                localStorage.clear()
-                window.location.reload()
+            } catch (error) {
+                console.log(error)
+                //localStorage.clear()
+                //window.location.reload()
             }
             alljson.customDefineItems = custom_json
         }
@@ -315,7 +316,7 @@ function 生成链接(func) {
     }
 
     if (func) {
-        func(openurl)
+        func(openurl, tiptext)
         return
     }
 
@@ -347,6 +348,28 @@ function processLink(link) {
     return replacedContent;
 }
 
+//从 https://api.aa1.cn/ 找的api链接
+function getShortLink(longUrl) {
+    const requestUrl = `https://api.s1f.top/short_link?url=${encodeURIComponent(longUrl)}`;
+
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", requestUrl, true);
+        xhr.onload = function () {
+            if (this.status >= 200 && this.status < 300) {
+                const response = JSON.parse(this.responseText);
+                resolve(response.data.url);
+            } else {
+                reject(new Error(`HTTP error! status: ${this.status}`));
+            }
+        };
+        xhr.onerror = function () {
+            reject(new Error("Network error"));
+        };
+        xhr.send();
+    });
+}
+
 
 allbutton[0].onclick = function () {
     if (work_message != "null") {
@@ -371,140 +394,127 @@ allbutton[1].onclick = function () {
         return
     }
 
-    //从 https://api.aa1.cn/ 找的api链接
-
-    if (value == "zsf") {
-        if (window.openurl) {
-            var openurl = window.openurl
-            var url = openurl.replace(/.*(?=\?gamedata)/, "");
-            var fxurl = encodeURIComponent(window.location.origin + "/wzzdy/open.html?openurl=" + url)
-            var apiurl = "https://api.s1f.top/short_link?url=" + fxurl
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', apiurl, true);
-            xhr.send();
-            work_message = "正在请求复制链接中 请稍等"
-            xhr.onerror = function () {
-                work_message = "null"
-                mdui.alert({
-                    headline: "提示",
-                    description: "出现错误 无法请求 请检查网络",
-                    confirmText: "我知道了",
-                    onConfirm: () => console.log("confirmed"),
-                });
-            }
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var murl = JSON.parse(this.responseText).data.url
-                    murl = processLink(murl);
-                    work_message = "null"
-                    mdui.confirm({
+    mdui.dialog({
+        headline: "提示",
+        description: "当前可以使用两种方法 使用链接法 可以直接复制链接 最为方便 也支持查看链接内的自定义属性 使用转换法将会把普通链接转换为通用链接 但方法较为复杂 但可以把任意房间转换为直接打开 也可以实现跨区游玩 不局限于自定义房间 但需要在游戏内QQ分享链接后才可以获取",
+        actions: [
+            {
+                text: "取消",
+            },
+            {
+                text: "链接法",
+                onClick: () => {
+                    if (window.openurl) {
+                        var openurl = window.openurl
+                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
+                            .then(shortLink => {
+                                murl = processLink(shortLink);
+                                work_message = "null"
+                                mdui.confirm({
+                                    headline: "提示",
+                                    description: "已获取到数据 是否立即复制链接",
+                                    confirmText: "确认",
+                                    cancelText: "取消",
+                                    onConfirm: () => {
+                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                                    },
+                                    onCancel: () => console.log("canceled"),
+                                });
+                            })
+                            .catch(error => {
+                                work_message = "null"
+                                mdui.alert({
+                                    headline: "提示",
+                                    description: "出现错误 无法请求 请检查网络",
+                                    confirmText: "我知道了",
+                                    onConfirm: () => console.log("confirmed"),
+                                });
+                                console.log(error)
+                            });
+                    } else {
+                        生成链接(function (openurl, tiptext) {
+                            getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
+                                .then(shortLink => {
+                                    murl = processLink(shortLink);
+                                    work_message = "null"
+                                    mdui.confirm({
+                                        headline: "提示",
+                                        description: tiptext + " 已获取到数据 是否复制链接并打开游戏？",
+                                        confirmText: "确认",
+                                        cancelText: "取消",
+                                        onConfirm: () => {
+                                            复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                                            打开链接(openurl)
+                                        },
+                                        onCancel: () => console.log("canceled"),
+                                    });
+                                })
+                                .catch(error => {
+                                    work_message = "null"
+                                    mdui.alert({
+                                        headline: "提示",
+                                        description: "出现错误 无法请求 请检查网络",
+                                        confirmText: "我知道了",
+                                        onConfirm: () => console.log("confirmed"),
+                                    });
+                                    console.log(error)
+                                });
+                        })
+                    }
+                },
+            },
+            {
+                text: "转换法",
+                onClick: () => {
+                    mdui.prompt({
                         headline: "提示",
-                        description: "已获取到数据 是否立即复制链接",
+                        description: "使用教程：如果通过网页或赛宝开房 打开游戏训练营 进入加载页 打开网页 点击启动 如果不是只是实现跨区游玩 可以忽略以上步骤 进入房间后点击游戏房间内右下角邀请QQ好友的按钮 发送到我的电脑 发送后选择留在QQ 然后复制发送的链接 输入到该输入框内 点击确认即可获得邀请链接 发送他人打开即可",
                         confirmText: "确认",
                         cancelText: "取消",
-                        onConfirm: () => {
-                            复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                        onConfirm: (value) => {
+                            var gamedata = value.split('gamedata=')[1]
+                            var appid = value.split('appid=')[1].split('&')[0]
+                            if (typeof gamedata == "undefined" || typeof appid == "undefined" || gamedata == "" || appid == "") {
+                                mdui_snackbar({
+                                    message: "输入链接有误",
+                                    action: "我知道了",
+                                    onActionClick: () => console.log("click action button")
+                                });
+                                return
+                            }
+                            getShortLink(window.location.origin + "/wzzdy/opengame.html?data=tencentmsdk" + appid + "://?gamedata=" + gamedata)
+                                .then(shortLink => {
+                                    murl = processLink(shortLink);
+                                    work_message = "null"
+                                    mdui.confirm({
+                                        headline: "提示",
+                                        description: "已获取到数据 是否立即复制链接",
+                                        confirmText: "确认",
+                                        cancelText: "取消",
+                                        onConfirm: () => {
+                                            复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                                        },
+                                        onCancel: () => console.log("canceled"),
+                                    });
+                                })
+                                .catch(error => {
+                                    work_message = "null"
+                                    mdui.alert({
+                                        headline: "提示",
+                                        description: "出现错误 无法请求 请检查网络",
+                                        confirmText: "我知道了",
+                                        onConfirm: () => console.log("confirmed"),
+                                    });
+                                    console.log(error)
+                                });
                         },
                         onCancel: () => console.log("canceled"),
                     });
-                }
+                },
             }
-        } else {
-            生成链接(function (openurl) {
-                var url = openurl.replace(/.*(?=\?gamedata)/, "");
-                var fxurl = encodeURIComponent(window.location.origin + "/wzzdy/open.html?openurl=" + url)
-                apiurl = "https://api.s1f.top/short_link?url=" + fxurl
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', apiurl, true);
-                xhr.send();
-                work_message = "正在请求复制链接中 请稍等"
-                xhr.onerror = function () {
-                    work_message = "null"
-                    mdui.alert({
-                        headline: "提示",
-                        description: "出现错误 无法请求 请检查网络",
-                        confirmText: "我知道了",
-                        onConfirm: () => console.log("confirmed"),
-                    });
-                }
-                xhr.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        var murl = JSON.parse(this.responseText).data.url
-                        murl = processLink(murl);
-                        work_message = "null"
-                        mdui.confirm({
-                            headline: "提示",
-                            description: "已获取到数据 是否复制链接并打开游戏？",
-                            confirmText: "确认",
-                            cancelText: "取消",
-                            onConfirm: () => {
-                                复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
-                                打开链接(openurl)
-                            },
-                            onCancel: () => console.log("canceled"),
-                        });
-                    }
-                }
-            })
-        }
-        return
-    }
+        ]
+    });
 
-
-    if (value == "tyf") {
-        mdui.prompt({
-            headline: "提示",
-            description: "使用教程：体验服内打开游戏训练营 进入加载页 打开网页 点击启动 进入房间后点击游戏房间内右下角邀请QQ好友的按钮 发送到我的电脑 发送后选择留在QQ 然后复制发送的链接 输入到该输入框内 点击确认即可获得邀请链接 发送他人打开即可",
-            confirmText: "确认",
-            cancelText: "取消",
-            onConfirm: (value) => {
-                var gamedata = value.split('gamedata=')[1]
-                if (typeof gamedata == "undefined" || gamedata == "") {
-                    mdui_snackbar({
-                        message: "输入链接有误",
-                        action: "我知道了",
-                        onActionClick: () => console.log("click action button")
-                    });
-                    return
-                }
-                var url = "tencentmsdk1104791911://?gamedata=" + gamedata
-                var fxurl = encodeURIComponent(window.location.origin + "/wzzdy/open.html?openurl=" + url)
-                var apiurl = "https://api.s1f.top/short_link?url=" + fxurl
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', apiurl, true);
-                xhr.send();
-                work_message = "正在请求复制链接中 请稍等"
-                xhr.onerror = function () {
-                    work_message = "null"
-                    mdui.alert({
-                        headline: "提示",
-                        description: "出现错误 无法请求 请检查网络",
-                        confirmText: "我知道了",
-                        onConfirm: () => console.log("confirmed"),
-                    });
-                }
-                xhr.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        var murl = JSON.parse(this.responseText).data.url
-                        murl = processLink(murl);
-                        work_message = "null"
-                        mdui.confirm({
-                            headline: "提示",
-                            description: "已获取到数据 是否立即复制链接",
-                            confirmText: "确认",
-                            cancelText: "取消",
-                            onConfirm: () => {
-                                复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
-                            },
-                            onCancel: () => console.log("canceled"),
-                        });
-                    }
-                }
-            },
-            onCancel: () => console.log("canceled"),
-        });
-        return
-    }
 }
 
 allbutton[2].onclick = function () {
@@ -575,100 +585,117 @@ allbutton[5].onclick = function () {
             apiurl = myapiurl + "/getroom_smoba?id=" + roomID + "&t=" + Date.now()
             var xhr = new XMLHttpRequest();
             xhr.open('GET', apiurl, true);
-            xhr.send();
+
             work_message = "正在请求复制链接中 请稍等"
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    if (this.status == 200) {
-                        var mdata = JSON.parse(this.responseText)
-                        if (mdata.gamedata) {
 
-                            const findstr = 'SmobaLaunch_'
-                            var game_json = JSON.parse(atob(mdata.gamedata.split(findstr)[1]));
-                            const comm_fields = mdata.comm_fields
-                            var banheros = []
-                            var custom_params = mdata.battle_custom_params
+            xhr.onload = function () {
 
-                            for (let index = 0; index < comm_fields.length; index++) {
-                                const element = comm_fields[index];
-                                if (element.name.includes("hero")) {
-                                    const allow_heros = element.value
+                if (this.status >= 200 && this.status < 300) {
+                    var mdata = JSON.parse(this.responseText)
+                    if (mdata.gamedata) {
 
-                                    console.log(allow_heros)
+                        const findstr = 'SmobaLaunch_'
+                        var game_json = JSON.parse(atob(mdata.gamedata.split(findstr)[1]));
+                        const comm_fields = mdata.comm_fields
+                        var banheros = []
+                        var custom_params = mdata.battle_custom_params
 
-                                    const allheros = mydatajson[1]
+                        for (let index = 0; index < comm_fields.length; index++) {
+                            const element = comm_fields[index];
+                            if (element.name.includes("hero")) {
+                                const allow_heros = element.value
 
-                                    for (let key in allheros) {
-                                        const element = allheros[key];
-                                        const myvalue = element.split('|', 1)[0];
-                                        if (allow_heros.includes(myvalue) != true) {
-                                            banheros.push(myvalue)
-                                        }
+                                console.log(allow_heros)
+
+                                const allheros = mydatajson[1]
+
+                                for (let key in allheros) {
+                                    const element = allheros[key];
+                                    const myvalue = element.split('|', 1)[0];
+                                    if (allow_heros.includes(myvalue) != true) {
+                                        banheros.push(myvalue)
                                     }
-
                                 }
+
                             }
-
-                            if (banheros.length > 0) {
-                                game_json.banHerosCamp1 = banheros
-                                game_json.banHerosCamp2 = banheros
-                            }
-
-                            if (custom_params) {
-                                game_json.customDefineItems = custom_params
-                            }
-
-                            console.log(game_json)
-
-                            const game_data = findstr + btoa(JSON.stringify(game_json))
-                            console.log(game_data)
-
-                            mdui_snackbar({
-                                message: "已获取到数据 请耐心等待 正在请求生成短链中",
-                                action: "我知道了",
-                                onActionClick: () => console.log("click action button")
-                            });
-
-                            var url = "?gamedata=" + game_data
-                            var fxurl = encodeURIComponent(window.location.origin + "/wzzdy/open.html?openurl=" + url)
-                            apiurl = "https://api.s1f.top/short_link?url=" + fxurl
-                            var xhr = new XMLHttpRequest();
-                            xhr.open('GET', apiurl, true);
-                            xhr.send();
-                            work_message = "正在请求复制链接中 请稍等"
-                            xhr.onreadystatechange = function () {
-                                if (this.readyState == 4 && this.status == 200) {
-                                    var murl = JSON.parse(this.responseText).data.url
-                                    murl = processLink(murl);
-                                    work_message = "null"
-                                    mdui.confirm({
-                                        headline: "提示",
-                                        description: "已获取到数据 是否复制链接并打开？",
-                                        confirmText: "确认",
-                                        cancelText: "取消",
-                                        onConfirm: () => {
-                                            复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
-                                            打开链接(window.location.origin + "/wzzdy/data.html?" + murl)
-                                        },
-                                        onCancel: () => console.log("canceled"),
-                                    });
-                                }
-                            }
-
-                        } else {
-                            mdui_snackbar({
-                                message: "获取失败 请检查是否满员",
-                                action: "我知道了",
-                                onActionClick: () => console.log("click action button")
-                            });
-                            work_message = "null"
-                            return
                         }
+
+                        if (banheros.length > 0) {
+                            game_json.banHerosCamp1 = banheros
+                            game_json.banHerosCamp2 = banheros
+                        }
+
+                        if (custom_params) {
+                            game_json.customDefineItems = custom_params
+                        }
+
+                        console.log(game_json)
+
+                        const game_data = findstr + btoa(JSON.stringify(game_json))
+                        console.log(game_data)
+
+                        mdui_snackbar({
+                            message: "已获取到数据 请耐心等待 正在请求生成短链中",
+                            action: "我知道了",
+                            onActionClick: () => console.log("click action button")
+                        });
+
+                        var openurl = "tencentmsdk1104466820://?gamedata=" + game_data
+
+                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
+                            .then(shortLink => {
+                                murl = processLink(shortLink);
+                                work_message = "null"
+                                mdui.confirm({
+                                    headline: "提示",
+                                    description: "已获取到数据 是否复制链接并打开游戏？",
+                                    confirmText: "确认",
+                                    cancelText: "取消",
+                                    onConfirm: () => {
+                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                                        打开链接(openurl)
+                                    },
+                                    onCancel: () => console.log("canceled"),
+                                });
+                            })
+                            .catch(error => {
+                                work_message = "null"
+                                mdui.alert({
+                                    headline: "提示",
+                                    description: "出现错误 无法请求 请检查网络",
+                                    confirmText: "我知道了",
+                                    onConfirm: () => console.log("confirmed"),
+                                });
+                                console.log(error)
+                            });
+
+
+
                     } else {
-                        alert("发生错误 可能是作者登录凭证掉了 你可以自行部署")
+                        mdui_snackbar({
+                            message: "获取失败 请检查是否满员",
+                            action: "我知道了",
+                            onActionClick: () => console.log("click action button")
+                        });
+                        work_message = "null"
+                        return
                     }
                 }
             }
+
+            xhr.onerror = function () {
+                work_message = "null"
+                mdui.alert({
+                    headline: "提示",
+                    description: "出现错误 可能作者登录凭证掉了",
+                    confirmText: "我知道了",
+                    onConfirm: () => console.log("confirmed"),
+                });
+                console.log(error)
+            }
+
+            xhr.send();
+
         },
         onCancel: () => console.log("canceled"),
     });
@@ -1236,18 +1263,18 @@ heroButton[8].onclick = function () {
 }
 
 function createMenuItems(settingsDoc, values, isdata) {
-    if (isdata) {
-        settingsDoc.value = isdata;
-        settingsDoc.defvalue = settingsDoc.value
-        return settingsDoc
-    }
+
     var index = 1
     values.forEach(element => {
         // 使用闭包解决
         (function (item_str, index) {
             // 创建新的 mdui-menu-item 元素  
             var menuItem = document.createElement('mdui-menu-item');
-            menuItem.value = index
+            if (isdata) {
+                menuItem.value = item_str;
+            } else {
+                menuItem.value = index
+            }
             menuItem.textContent = item_str
             menuItem.onclick = function () {
             }
@@ -1257,8 +1284,12 @@ function createMenuItems(settingsDoc, values, isdata) {
         index = index + 1
     });
 
+
     settingsDoc.updateComplete.then(() => {
-        settingsDoc.value = 1;
+        if (isdata) {
+            settingsDoc.value = isdata;
+        }
+        //存储默认值
         settingsDoc.defvalue = settingsDoc.value
     });
     return settingsDoc
@@ -1369,6 +1400,39 @@ function loadmenu() {
             document.getElementsByClassName("blueheronum")[0].value = "1"
             document.getElementsByClassName("redheronum")[0].value = "1"
             var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
+
+            if (localStorage.getItem("wzzdy_customsettip") != "0.1") {
+                mdui.alert({
+                    headline: "提示",
+                    description: "网页偏重自定义属性 网页为自定义属性提供了高级设置 你可以手动在高级设置中实现更多高级功能 高级配置与该配置绑定 例如 你可以设置随机生成和打乱指定自定义属性 实现属性与地图模式 禁用英雄的绑定 等等",
+                    confirmText: "我知道了",
+                    onConfirm: () => localStorage.setItem("wzzdy_customsettip", "0.1"),
+                });
+            }
+
+            // 兵线出兵的值比较特殊 后字符串的输出
+            /*
+            const originalArray = {
+                0: ["不出兵"],
+                1: ["对抗路"],
+                2: ["中路"],
+                3: ["对抗路", "中路"],
+                4: ["发育路"],
+                5: ["对抗路", "发育路"],
+                6: ["中路", "发育路"],
+            };
+
+            const result = Object.entries(originalArray).reduce((acc, [key, value]) => {
+                const newKey = parseInt(key) + 1;
+                const valueStr = Array.isArray(value) ? value.join(', ') : value;
+                acc += `${newKey}:${valueStr} `;
+                return acc;
+            }, '');
+
+            console.log(result);
+            */
+
+            document.querySelector(".extratip").innerText = "数字与数值对应内容\n" + createcustom_tab() + "\n 兵线出兵的值比较特殊 1:不出兵 2:对抗路 3:中路 4:对抗路, 中路 5:发育路 6:对抗路, 发育路 7:中路, 发育路"
             try {
                 选择自定义配置(custom_json[document.querySelectorAll(".myedit")[2].value])
             } catch (e) {
@@ -1508,11 +1572,14 @@ function shuffleArray(array) {
     }
 }
 
-function shuffleArray2(Arr1, Arr2, pos) {
+function shuffleArray2(Arr1, Arr2, postab) {
     var combinedArr = Arr1.concat(Arr2);
+    if (typeof postab == "undefined") {
+        postab = Array.from({ length: combinedArr.length }, (_, i) => i + 1);
+    }
     // 打乱合并后的数组
-    shuffleSelectedPositions(combinedArr, pos);
-    console.log(shuffleSelectedPositions(combinedArr, pos))
+    var shuffarr = shuffleSelectedPositions(combinedArr, postab);
+    console.log(shuffarr)
     // 将打乱后的数组拆分成两个数组
     var shuffledArr1 = combinedArr.slice(0, Arr1.length);
     var shuffledArr2 = combinedArr.slice(Arr1.length);
@@ -1548,16 +1615,47 @@ function getRandomElementFromArray(arr) {
     return arr[0];
 }
 
-function shuffleArray3(Arr1, Arr2, pos, pos1) {
+function shuffleArray3(Arr1, Arr2, postab, numtab) {
     var combinedArr = Arr1.concat(Arr2);
+    if (typeof postab == "undefined") {
+        postab = Array.from({ length: combinedArr.length }, (_, i) => i + 1);
+    }
     // 打乱合并后的数组
-    combinedArr[pos - 1] = pos1
+    for (let index = 0; index < combinedArr.length; index++) {
+        const pos = postab[index] - 1
+        if (pos >= combinedArr.length) {
+            alert("高级设置有问题 请检查随机打乱数据中 生效位置的填写是否越界 例如 兵线类生效位置填写为1,2,3 实际上除了英雄到2就结束了 已自动跳过")
+            continue
+        }
+        var num = getRandomElementFromArray(numtab)
+        combinedArr[pos] = num
+    }
     // 将打乱后的数组拆分成两个数组
     var shuffledArr1 = combinedArr.slice(0, Arr1.length);
     var shuffledArr2 = combinedArr.slice(Arr1.length);
-    console.log("打乱前:", Arr1, Arr2);
-    console.log("打乱后的:", shuffledArr1, shuffledArr2);
+    console.log("随机生成前:", Arr1, Arr2);
+    console.log("随机生成后的:", shuffledArr1, shuffledArr2);
     return [shuffledArr1, shuffledArr2]
+}
+
+function shuffleArray4(Arr, postab, numtab) {
+    const combinedArr = [...Arr];
+    if (typeof postab == "undefined") {
+        postab = Array.from({ length: combinedArr.length }, (_, i) => i + 1);
+    }
+    // 打乱合并后的数组
+    for (let index = 0; index < combinedArr.length; index++) {
+        const pos = postab[index] - 1
+        if (pos >= combinedArr.length) {
+            alert("高级设置有问题 请检查随机打乱数据中 生效位置的填写是否越界 例如 兵线类生效位置填写为1,2,3 实际上除了英雄到2就结束了 已自动跳过")
+            continue
+        }
+        var num = getRandomElementFromArray(numtab)
+        combinedArr[pos] = num
+    }
+    console.log("随机生成前:", Arr);
+    console.log("随机生成后的:", combinedArr);
+    return combinedArr
 }
 
 function decrementNumberAfterColon(inputString) {
@@ -1591,140 +1689,155 @@ function makejson(HeroList, bxList, ygList, fytList, sjList, gjjson) {
     var ysList_blue = HeroList_blue[5]
     var ysList_red = HeroList_red[5]
 
-    var sjdl = gjjson[2]
-    var sjsc = gjjson[3]
+    var sjsc = gjjson[2]
+    var sjdl = gjjson[3]
 
-    function 判断a数据(pos, postab) {
-        if (pos == 1) {
-            console.log(postab)
-            const result = shuffleArray2(expList_blue, expList_red, postab);
-            expList_blue = result[0]
-            expList_red = result[1]
-        } else if (pos == 2) {
-            const result = shuffleArray2(fashuList_blue, fashuList_red, postab);
-            fashuList_blue = result[0]
-            fashuList_red = result[1]
-        } else if (pos == 3) {
-            const result = shuffleArray2(wuliList_blue, wuliList_red, postab);
-            wuliList_blue = result[0]
-            wuliList_red = result[1]
-        } else if (pos == 4) {
-            const result = shuffleArray2(cdList_blue, cdList_red, postab);
-            cdList_blue = result[0]
-            cdList_red = result[1]
-        } else if (pos == 5) {
-            const result = shuffleArray2(jinbiList_blue, jinbiList_red, postab);
-            jinbiList_blue = result[0]
-            jinbiList_red = result[1]
-        } else if (pos == 6) {
-            const result = shuffleArray2(ysList_blue, ysList_red, postab);
-            ysList_blue = result[0]
-            ysList_red = result[1]
-        } else if (pos == 7) {
-            bxList[0] = shuffleArray(bxList[0]);
-        } else if (pos == 8) {
-            bxList[1] = shuffleArray(bxList[1]);
-        } else if (pos == 9) {
-            bxList[2] = shuffleArray(bxList[2]);
-        } else if (pos == 10) {
-            bxList[3] = shuffleArray(bxList[3]);
-        } else if (pos == 11) {
-            bxList[4] = shuffleArray(bxList[4]);
-        } else if (pos == 12) {
-            bxList[5] = shuffleArray(bxList[5]);
-        } else if (pos == 13) {
-            ygList[0] = shuffleArray(ygList[0]);
-        } else if (pos == 14) {
-            ygList[1] = shuffleArray(ygList[1]);
-        } else if (pos == 15) {
-            fytList[0] = shuffleArray(fytList[0]);
-        } else if (pos == 16) {
-            fytList[1] = shuffleArray(fytList[1]);
-        } else if (pos == 17) {
-            fytList[2] = shuffleArray(fytList[2]);
-        } else if (pos == 18) {
-            sjList[0] = shuffleArray(sjList[0]);
-        } else if (pos == 19) {
-            sjList[1] = shuffleArray(sjList[1]);
-        }
-    }
-
-    function 判断b数据(pos, postab) {
-        const numberArray = pos.match(/\d+/g).map(Number);
-        var pos = numberArray[0]
-        numberArray.shift();
-        var oripeotab = [...postab]
-        for (let index = 0; index < numberArray.length; index++) {
-            var postab = getRandomElementFromArray(oripeotab)
-            console.log(postab, index)
-            const mpos = numberArray[index];
+    function 判断随机生成数据(menutab, numtab, postab) {
+        for (let index = 0; index < menutab.length; index++) {
+            const pos = menutab[index];
             if (pos == 1) {
-                const result = shuffleArray3(expList_blue, expList_red, mpos, postab);
+                const result = shuffleArray3(expList_blue, expList_red, postab, numtab);
                 expList_blue = result[0]
                 expList_red = result[1]
             } else if (pos == 2) {
-                const result = shuffleArray3(fashuList_blue, fashuList_red, mpos, postab);
+                const result = shuffleArray3(fashuList_blue, fashuList_red, postab, numtab);
                 fashuList_blue = result[0]
                 fashuList_red = result[1]
             } else if (pos == 3) {
-                const result = shuffleArray3(wuliList_blue, wuliList_red, mpos, postab);
+                const result = shuffleArray3(wuliList_blue, wuliList_red, postab, numtab);
                 wuliList_blue = result[0]
                 wuliList_red = result[1]
             } else if (pos == 4) {
-                const result = shuffleArray3(cdList_blue, cdList_red, mpos, postab);
+                const result = shuffleArray3(cdList_blue, cdList_red, postab, numtab);
                 cdList_blue = result[0]
                 cdList_red = result[1]
             } else if (pos == 5) {
-                const result = shuffleArray3(jinbiList_blue, jinbiList_red, mpos, postab);
+                const result = shuffleArray3(jinbiList_blue, jinbiList_red, postab, numtab);
                 jinbiList_blue = result[0]
                 jinbiList_red = result[1]
             } else if (pos == 6) {
-                const result = shuffleArray3(ysList_blue, ysList_red, mpos, postab);
+                const result = shuffleArray3(ysList_blue, ysList_red, postab, numtab);
                 ysList_blue = result[0]
                 ysList_red = result[1]
             } else if (pos == 7) {
-                bxList[0][mpos] = postab;
+                bxList[0] = shuffleArray4(bxList[0], postab, numtab);
             } else if (pos == 8) {
-                bxList[1][mpos] = postab;
+                bxList[1] = shuffleArray4(bxList[1], postab, numtab);
             } else if (pos == 9) {
-                bxList[2][mpos] = postab;
+                bxList[2] = shuffleArray4(bxList[2], postab, numtab);
             } else if (pos == 10) {
-                bxList[3][mpos] = postab;
+                bxList[3] = shuffleArray4(bxList[3], postab, numtab);
             } else if (pos == 11) {
-                bxList[4][mpos] = postab;
+                bxList[4] = shuffleArray4(bxList[4], postab, numtab);
             } else if (pos == 12) {
-                bxList[5][mpos] = postab;
+                bxList[5] = shuffleArray4(bxList[5], postab, numtab);
             } else if (pos == 13) {
-                ygList[0][mpos] = postab;
+                ygList[0] = shuffleArray4(ygList[0], postab, numtab);
             } else if (pos == 14) {
-                ygList[1][mpos] = postab;
+                ygList[1] = shuffleArray4(ygList[1], postab, numtab);
             } else if (pos == 15) {
-                fytList[0][mpos] = postab;
+                fytList[0] = shuffleArray4(fytList[0], postab, numtab);
             } else if (pos == 16) {
-                fytList[1][mpos] = postab;
+                fytList[1] = shuffleArray4(fytList[1], postab, numtab);
             } else if (pos == 17) {
-                fytList[2][mpos] = postab;
+                fytList[2] = shuffleArray4(fytList[2], postab, numtab);
             } else if (pos == 18) {
-                sjList[0][mpos] = postab;
+                sjList[0] = shuffleArray4(sjList[0], postab, numtab);
             } else if (pos == 19) {
-                sjList[1][mpos] = postab;
+                sjList[1] = shuffleArray4(sjList[1], postab, numtab);
             } else if (pos == 20) {
-                sjList[2] = postab;
+                sjList[2] = shuffleArray4(sjList[2], postab, numtab);
+            }
+        }
+    }
+
+    function 判断随机打乱数据(menutab, postab) {
+        for (let index = 0; index < menutab.length; index++) {
+            const pos = menutab[index];
+            if (pos == 1) {
+                const result = shuffleArray2(expList_blue, expList_red, postab);
+                expList_blue = result[0]
+                expList_red = result[1]
+            } else if (pos == 2) {
+                const result = shuffleArray2(fashuList_blue, fashuList_red, postab);
+                fashuList_blue = result[0]
+                fashuList_red = result[1]
+            } else if (pos == 3) {
+                const result = shuffleArray2(wuliList_blue, wuliList_red, postab);
+                wuliList_blue = result[0]
+                wuliList_red = result[1]
+            } else if (pos == 4) {
+                const result = shuffleArray2(cdList_blue, cdList_red, postab);
+                cdList_blue = result[0]
+                cdList_red = result[1]
+            } else if (pos == 5) {
+                const result = shuffleArray2(jinbiList_blue, jinbiList_red, postab);
+                jinbiList_blue = result[0]
+                jinbiList_red = result[1]
+            } else if (pos == 6) {
+                const result = shuffleArray2(ysList_blue, ysList_red, postab);
+                ysList_blue = result[0]
+                ysList_red = result[1]
+            } else if (pos == 7) {
+                bxList[0] = shuffleArray(bxList[0]);
+            } else if (pos == 8) {
+                bxList[1] = shuffleArray(bxList[1]);
+            } else if (pos == 9) {
+                bxList[2] = shuffleArray(bxList[2]);
+            } else if (pos == 10) {
+                bxList[3] = shuffleArray(bxList[3]);
+            } else if (pos == 11) {
+                bxList[4] = shuffleArray(bxList[4]);
+            } else if (pos == 12) {
+                bxList[5] = shuffleArray(bxList[5]);
+            } else if (pos == 13) {
+                ygList[0] = shuffleArray(ygList[0]);
+            } else if (pos == 14) {
+                ygList[1] = shuffleArray(ygList[1]);
+            } else if (pos == 15) {
+                fytList[0] = shuffleArray(fytList[0]);
+            } else if (pos == 16) {
+                fytList[1] = shuffleArray(fytList[1]);
+            } else if (pos == 17) {
+                fytList[2] = shuffleArray(fytList[2]);
+            } else if (pos == 18) {
+                sjList[0] = shuffleArray(sjList[0]);
+            } else if (pos == 19) {
+                sjList[1] = shuffleArray(sjList[1]);
             }
         }
     }
 
     if (sjsc != "" && isJSON(sjsc)) {
         var scgz = JSON.parse(sjsc)
-        for (const key in scgz) {
-            判断a数据(key, scgz[key])
-        }
+        scgz.forEach(element => {
+            var [menupos, randomtab, postab] = element.split(":")
+            if (randomtab) {
+                randomtab = randomtab.match(/\d+/g).map(Number);
+            } else {
+                return
+            }
+            if (postab) {
+                postab = postab.match(/\d+/g).map(Number);
+            }
+            const numberArray = menupos.match(/\d+/g).map(Number);
+
+            判断随机生成数据(numberArray, randomtab, postab)
+        });
     }
+
     if (sjdl != "" && isJSON(sjdl)) {
         var scgz1 = JSON.parse(sjdl)
-        for (const key in scgz1) {
-            判断b数据(key, scgz1[key])
-        }
+        scgz1.forEach(element => {
+            var [menupos, postab] = element.split(":")
+            if (postab) {
+                postab = postab.match(/\d+/g).map(Number);
+            } else {
+                return
+            }
+            const numberArray = menupos.match(/\d+/g).map(Number);
+            判断随机打乱数据(numberArray, postab)
+        });
     }
 
 
@@ -2972,4 +3085,40 @@ function mdui_snackbar(args) {
         mysnackbar.remove()
     }
     mysnackbar = mdui.snackbar(args);
+}
+
+function createcustom_tab() {
+    var menu_limit = []
+    var allputonng = document.getElementsByClassName("putong")
+    var i = 1
+    var allstr = ""
+    for (let index = 0; index < allputonng.length; index++) {
+        const putongelement = allputonng[index];
+
+        var name = putongelement.getElementsByTagName("mdui-list-subheader")[0].textContent
+        allstr += name + "\n"
+        var select = putongelement.getElementsByTagName("mdui-select")
+        for (let index = 0; index < select.length; index++) {
+            const element = select[index];
+            const ele_maxvalue = element.menuItems.length
+            menu_limit.push(ele_maxvalue)
+
+            const ele_label = element.label
+            console.log(allstr)
+            allstr += i.toString() + ":" + ele_label + " "
+            i++
+        }
+
+        allstr += "\n"
+
+
+    }
+
+    menu_limit.push(document.querySelector("#mytiao").menuItems.length)
+    allstr += i.toString() + ":" + document.querySelector("#mytiao").label
+
+    console.log(JSON.stringify(menu_limit))
+    console.log(allstr)
+
+    return allstr
 }
