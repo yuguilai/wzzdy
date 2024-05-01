@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <script>
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch((error) => {
+                console.error('Service Worker registration failed:', error);
+            });
+        }
+
+        if (window.self !== window.top) {
+            url = window.top.location.href;
+        }
+
+    </script>
+
+    <title>请使用浏览器打开</title>
+    <link crossorigin="" rel="shortcut icon" type="image/x-icon" href="./logo-200x200.png">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+<body>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #03081A;
+        }
+
+        #message {
+            font-size: 16px;
+            margin: 13px;
+            font-weight: normal;
+            color: #878B99;
+        }
+
+        #copy {
+            display: block;
+            width: 214px;
+            height: 40px;
+            line-height: 40px;
+            margin: 18px auto 0 auto;
+            text-align: center;
+            font-size: 18px;
+            color: #2466f4;
+            border-radius: 20px;
+            border: .5px #2466f4 solid;
+            text-decoration: none
+        }
+    </style>
+
+    <div style="text-align:center">
+
+        <div id="title">提示</div>
+        <div id="message">微信或QQ内访问不可打开游戏链接 请复制后在浏览器内打开本网页</div>
+        <a id="copy">点击复制链接</a>
+
+    </div>
+
+    <script>
+
+        function 复制文本(str) {
+            // 创建一个范围对象
+            const range = document.createRange();
+            // 创建一个新的文本节点
+            const textNode = document.createTextNode(str);
+            document.body.append(textNode)
+            // 将文本节点添加到范围中
+            range.selectNodeContents(textNode);
+            // 获取当前选择
+            const selection = window.getSelection();
+            // 移除之前选中内容
+            if (selection.rangeCount > 0) selection.removeAllRanges();
+            // 将范围添加到选择中
+            selection.addRange(range);
+            // 执行复制命令
+            document.execCommand('copy');
+            // 移除范围，清空选择
+            selection.removeAllRanges();
+            textNode.remove()
+            alert("复制成功")
+        }
+
+        document.getElementById("copy").onclick = function () {
+            复制文本(url)
+        }
+
+    </script>
+
+</body>
+
+</html>
