@@ -288,6 +288,8 @@
                     <mdui-button variant="filled" name value type="buttn" class="herobutton">反选</mdui-button>
                     <mdui-button variant="filled" name value type="buttn" class="herobutton">保存方案</mdui-button>
 
+                    <mdui-text-field variant="outlined" label="搜索内容" clearable type="text" class="search_heroedit"
+                        name></mdui-text-field>
 
                     <p>如显示不全可向下滑动查看更多内容 点击选择方案选择保存的方案</p>
 
@@ -300,9 +302,6 @@
                         <mdui-radio value="5">射手</mdui-radio>
                         <mdui-radio value="6">辅助</mdui-radio>
                     </mdui-radio-group>
-
-                    <mdui-text-field variant="outlined" label="搜索内容" clearable type="text" class="search_heroedit"
-                        name></mdui-text-field>
 
                     <div class="myherolist"></div>
 
@@ -332,20 +331,20 @@
                     <mdui-button variant="filled" name value type="buttn" class="custombutton">还原</mdui-button>
 
                     <mdui-dialog class="suijitest" headline="提示"
-                    description='随机生成数据数组value类型为 生效选项位置:随机生成范围:随机生成位置(不填写则默认全部) 例如在随机生成数据填入 ["1:1,2,3,4,5:5,6,7"] 代表随机第一个选项 随机生成数据1到5 只生效于位置5 6 7 随机打乱数据数组value类型为 生效选项位置:随机打乱位置(不填写则默认全部) 填入 ["1,2,3:2,3,4"] 代表第一个选项到第三个选项 从位置2到位置4随机打乱数据 随机打乱位置的设置仅支持英雄属性 最后两个内容要求必须json数组结构 该功能可能导致无法启动 请酌情使用'><mdui-text-field
+                        description='本弹窗一共四个输入框可供输入 如显示不全可向下滑动查看更多内容 随机生成数据数组value类型为 生效选项位置:随机生成范围:随机生成位置(不填写则默认全部) 例如在随机生成数据填入 ["1:1,2,3,4,5:5,6,7"] 代表随机第一个选项 随机生成数据1到5 只生效于位置5 6 7 随机打乱数据数组value类型为 生效选项位置:随机打乱位置(不填写则默认全部) 填入 ["1,2,3:2,3,4"] 代表第一个选项到第三个选项 从位置2到位置4随机打乱数据 随机打乱位置的设置仅支持英雄属性 最后两个内容要求必须json数组结构 该功能可能导致无法启动 请酌情使用'><mdui-text-field
                             variant="filled" type="text" name="" style="padding-top: 10px;" clearable
                             label="地图模式"></mdui-text-field><mdui-text-field variant="filled" type="text" name=""
                             clearable style="padding-top: 10px;" label="禁用英雄"></mdui-text-field>
-                            <p class="extratip"></p>
+                        <p class="extratip"></p>
 
-                            <mdui-text-field
-                            variant="filled" type="text" name="" style="padding-top: 10px;" clearable
+                        <mdui-text-field variant="filled" type="text" name="" style="padding-top: 10px;" clearable
                             label="随机生成数据"></mdui-text-field><mdui-text-field variant="filled" type="text" name=""
                             clearable style="padding-top: 10px;" label="随机打乱数据"></mdui-text-field><mdui-button
                             slot="action" variant="text" name="" value=""
                             onclick='document.getElementsByClassName("suijitest")[0].open = false'
                             type="button">取消</mdui-button><mdui-button slot="action" variant="text" name="" value=""
-                            onclick='entclick()' type="button">确认</mdui-button></mdui-dialog>
+                            onclick='entclick()' type="button">确认</mdui-button>
+                    </mdui-dialog>
 
                     <p>如显示不全可向下滑动查看更多内容 点击选择方案选择保存的方案</p>
 
