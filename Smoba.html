@@ -125,7 +125,11 @@
         var gamejson = JSON.parse(atob(game_base64data))
         var banheros = gamejson.banHerosCamp1
         var mapid = gamejson.mapID
-        var mapname = mapnametable[mapid][0]
+        if (mapnametable[mapid]) {
+            var mapname = mapnametable[mapid][0]
+        } else {
+            var mapname = "地图id:" + mapid
+        }
         tipdoc.innerText = tiptext + "\n地图模式:" + mapname
         console.log(mapname)
         var custom = gamejson.customDefineItems
