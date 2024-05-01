@@ -765,9 +765,9 @@ for (item in mydatajson[0]) {
 
 var herodialog = document.querySelector(".example-dialog")
 
-
+herotip = false
 herodialog.querySelector("mdui-button").onclick = function () {
-    if (herotip != true) {
+    if (herotip == false) {
         herotip = true
         mdui.confirm({
             headline: "提示",
@@ -789,8 +789,9 @@ document.querySelectorAll(".myedit")[1].onclick = function () {
 
 var customdialog = document.querySelector(".custom-dialog")
 
+customtip = false
 customdialog.querySelector("mdui-button").onclick = function () {
-    if (customtip != true) {
+    if (customtip == false) {
         customtip = true
         mdui.confirm({
             headline: "提示",
