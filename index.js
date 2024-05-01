@@ -26,7 +26,7 @@ if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
 if (localStorage.getItem("wzzdy_freetip") != "0.2") {
     mdui.alert({
         headline: "提示",
-        description: "本网页完全免费 如果你是购买得到的 你可能被骗了 本网页开源自 https://gitee.com/huajicloud/wzzdy/",
+        description: "本网页完全免费且开源 开源链接 https://gitee.com/huajicloud/wzzdy/ 如果你是购买得到的 你可能被骗了",
         confirmText: "我知道了",
         onConfirm: () => localStorage.setItem("wzzdy_freetip", "0.2"),
     });
@@ -1288,6 +1288,8 @@ function createMenuItems(settingsDoc, values, isdata) {
     settingsDoc.updateComplete.then(() => {
         if (isdata) {
             settingsDoc.value = isdata;
+        } else {
+            settingsDoc.value = 1;
         }
         //存储默认值
         settingsDoc.defvalue = settingsDoc.value
