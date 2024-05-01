@@ -472,9 +472,10 @@ allbutton[1].onclick = function () {
                         confirmText: "确认",
                         cancelText: "取消",
                         onConfirm: (value) => {
-                            var gamedata = value.split('gamedata=')[1]
-                            var appid = value.split('appid=')[1].split('&')[0]
-                            if (typeof gamedata == "undefined" || typeof appid == "undefined" || gamedata == "" || appid == "") {
+                            try {
+                                var gamedata = value.split('gamedata=')[1]
+                                var appid = value.split('appid=')[1].split('&')[0]
+                            } catch (error) {
                                 mdui_snackbar({
                                     message: "输入链接有误",
                                     action: "我知道了",
