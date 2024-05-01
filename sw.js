@@ -1,10 +1,9 @@
-const cacheName = 'my-pwa-v4.0';
+const cacheName = 'my-pwa-v4.01';
 const urlsToCache = [
     './',
     './index.html',
     './manifest.json',
     './jsondo.html',
-    './open.html',
     './openurl.html',
     './data.html',
     './Smoba.html',
