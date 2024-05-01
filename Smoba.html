@@ -15,7 +15,14 @@
             });
         }
 
-        var url = window.location.href.split(/\?(.+)/)[1];
+        if (navigator.userAgent.indexOf("MicroMessenger") !== -1) {
+            document.write('<iframe id="fullscreen-iframe" src="about:blank" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 999999;"></iframe>');
+            const iframe = document.getElementById("fullscreen-iframe");
+            iframe.src = window.location.origin + "/wzzdy/openurl.html";
+        }
+
+        var url = window.location.href.split(/\?data=(.+)/)[1];
+
 
         if (url) {
             if (url.includes("SmobaLaunch_") == false) {
@@ -25,11 +32,18 @@
             window.location.replace(window.location.origin + "/wzzdy/")
         }
 
-        var gamesplit = window.url.split('SmobaLaunch_')
+        var gamesplit_str = "?gamedata="
+        var gamesplit = window.url.split(gamesplit_str)
         if (gamesplit) {
-            window.index = url.indexOf("SmobaLaunch_")
-            window.gameurl = url.substring(0, index);
-            window.game_base64data = gamesplit[1]
+            window.gameurl = gamesplit[0];
+            window.game_base64data = gamesplit[1].split("SmobaLaunch_")[1];
+            var zsfappsdk = "tencentmsdk1104466820://"
+            if (navigator.userAgent.indexOf("QQ/") !== -1) {
+                //正式服
+                if (gameurl == zsfappsdk) {
+                    window.gameurl = gameurl.replace(new RegExp(zsfappsdk, 'g'), 'https://h5.nes.smoba.qq.com/pvpesport.web.user/#/launch-game-mp-qq');
+                }
+            }
         } else {
             window.location.replace(window.location.origin + "/wzzdy/")
         }
@@ -229,19 +243,19 @@
             gamejson.AddType = "0"
             gamejson.campid = campid.toString()
             var gamedata = JSON.stringify(gamejson)
-            var url = "https://h5.nes.smoba.qq.com/pvpesport.web.user/#/launch-game-mp-qq?" + gameurl + "SmobaLaunch_" + btoa(gamedata)
+            var url = gameurl + gamesplit_str + "SmobaLaunch_" + btoa(gamedata)
             return url
         }
 
         function addblue() {
             var url = seturl(1)
-            window.location.href = url
+            window.top.location.href = url
         }
 
 
         function addred() {
             var url = seturl(2)
-            window.location.href = url
+            window.top.location.href = url
         }
 
         function checkArrayValue(sourceArray, targetArray) {
@@ -652,7 +666,7 @@
         }
 
         function home() {
-            window.location.replace(window.location.origin + "/wzzdy/")
+            window.top.location.replace(window.location.origin + "/wzzdy/")
         }
 
     </script>
