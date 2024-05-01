@@ -767,7 +767,8 @@ var herodialog = document.querySelector(".example-dialog")
 
 
 herodialog.querySelector("mdui-button").onclick = function () {
-    if (herodialog.open == true) {
+    if (herotip != true) {
+        herotip = true
         mdui.confirm({
             headline: "提示",
             description: "确认关闭吗 更改了配置必须要新建或保存才能生效",
@@ -777,6 +778,7 @@ herodialog.querySelector("mdui-button").onclick = function () {
                 herodialog.open = false
             },
             onCancel: () => console.log("canceled"),
+            onClosed: () => herotip = false,
         });
     }
 }
@@ -788,7 +790,8 @@ document.querySelectorAll(".myedit")[1].onclick = function () {
 var customdialog = document.querySelector(".custom-dialog")
 
 customdialog.querySelector("mdui-button").onclick = function () {
-    if (customdialog.open == true) {
+    if (customtip != true) {
+        customtip = true
         mdui.confirm({
             headline: "提示",
             description: "确认关闭吗 更改了配置必须要新建或保存才能生效",
@@ -798,6 +801,7 @@ customdialog.querySelector("mdui-button").onclick = function () {
                 customdialog.open = false
             },
             onCancel: () => console.log("canceled"),
+            onClosed: () => customtip = false,
         });
     }
 }
