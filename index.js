@@ -238,9 +238,8 @@ function 生成链接(func) {
             try {
                 var custom_json = makejson(json_herolist, json_bxlist, json_yglist, json_fytlist, json_sjlist, mysjson)
             } catch (error) {
-                console.log(error)
-                //localStorage.clear()
-                //window.location.reload()
+                localStorage.clear()
+                window.location.reload()
             }
             alljson.customDefineItems = custom_json
         }
