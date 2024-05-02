@@ -78,6 +78,7 @@
                     document.title = event.data.title;
                     console.log("iframe url: " + event.data.url)
                     receivedMessage = true;
+                    document.getElementsByClassName("mytext")[0].remove()
                     iframe.style.display = "unset"
                 }
             }, false);
