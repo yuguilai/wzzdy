@@ -657,14 +657,13 @@ allbutton[1].onclick = function () {
                 },
             }
         ],
-        body: '<mdui-text-field class="copydialog_edit" variant="filled" type="text" name="" style="padding-top: 10px;" clearable="" label="生成规则"></mdui-text-field>\n<p><br>如显示不全可向下滑动查看更多内容<br>当生成规则包括以下字符 会自动被替换为指定字符 默认生成规则为url<br>mode->模式名<br>hero->当前禁用英雄配置名<br>custom->当前自定义配置名<br>url->最终生成链接<br>gametype->游戏类型 例如正式服<br>\\n->换行<br>如不做特别标记 链接法和转换法复制规则默认相同 如想精准设置 请将配置与配置间直接使用|||分割即可</p>',
+        body: '<mdui-text-field class="copydialog_edit" variant="filled" type="text" name="" style="padding-top: 10px;" clearable="" label="生成规则"></mdui-text-field>\n<p><br>如显示不全可向下滑动查看更多内容<br>当生成规则包括以下字符 会自动被替换为指定字符 默认生成规则为url<br>mode --> 模式名<br>hero --> 当前禁用英雄配置名<br>custom --> 当前自定义配置名<br>url --> 最终生成链接<br>gametype --> 游戏类型 例如正式服<br>\\n --> 换行<br>如不做特别标记 链接法和转换法复制规则默认相同 如想精准设置 请将配置与配置间直接使用|||分割即可</p>',
         onOpened: () => {
             myedit = document.getElementsByClassName("copydialog_edit")[0]
             myedit.value = localStorage.getItem("wzzdy_copyrule")
             myedit.addEventListener("input", function () {
                 localStorage.setItem("wzzdy_copyrule", myedit.value)
             })
-            console.log(myedit)
         },
     });
 
