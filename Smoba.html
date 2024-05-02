@@ -107,6 +107,8 @@
 
     <script>
 
+        window.top.postMessage({ title: document.title, url: window.location.href }, '*');
+
         var tipdoc = document.querySelector(".mytext")
         var tiptext = "如果加入失败可尝试点击其他阵营加入"
 
