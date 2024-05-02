@@ -70,6 +70,10 @@ if (localStorage.getItem("wzzdy_mycustomthemecolor")) {
     document.getElementsByClassName("color-custom")[0].value = localStorage.getItem("wzzdy_mycustomthemecolor")
 }
 
+if (localStorage.getItem("wzzdy_copyrule") == null) {
+    localStorage.setItem("wzzdy_copyrule", "url")
+}
+
 
 var allbutton = document.querySelectorAll(".mybutton")
 var work_message = "null"
@@ -369,6 +373,138 @@ function getShortLink(longUrl) {
     });
 }
 
+function GetModeStr(openurl) {
+
+    function extractNumbers(str) {
+        const regex = /_(\d+)/g;
+        let match;
+        let result = [];
+
+        while ((match = regex.exec(str)) !== null) {
+            // 匹配到的数字位于match[1]，因为(\d+)是第一个捕获组
+            result.push(Number(match[1]));
+        }
+
+        return result;
+    }
+
+    var mapnametable = {};
+    var maptable = mydatajson[0]
+
+    for (const key in maptable) {
+        const valueArray = maptable[key];
+        mapnametable[valueArray[0]] = [key, valueArray[2]];
+    }
+
+    //补全
+    mapnametable[1010] = ["快速赛", 10]
+    mapnametable[20031] = ["小峡谷", 10]
+    mapnametable[25001] = ["1v1对抗路", 2]
+    mapnametable[25002] = ["1v1中路", 2]
+    mapnametable[25003] = ["1v1发育路", 2]
+    mapnametable[20910] = ["5v5征兆0ban位", 10];
+
+    mapnametable[20009] = ["火焰山大作战", 10]
+    mapnametable[20012] = ["克隆模式", 10]
+    mapnametable[20019] = ["契约之战", 10]
+    mapnametable[20017] = ["无限乱斗", 10]
+    mapnametable[90001] = ["梦境大乱斗", 10]
+    mapnametable[4010] = ["变身大乱斗", 10]
+
+    mapnametable[5121] = ["觉醒之战", 10]
+    mapnametable[5153] = ["多重施法", 10]
+
+
+
+    const gamedata = openurl.split(/gamedata=(.+)/)[1];
+    const mapid = extractNumbers(gamedata)[9]
+
+    if (mapnametable[mapid]) {
+        var mapname = mapnametable[mapid][0]
+    } else {
+        var mapname = "地图id:" + mapid
+    }
+
+    if (/ShareRoom/.test(gamedata)) {
+        roomtype = "房间"
+    }
+    else if (/ShareTeam/.test(gamedata)) {
+        roomtype = "组队"
+    }
+    else {
+        roomtype = "未知"
+    }
+    return mapname + " " + roomtype
+}
+
+function replaceContent(str, replaceurl, replacepos, openurl) {
+
+    console.log("未处理前:" + str)
+
+
+    function showcopytipdia() {
+        mdui.alert({
+            headline: "提示",
+            description: "生成规则不能为空 已帮你恢复默认生成规则",
+            confirmText: "我知道了",
+            onConfirm: () => console.log("confirmed"),
+        });
+    }
+
+    const parts = str.split('|||');
+
+    // 如果数组长度大于1，说明包含分隔符，返回左右两侧的数据
+    if (parts.length > 1) {
+        str = parts[replacepos]
+        if (str == "") {
+            str = "url"
+            parts[replacepos] = str
+            showcopytipdia()
+            localStorage.setItem("wzzdy_copyrule", parts[0] + "|||" + parts[1])
+        }
+    } else {
+        if (str == "") {
+            str = "url"
+            showcopytipdia()
+            localStorage.setItem("wzzdy_copyrule", str)
+        }
+    }
+
+    if (str.includes("url") == false) {
+        mdui.alert({
+            headline: "过于逆天的复制规则",
+            description: "你必须要至少在规则内添加url才能生效 已自动使用默认规则 并没有清空你的错误规则 请自动修改规则后重试",
+            confirmText: "我知道了",
+            onConfirm: () => console.log("confirmed"),
+        });
+        return replaceurl
+    }
+
+    //转换法需要特殊判断
+    if (replacepos == 1) {
+        str = str.replace(/mode/g, GetModeStr(openurl));
+    } else {
+        str = str.replace(/mode/g, document.querySelectorAll(".myedit")[0].value);
+    }
+    str = str.replace(/hero/g, document.querySelectorAll(".myedit")[1].value);
+    str = str.replace(/custom/g, document.querySelectorAll(".myedit")[2].value);
+    str = str.replace(/url/g, replaceurl);
+
+    let mode
+    if (openurl.includes("tencentmsdk1104466820")) {
+        mode = "正式服"
+    } else if (openurl.includes("tencentmsdk1104791911")) {
+        mode = "体验服"
+    }
+
+    str = str.replace(/gametype/g, mode);
+
+
+    console.log("处理后:" + str)
+
+    return str;
+}
+
 
 allbutton[0].onclick = function () {
     if (work_message != "null") {
@@ -393,9 +529,13 @@ allbutton[1].onclick = function () {
         return
     }
 
+    // 创建<span>元素  
+    var span = document.createElement('span');
+    // 设置<span>元素的文本内容  
+    span.innerHTML = '<span slot="description">当前可以使用两种方法 使用链接法 可以直接复制链接 最为方便 也支持查看链接内的自定义属性 使用转换法将会把普通链接转换为通用链接 但方法较为复杂 但可以把任意房间转换为直接打开 也可以实现跨区游玩 不局限于自定义房间 但需要在游戏内QQ分享链接后才可以获取<br>提示 ：你可以通过编辑「生成规则」来编辑复制链接的生成规则</span>';
     mdui.dialog({
         headline: "提示",
-        description: "当前可以使用两种方法 使用链接法 可以直接复制链接 最为方便 也支持查看链接内的自定义属性 使用转换法将会把普通链接转换为通用链接 但方法较为复杂 但可以把任意房间转换为直接打开 也可以实现跨区游玩 不局限于自定义房间 但需要在游戏内QQ分享链接后才可以获取",
+        description: span,
         actions: [
             {
                 text: "取消",
@@ -415,7 +555,8 @@ allbutton[1].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                                        let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
+                                        复制文本(url)
                                     },
                                     onCancel: () => console.log("canceled"),
                                 });
@@ -442,7 +583,8 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
+                                            复制文本(url)
                                             打开链接(openurl)
                                         },
                                         onCancel: () => console.log("canceled"),
@@ -482,7 +624,8 @@ allbutton[1].onclick = function () {
                                 });
                                 return
                             }
-                            getShortLink(window.location.origin + "/wzzdy/opengame.html?data=tencentmsdk" + appid + "://?gamedata=" + gamedata)
+                            let openurl = "tencentmsdk" + appid + "://?gamedata=" + gamedata
+                            getShortLink(window.location.origin + "/wzzdy/opengame.html?data=" + openurl)
                                 .then(shortLink => {
                                     murl = processLink(shortLink);
                                     work_message = "null"
@@ -492,7 +635,8 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 1, openurl)
+                                            复制文本(url)
                                         },
                                         onCancel: () => console.log("canceled"),
                                     });
@@ -512,7 +656,16 @@ allbutton[1].onclick = function () {
                     });
                 },
             }
-        ]
+        ],
+        body: '<mdui-text-field class="copydialog_edit" variant="filled" type="text" name="" style="padding-top: 10px;" clearable="" label="生成规则"></mdui-text-field>\n<p><br>如显示不全可向下滑动查看更多内容<br>当生成规则包括以下字符 会自动被替换为指定字符 默认生成规则为url<br>mode->模式名<br>hero->当前禁用英雄配置名<br>custom->当前自定义配置名<br>url->最终生成链接<br>gametype->游戏类型 例如正式服<br>\\n->换行<br>如不做特别标记 链接法和转换法复制规则默认相同 如想精准设置 请将配置与配置间直接使用|||分割即可</p>',
+        onOpened: () => {
+            myedit = document.getElementsByClassName("copydialog_edit")[0]
+            myedit.value = localStorage.getItem("wzzdy_copyrule")
+            myedit.addEventListener("input", function () {
+                localStorage.setItem("wzzdy_copyrule", myedit.value)
+            })
+            console.log(myedit)
+        },
     });
 
 }
@@ -652,7 +805,7 @@ allbutton[5].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl)
+                                        复制文本("已将原赛宝房间链接:" + value + " 转换为网页链接 可防止卡房 请点击蓝方或红方加入\n" + window.location.origin + "/wzzdy/data.html?" + murl)
                                         打开链接(openurl)
                                     },
                                     onCancel: () => console.log("canceled"),
@@ -1010,13 +1163,17 @@ function 加载英雄配置() {
 
 
 function 复制文本(str) {
+    // 替换换行符为 HTML 的换行标签
+    const htmlStr = str.replace(/\n/g, '<br>');
+    // 创建一个新的元素节点来包含 HTML 内容
+    const div = document.createElement('div');
+    div.innerHTML = htmlStr;
+    document.body.appendChild(div);
+
     // 创建一个范围对象
     const range = document.createRange();
-    // 创建一个新的文本节点
-    const textNode = document.createTextNode(str);
-    document.body.append(textNode)
-    // 将文本节点添加到范围中
-    range.selectNodeContents(textNode);
+    // 将新创建的元素节点添加到范围中
+    range.selectNode(div);
     // 获取当前选择
     const selection = window.getSelection();
     // 移除之前选中内容
@@ -1027,7 +1184,8 @@ function 复制文本(str) {
     document.execCommand('copy');
     // 移除范围，清空选择
     selection.removeAllRanges();
-    textNode.remove()
+    div.remove();
+
     mdui_snackbar({
         message: "复制成功",
         action: "我知道了",
