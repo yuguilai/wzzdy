@@ -7,13 +7,47 @@
         <meta charset="UTF-8">
         <link crossorigin="" rel="shortcut icon" type="image/x-icon" href="./logo-200x200.png">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>跳转链接中...</title>
+        <title>跳转链接中转</title>
+        <style data-emotion="css" data-s="">
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                height: 100vh;
+                margin: 0;
+                background-image: linear-gradient(rgba(255, 255, 255, 0.09) 74%, rgba(0, 156, 238, 0.3));
+            }
+
+            .mytext {
+                font-size: 1.5rem;
+                font-weight: 300;
+                margin-bottom: 22px;
+                text-align: center;
+            }
+        </style>
     </head>
+
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        iframe {
+            display: none;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
+
     <iframe id="fullscreen-iframe"
-        style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;border: none;margin: 0;padding: 0;overflow: hidden;z-index: 999999;"></iframe>
+        style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;border: none;margin: 0;padding: 0;overflow: hidden;z-index: 999999;display:none"></iframe>
+    <p class="mytext">加载中...</p>
 
     <script>
 
@@ -24,6 +58,7 @@
                 console.error('Service Worker registration failed:', error);
             });
         }
+
 
         var url = window.location.href.split(/\?(.+)/)[1];
         if (url) {
@@ -37,18 +72,20 @@
             iframe = document.querySelector("iframe")
             iframe.src = url
 
+            let receivedMessage = false;
+            window.addEventListener('message', function (event) {
+                if (event.data && event.data.title && event.data.url) {
+                    document.title = event.data.title;
+                    console.log("iframe url: " + event.data.url)
+                    receivedMessage = true;
+                    iframe.style.display = "unset"
+                }
+            }, false);
+
 
             iframe.onload = function () {
                 setTimeout(function () {
-                    //检测是否在同域
-                    try {
-                        var iframeUrl = iframe.contentWindow.location.href;
-                        console.log('IFrame URL:', iframeUrl);
-                        var iframeTitle = iframe.contentDocument.title;
-                        // 设置当前网页的title为iframe的title
-                        document.title = iframeTitle;
-                    } catch (error) {
-                        console.error(error);
+                    if (receivedMessage == false) {
                         alert("超时未跳转 请检查链接或网络情况 正在跳转至主页")
                         window.location.replace(window.location.origin + "/wzzdy/")
                     }
