@@ -86,6 +86,9 @@
     <script src="myjson.js"></script>
 
     <script>
+
+        window.top.postMessage({ title: document.title, url: window.location.href }, '*');
+
         function extractNumbers(str) {
             const regex = /_(\d+)/g;
             let match;
