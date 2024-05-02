@@ -473,7 +473,7 @@ function replaceContent(str, replaceurl, replacepos, openurl) {
     if (str.includes("url") == false) {
         mdui.alert({
             headline: "过于逆天的复制规则",
-            description: "你必须要至少在规则内添加url才能生效 已自动使用默认规则 并没有清空你的错误规则 请自动修改规则后重试",
+            description: "你必须要至少在规则内添加url才能生效 已自动使用默认规则 并没有清空你的错误规则 请自行修改规则后重试",
             confirmText: "我知道了",
             onConfirm: () => console.log("confirmed"),
         });
