@@ -38,10 +38,14 @@
             window.gameurl = gamesplit[0];
             window.game_base64data = gamesplit[1].split("SmobaLaunch_")[1];
             var zsfappsdk = "tencentmsdk1104466820://"
+            var tyfappsdk = "tencentmsdk1104791911://"
             if (navigator.userAgent.indexOf("QQ/") !== -1) {
-                //正式服
                 if (gameurl == zsfappsdk) {
                     window.gameurl = gameurl.replace(new RegExp(zsfappsdk, 'g'), 'https://h5.nes.smoba.qq.com/pvpesport.web.user/#/launch-game-mp-qq');
+                } else if (gameurl == tyfappsdk) {
+                    document.write('<iframe id="fullscreen-iframe" src="about:blank" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 999999;"></iframe>');
+                    const iframe = document.getElementById("fullscreen-iframe");
+                    iframe.src = window.location.origin + "/wzzdy/openurl.html";
                 }
             }
         } else {
