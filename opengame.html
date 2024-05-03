@@ -165,7 +165,7 @@
         if (mapnametable[mapid]) {
             var mapname = mapnametable[mapid][0]
         } else {
-            var mapname = "地图id:" + mapid
+            var mapname = mapid
         }
 
         if (/ShareRoom/.test(gamedata)) {
@@ -184,7 +184,7 @@
             window.gametype = "体验服"
         }
 
-        tipdoc.innerText = tiptext + "\n" + gametype + " " + mapname + " " + roomtype
+        tipdoc.innerText = tiptext + "\n" + gametype + " " + mapname + roomtype
         console.log(mapname)
 
         function addroom() {
