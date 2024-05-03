@@ -434,7 +434,7 @@ function GetModeStr(openurl) {
     else {
         roomtype = "未知"
     }
-    return mapname + " " + roomtype
+    return mapname + roomtype
 }
 
 function replaceContent(str, replaceurl, replacepos, openurl) {
@@ -801,12 +801,11 @@ allbutton[5].onclick = function () {
                                 work_message = "null"
                                 mdui.confirm({
                                     headline: "提示",
-                                    description: "已获取到数据 是否复制链接并打开游戏？",
+                                    description: "已获取到数据 是否复制链接？",
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        复制文本("已将原赛宝房间链接:" + value + " 转换为网页链接 可防止卡房 请点击蓝方或红方加入\n" + window.location.origin + "/wzzdy/data.html?" + murl)
-                                        打开链接(openurl)
+                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl + "\n该链接由原王者赛宝房间链接" + value + "转换 可防止卡房 本链接由https://huajiqaq.github.io/wzzdy/的 赛宝还原 转换")
                                     },
                                     onCancel: () => console.log("canceled"),
                                 });
