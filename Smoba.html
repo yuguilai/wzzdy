@@ -39,13 +39,17 @@
             window.game_base64data = gamesplit[1].split("SmobaLaunch_")[1];
             var zsfappsdk = "tencentmsdk1104466820://"
             var tyfappsdk = "tencentmsdk1104791911://"
-            if (navigator.userAgent.indexOf("QQ/") !== -1) {
-                if (gameurl == zsfappsdk) {
+            if (gameurl == zsfappsdk) {
+                window.gametype = "正式服"
+                if (navigator.userAgent.indexOf("QQ/") !== -1) {
                     window.gameurl = gameurl.replace(new RegExp(zsfappsdk, 'g'), 'https://h5.nes.smoba.qq.com/pvpesport.web.user/#/launch-game-mp-qq');
-                } else if (gameurl == tyfappsdk) {
+                }
+            } else if (gameurl == tyfappsdk) {
+                window.gametype = "体验服"
+                if (navigator.userAgent.indexOf("QQ/") !== -1) {
                     document.write('<iframe id="fullscreen-iframe" src="about:blank" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 999999;"></iframe>');
                     const iframe = document.getElementById("fullscreen-iframe");
-                    iframe.src = window.location.origin + "/wzzdy/openurl.html";
+                    iframe.src = window.location.origin + "/openurl.html";
                 }
             }
         } else {
@@ -150,12 +154,6 @@
             var mapname = mapnametable[mapid][0]
         } else {
             var mapname = "地图id:" + mapid
-        }
-
-        if (gameurl == zsfappsdk) {
-            window.gametype = "正式服"
-        } else if (gameurl == tyfappsdk) {
-            window.gametype = "体验服"
         }
 
         tipdoc.innerText = tiptext + "\n" + gametype + " 地图模式:" + mapname
