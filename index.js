@@ -24,11 +24,22 @@ if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
 }
 
 if (localStorage.getItem("wzzdy_freetip") != "0.2") {
-    mdui.alert({
+    mdui.dialog({
         headline: "提示",
-        description: "本网页完全免费且开源 开源链接 https://gitee.com/huajicloud/wzzdy/ 如果你是购买得到的 你可能被骗了",
-        confirmText: "我知道了",
-        onConfirm: () => localStorage.setItem("wzzdy_freetip", "0.2"),
+        description: "本网页完全免费且开源 如果你是购买得到的 你可能被骗了",
+        actions: [
+            {
+                text: "复制开源链接",
+                onClick: () => {
+                    复制文本("https://gitee.com/huajicloud/wzzdy")
+                    return true;
+                },
+            },
+            {
+                text: "我知道了",
+            }
+        ],
+        onClose: () => localStorage.setItem("wzzdy_freetip", "0.2"),
     });
 }
 
@@ -323,22 +334,16 @@ function 生成链接(func) {
         return
     }
 
-    mdui.dialog({
+    mdui.confirm({
         headline: "提示",
         description: tiptext,
-        actions: [
-            {
-                text: "取消",
-            },
-            {
-                text: "继续",
-                onClick: () => {
-                    window.openurl = openurl
-                    打开链接(openurl)
-                    return true;
-                },
-            }
-        ]
+        confirmText: "继续",
+        cancelText: "取消",
+        onConfirm: () => {
+            window.openurl = openurl
+            打开链接(openurl)
+        },
+        onCancel: () => console.log("canceled"),
     });
 
 }
@@ -659,7 +664,7 @@ allbutton[1].onclick = function () {
             }
         ],
         body: '<mdui-text-field class="copydialog_edit" variant="filled" type="text" name="" style="padding-top: 10px;" label="生成规则"></mdui-text-field>\n<p><br>如显示不全可向下滑动查看更多内容<br>当生成规则包括以下字符 会自动被替换为指定字符 默认生成规则为url<br>mode --> 模式名<br>hero --> 当前禁用英雄配置名<br>custom --> 当前自定义配置名<br>url --> 最终生成链接<br>gametype --> 游戏类型 例如正式服<br>\\n --> 换行<br>如不做特别标记 链接法和转换法复制规则默认相同 如想精准设置 请将配置与配置间直接使用|||分割即可 例如 map url|||gametype map url</p>',
-        onOpened: () => {
+        onOpen: () => {
             myedit = document.getElementsByClassName("copydialog_edit")[0]
             myedit.value = localStorage.getItem("wzzdy_copyrule")
             myedit.addEventListener("input", function () {
@@ -930,7 +935,7 @@ herodialog.querySelector("mdui-button").onclick = function () {
                 herodialog.open = false
             },
             onCancel: () => console.log("canceled"),
-            onClosed: () => herotip = false,
+            onClose: () => herotip = false,
         });
     }
 }
@@ -954,7 +959,7 @@ customdialog.querySelector("mdui-button").onclick = function () {
                 customdialog.open = false
             },
             onCancel: () => console.log("canceled"),
-            onClosed: () => customtip = false,
+            onClose: () => customtip = false,
         });
     }
 }
