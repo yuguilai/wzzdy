@@ -253,8 +253,13 @@ function 生成链接(func) {
             try {
                 var custom_json = makejson(json_herolist, json_bxlist, json_yglist, json_fytlist, json_sjlist, mysjson)
             } catch (error) {
-                localStorage.clear()
-                window.location.reload()
+                console.log(error)
+                mdui.alert({
+                    headline: "提示",
+                    description: "合成自定义配置时出错 错误信息(可自己查看或发送给作者):" + error,
+                    confirmText: "我知道了",
+                });
+                return
             }
             alljson.customDefineItems = custom_json
         }
@@ -2119,7 +2124,11 @@ function makejson(HeroList, bxList, ygList, fytList, sjList, gjjson) {
 
     for (let index = 0; index < jsondo.length; index++) {
         const element = jsondo[index];
-        if (element.includes(":1")) {
+        const value = element.split(":")[1]
+        if (value == "" || value == "0") {
+            throw "自定义配置信息有误 点击自定义配置的管理配置手动保存配置来更新该配置即可解决该问题"
+        }
+        if (value == "1") {
             jsondo.splice(index, 1);
             index--;
         } else {
@@ -2320,31 +2329,31 @@ function 判断出线数值(myvalue) {
     return bxmode
 }
 
-function 判断数据(str) {
-    var r1
-    if (str == "") {
-        r1 = 0
-    } else {
-        r1 = str
+function 判断数据(doc) {
+    if (doc.value == "") {
+        doc.value = 1
     }
-    return r1
+
+    let value = doc.value
+
+    return value
 }
 
 function 获取野怪数据(bingxiandoc, func, func2, func3, bingxiandoc2) {
     //先循环五次 出兵路线需要特殊判断
     for (let index = 0; index < 5; index++) {
         if (bingxiandoc2) {
-            var myvalue = bingxiandoc[index].value;
-            var myvalue2 = bingxiandoc2[index].value;
+            var mydoc = bingxiandoc[index];
+            var mydoc2 = bingxiandoc2[index];
             var mdata = []
-            mdata.push(判断数据(myvalue))
-            mdata.push(判断数据(myvalue2))
+            mdata.push(判断数据(mydoc))
+            mdata.push(判断数据(mydoc2))
             func(mdata)
         } else {
-            var myvalue = bingxiandoc[index].value;
+            var mydoc = bingxiandoc[index];
             var mdata = []
-            mdata.push(判断数据(myvalue))
-            mdata.push(判断数据(myvalue))
+            mdata.push(判断数据(mydoc))
+            mdata.push(判断数据(mydoc))
             func(mdata)
         }
     }
@@ -2367,17 +2376,17 @@ function 获取野怪数据(bingxiandoc, func, func2, func3, bingxiandoc2) {
     //野怪list
     for (let index = 6; index < 8; index++) {
         if (bingxiandoc2) {
-            const myvalue = bingxiandoc[index].value;
-            const myvalue2 = bingxiandoc2[index].value;
+            const mydoc = bingxiandoc[index];
+            const mydoc2 = bingxiandoc2[index];
             var mdata = []
-            mdata.push(判断数据(myvalue))
-            mdata.push(判断数据(myvalue2))
+            mdata.push(判断数据(mydoc))
+            mdata.push(判断数据(mydoc2))
             func3(mdata)
         } else {
-            const myvalue = bingxiandoc[index].value;
+            const mydoc = bingxiandoc[index];
             var mdata = []
-            mdata.push(判断数据(myvalue))
-            mdata.push(判断数据(myvalue))
+            mdata.push(判断数据(mydoc))
+            mdata.push(判断数据(mydoc))
             func3(mdata)
         }
     }
@@ -2388,17 +2397,17 @@ function 获取防御塔属性(fytsjdoc, func, func2, func3, fytsjdoc2) {
     for (let index = 0; index < 3; index++) {
 
         if (fytsjdoc2) {
-            const myvalue = fytsjdoc[index].value;
-            const myvalue2 = fytsjdoc2[index].value;
+            const mydoc = fytsjdoc[index];
+            const mydoc2 = fytsjdoc2[index];
             var mdata = []
-            mdata.push(判断数据(myvalue))
-            mdata.push(判断数据(myvalue2))
+            mdata.push(判断数据(mydoc))
+            mdata.push(判断数据(mydoc2))
             func(mdata)
         } else {
-            const myvalue = fytsjdoc[index].value;
+            const mydoc = fytsjdoc[index];
             var mdata = []
-            mdata.push(判断数据(myvalue))
-            mdata.push(判断数据(myvalue))
+            mdata.push(判断数据(mydoc))
+            mdata.push(判断数据(mydoc))
             func(mdata)
         }
     }
@@ -2407,22 +2416,22 @@ function 获取防御塔属性(fytsjdoc, func, func2, func3, fytsjdoc2) {
     for (let index = 3; index < 5; index++) {
 
         if (fytsjdoc2) {
-            const myvalue = fytsjdoc[index].value;
-            const myvalue2 = fytsjdoc2[index].value;
+            const mydoc = fytsjdoc[index];
+            const mydoc2 = fytsjdoc2[index];
             var mdata = []
-            mdata.push(判断数据(myvalue))
-            mdata.push(判断数据(myvalue2))
+            mdata.push(判断数据(mydoc))
+            mdata.push(判断数据(mydoc2))
             func2(mdata)
         } else {
-            const myvalue = fytsjdoc[index].value;
+            const mydoc = fytsjdoc[index];
             var mdata = []
-            mdata.push(判断数据(myvalue))
-            mdata.push(判断数据(myvalue))
+            mdata.push(判断数据(mydoc))
+            mdata.push(判断数据(mydoc))
             func2(mdata)
         }
     }
 
-    func3(判断数据(document.getElementById("mytiao").value))
+    func3(判断数据(document.getElementById("mytiao")))
 
 }
 
@@ -2507,8 +2516,8 @@ function 获取选择自定义名() {
             var herodata_blue = []
             var herodata_red = []
             for (let i = 0; i < 5; i++) {
-                herodata_blue.push(bluedoc[index].value)
-                herodata_red.push(reddoc[index].value)
+                herodata_blue.push(判断数据(bluedoc[index]))
+                herodata_red.push(判断数据(reddoc[index]))
             }
 
             HeroList_blue.push(herodata_blue)
@@ -2535,8 +2544,8 @@ function 获取选择自定义名() {
             var herodata_red = []
 
             for (let i = 0; i < 5; i++) {
-                herodata_blue.push(bluelist[i].getElementsByTagName("mdui-select")[index].value)
-                herodata_red.push(redlist[i].getElementsByTagName("mdui-select")[index].value)
+                herodata_blue.push(判断数据(bluelist[i].getElementsByTagName("mdui-select")[index]))
+                herodata_red.push(判断数据(redlist[i].getElementsByTagName("mdui-select")[index]))
             }
 
             HeroList_blue.push(herodata_blue)
@@ -2560,8 +2569,8 @@ function 获取选择自定义名() {
             var herodata_red = []
 
             for (let i = 0; i < 5; i++) {
-                herodata_blue.push(allputong[0].getElementsByTagName("mdui-select")[index].value)
-                herodata_red.push(allputong[0].getElementsByTagName("mdui-select")[index].value)
+                herodata_blue.push(判断数据(allputong[0].getElementsByTagName("mdui-select")[index]))
+                herodata_red.push(判断数据(allputong[0].getElementsByTagName("mdui-select")[index]))
             }
 
             HeroList_blue.push(herodata_blue)
