@@ -330,28 +330,6 @@
                     <mdui-button variant="filled" name value type="buttn" class="custombutton">保存方案</mdui-button>
                     <mdui-button variant="filled" name value type="buttn" class="custombutton">还原</mdui-button>
 
-                    <mdui-dialog class="suijitest" headline="提示"
-                        description='本弹窗一共四个输入框可供输入 如显示不全可向下滑动查看更多内容'><mdui-text-field variant="filled" type="text"
-                            name="" style="padding-top: 10px;" clearable label="地图模式"></mdui-text-field><mdui-text-field
-                            variant="filled" type="text" name="" clearable style="padding-top: 10px;"
-                            label="禁用英雄"></mdui-text-field>
-
-                        <mdui-text-field variant="filled" type="text" name="" style="padding-top: 10px;" readonly
-                            value="点击编辑配置" label="随机生成数据"></mdui-text-field><mdui-text-field variant="filled"
-                            type="text" name="" readonly value="点击编辑配置" style="padding-top: 10px;"
-                            label="随机打乱数据"></mdui-text-field><mdui-button slot="action" variant="text" name="" value=""
-                            onclick='document.getElementsByClassName("suijitest")[0].open = false'
-                            type="button">取消</mdui-button><mdui-button slot="action" variant="text" name="" value=""
-                            onclick='entclick()' type="button">确认</mdui-button>
-                    </mdui-dialog>
-
-
-                    <mdui-dialog class="peiedit" headline="高级功能设置" description='点击下方即可编辑'>
-                        <mdui-button slot="action" variant="text" name="" value=""
-                            onclick='document.getElementsByClassName("peiedit")[0].open = false'
-                            type="button">返回</mdui-button>
-                    </mdui-dialog>
-
                     <p>如显示不全可向下滑动查看更多内容 点击选择方案选择保存的方案</p>
 
                     <mdui-tabs value="tab-1">
@@ -445,6 +423,28 @@
 
                         </mdui-tab-panel>
                     </mdui-tabs>
+
+                    <mdui-dialog class="suijitest" headline="提示"
+                    description='本弹窗一共四个输入框可供输入 如显示不全可向下滑动查看更多内容'><mdui-text-field variant="filled" type="text"
+                        name="" style="padding-top: 10px;" clearable label="地图模式"></mdui-text-field><mdui-text-field
+                        variant="filled" type="text" name="" clearable style="padding-top: 10px;"
+                        label="禁用英雄"></mdui-text-field>
+
+                    <mdui-text-field variant="filled" type="text" name="" style="padding-top: 10px;" readonly
+                        value="点击编辑配置" label="随机生成数据"></mdui-text-field><mdui-text-field variant="filled"
+                        type="text" name="" readonly value="点击编辑配置" style="padding-top: 10px;"
+                        label="随机打乱数据"></mdui-text-field><mdui-button slot="action" variant="text" name="" value=""
+                        onclick='document.getElementsByClassName("suijitest")[0].open = false'
+                        type="button">取消</mdui-button><mdui-button slot="action" variant="text" name="" value=""
+                        onclick='entclick()' type="button">确认</mdui-button>
+                </mdui-dialog>
+
+
+                <mdui-dialog class="peiedit" headline="高级功能设置" description='点击下方即可编辑'>
+                    <mdui-button slot="action" variant="text" name="" value=""
+                        onclick='document.getElementsByClassName("peiedit")[0].open = false'
+                        type="button">返回</mdui-button>
+                </mdui-dialog>
 
                 </mdui-dialog>
 
