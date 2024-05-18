@@ -2602,8 +2602,8 @@ function 选择自定义配置(json) {
     } else {
         edittt[0].value = ""
         edittt[1].value = ""
-        edittt[2].value = ""
-        edittt[3].value = ""
+        edittt[2].data = ""
+        edittt[3].data = ""
     }
 
 
