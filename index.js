@@ -1,6 +1,6 @@
 window.onload = function () {
     document.getElementsByTagName("mdui-card")[0].style.visibility = "unset"
-    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.7"
+    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.8"
 }
 
 const tip1 = "没有配置 请先点击管理配置新建配置"
@@ -1584,29 +1584,8 @@ function loadmenu() {
                 });
             }
 
-            // 兵线出兵的值比较特殊 后字符串的输出
-            /*
-            const originalArray = {
-                0: ["不出兵"],
-                1: ["对抗路"],
-                2: ["中路"],
-                3: ["对抗路", "中路"],
-                4: ["发育路"],
-                5: ["对抗路", "发育路"],
-                6: ["中路", "发育路"],
-            };
 
-            const result = Object.entries(originalArray).reduce((acc, [key, value]) => {
-                const newKey = parseInt(key) + 1;
-                const valueStr = Array.isArray(value) ? value.join(', ') : value;
-                acc += `${newKey}:${valueStr} `;
-                return acc;
-            }, '');
-
-            console.log(result);
-            */
-
-            document.querySelector(".extratip").innerText = "数字与数值对应内容\n" + createcustom_tab() + "\n 兵线出兵的值比较特殊 1:不出兵 2:对抗路 3:中路 4:对抗路, 中路 5:发育路 6:对抗路, 发育路 7:中路, 发育路"
+            document.querySelector(".extratip").innerText = "你可点击下方编辑"
             try {
                 选择自定义配置(custom_json[document.querySelectorAll(".myedit")[2].value])
             } catch (e) {
@@ -1746,14 +1725,10 @@ function shuffleArray(array) {
     }
 }
 
-function shuffleArray2(Arr1, Arr2, postab) {
+function shuffleArray2(Arr1, Arr2, randomtab) {
     var combinedArr = Arr1.concat(Arr2);
-    if (typeof postab == "undefined") {
-        postab = Array.from({ length: combinedArr.length }, (_, i) => i + 1);
-    }
     // 打乱合并后的数组
-    var shuffarr = shuffleSelectedPositions(combinedArr, postab);
-    console.log(shuffarr)
+    shuffleSelectedPositions(combinedArr, randomtab);
     // 将打乱后的数组拆分成两个数组
     var shuffledArr1 = combinedArr.slice(0, Arr1.length);
     var shuffledArr2 = combinedArr.slice(Arr1.length);
@@ -1782,27 +1757,18 @@ function shuffleSelectedPositions(arr, positionsToShuffle) {
 
 
 function getRandomElementFromArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const randomIndex = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[randomIndex]] = [arr[randomIndex], arr[i]];
-    }
-    return arr[0];
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
 }
 
-function shuffleArray3(Arr1, Arr2, postab, numtab) {
+
+function shuffleArray3(Arr1, Arr2, randomtab, postab) {
     var combinedArr = Arr1.concat(Arr2);
-    if (typeof postab == "undefined") {
-        postab = Array.from({ length: combinedArr.length }, (_, i) => i + 1);
-    }
     // 打乱合并后的数组
-    for (let index = 0; index < combinedArr.length; index++) {
+    for (let index = 0; index < postab.length; index++) {
         const pos = postab[index] - 1
-        if (pos >= combinedArr.length) {
-            alert("高级设置有问题 请检查随机打乱数据中 生效位置的填写是否越界 例如 兵线类生效位置填写为1,2,3 实际上除了英雄到2就结束了 已自动跳过")
-            continue
-        }
-        var num = getRandomElementFromArray(numtab)
-        combinedArr[pos] = num
+        let random = getRandomElementFromArray(randomtab)
+        combinedArr[pos] = random
     }
     // 将打乱后的数组拆分成两个数组
     var shuffledArr1 = combinedArr.slice(0, Arr1.length);
@@ -1812,20 +1778,13 @@ function shuffleArray3(Arr1, Arr2, postab, numtab) {
     return [shuffledArr1, shuffledArr2]
 }
 
-function shuffleArray4(Arr, postab, numtab) {
+function shuffleArray4(Arr, randomtab, postab) {
     const combinedArr = [...Arr];
-    if (typeof postab == "undefined") {
-        postab = Array.from({ length: combinedArr.length }, (_, i) => i + 1);
-    }
     // 打乱合并后的数组
-    for (let index = 0; index < combinedArr.length; index++) {
+    for (let index = 0; index < postab.length; index++) {
         const pos = postab[index] - 1
-        if (pos >= combinedArr.length) {
-            alert("高级设置有问题 请检查随机打乱数据中 生效位置的填写是否越界 例如 兵线类生效位置填写为1,2,3 实际上除了英雄到2就结束了 已自动跳过")
-            continue
-        }
-        var num = getRandomElementFromArray(numtab)
-        combinedArr[pos] = num
+        let random = getRandomElementFromArray(randomtab)
+        combinedArr[pos] = random
     }
     console.log("随机生成前:", Arr);
     console.log("随机生成后的:", combinedArr);
@@ -1866,152 +1825,146 @@ function makejson(HeroList, bxList, ygList, fytList, sjList, gjjson) {
     var sjsc = gjjson[2]
     var sjdl = gjjson[3]
 
-    function 判断随机生成数据(menutab, numtab, postab) {
-        for (let index = 0; index < menutab.length; index++) {
-            const pos = menutab[index];
-            if (pos == 1) {
-                const result = shuffleArray3(expList_blue, expList_red, postab, numtab);
-                expList_blue = result[0]
-                expList_red = result[1]
-            } else if (pos == 2) {
-                const result = shuffleArray3(fashuList_blue, fashuList_red, postab, numtab);
-                fashuList_blue = result[0]
-                fashuList_red = result[1]
-            } else if (pos == 3) {
-                const result = shuffleArray3(wuliList_blue, wuliList_red, postab, numtab);
-                wuliList_blue = result[0]
-                wuliList_red = result[1]
-            } else if (pos == 4) {
-                const result = shuffleArray3(cdList_blue, cdList_red, postab, numtab);
-                cdList_blue = result[0]
-                cdList_red = result[1]
-            } else if (pos == 5) {
-                const result = shuffleArray3(jinbiList_blue, jinbiList_red, postab, numtab);
-                jinbiList_blue = result[0]
-                jinbiList_red = result[1]
-            } else if (pos == 6) {
-                const result = shuffleArray3(ysList_blue, ysList_red, postab, numtab);
-                ysList_blue = result[0]
-                ysList_red = result[1]
-            } else if (pos == 7) {
-                bxList[0] = shuffleArray4(bxList[0], postab, numtab);
-            } else if (pos == 8) {
-                bxList[1] = shuffleArray4(bxList[1], postab, numtab);
-            } else if (pos == 9) {
-                bxList[2] = shuffleArray4(bxList[2], postab, numtab);
-            } else if (pos == 10) {
-                bxList[3] = shuffleArray4(bxList[3], postab, numtab);
-            } else if (pos == 11) {
-                bxList[4] = shuffleArray4(bxList[4], postab, numtab);
-            } else if (pos == 12) {
-                bxList[5] = shuffleArray4(bxList[5], postab, numtab);
-            } else if (pos == 13) {
-                ygList[0] = shuffleArray4(ygList[0], postab, numtab);
-            } else if (pos == 14) {
-                ygList[1] = shuffleArray4(ygList[1], postab, numtab);
-            } else if (pos == 15) {
-                fytList[0] = shuffleArray4(fytList[0], postab, numtab);
-            } else if (pos == 16) {
-                fytList[1] = shuffleArray4(fytList[1], postab, numtab);
-            } else if (pos == 17) {
-                fytList[2] = shuffleArray4(fytList[2], postab, numtab);
-            } else if (pos == 18) {
-                sjList[0] = shuffleArray4(sjList[0], postab, numtab);
-            } else if (pos == 19) {
-                sjList[1] = shuffleArray4(sjList[1], postab, numtab);
-            } else if (pos == 20) {
-                sjList[2] = shuffleArray4(sjList[2], postab, numtab);
-            }
+    function 判断随机生成数据(pos, randomtab, postab) {
+        if (pos == 1) {
+            const result = shuffleArray3(expList_blue, expList_red, randomtab, postab);
+            expList_blue = result[0]
+            expList_red = result[1]
+        } else if (pos == 2) {
+            const result = shuffleArray3(fashuList_blue, fashuList_red, randomtab, postab);
+            fashuList_blue = result[0]
+            fashuList_red = result[1]
+        } else if (pos == 3) {
+            const result = shuffleArray3(wuliList_blue, wuliList_red, randomtab, postab);
+            wuliList_blue = result[0]
+            wuliList_red = result[1]
+        } else if (pos == 4) {
+            const result = shuffleArray3(cdList_blue, cdList_red, randomtab, postab);
+            cdList_blue = result[0]
+            cdList_red = result[1]
+        } else if (pos == 5) {
+            const result = shuffleArray3(jinbiList_blue, jinbiList_red, randomtab, postab);
+            jinbiList_blue = result[0]
+            jinbiList_red = result[1]
+        } else if (pos == 6) {
+            const result = shuffleArray3(ysList_blue, ysList_red, randomtab, postab);
+            ysList_blue = result[0]
+            ysList_red = result[1]
+        } else if (pos == 7) {
+            bxList[0] = shuffleArray4(bxList[0], randomtab, postab);
+        } else if (pos == 8) {
+            bxList[1] = shuffleArray4(bxList[1], randomtab, postab);
+        } else if (pos == 9) {
+            bxList[2] = shuffleArray4(bxList[2], randomtab, postab);
+        } else if (pos == 10) {
+            bxList[3] = shuffleArray4(bxList[3], randomtab, postab);
+        } else if (pos == 11) {
+            bxList[4] = shuffleArray4(bxList[4], randomtab, postab);
+        } else if (pos == 12) {
+            bxList[5] = shuffleArray4(bxList[5], randomtab, postab);
+        } else if (pos == 13) {
+            ygList[0] = shuffleArray4(ygList[0], randomtab, postab);
+        } else if (pos == 14) {
+            ygList[1] = shuffleArray4(ygList[1], randomtab, postab);
+        } else if (pos == 15) {
+            fytList[0] = shuffleArray4(fytList[0], randomtab, postab);
+        } else if (pos == 16) {
+            fytList[1] = shuffleArray4(fytList[1], randomtab, postab);
+        } else if (pos == 17) {
+            fytList[2] = shuffleArray4(fytList[2], randomtab, postab);
+        } else if (pos == 18) {
+            sjList[0] = shuffleArray4(sjList[0], randomtab, postab);
+        } else if (pos == 19) {
+            sjList[1] = shuffleArray4(sjList[1], randomtab, postab);
+        } else if (pos == 20) {
+            sjList[2] = shuffleArray4(sjList[2], randomtab, postab);
         }
     }
 
-    function 判断随机打乱数据(menutab, postab) {
-        for (let index = 0; index < menutab.length; index++) {
-            const pos = menutab[index];
-            if (pos == 1) {
-                const result = shuffleArray2(expList_blue, expList_red, postab);
-                expList_blue = result[0]
-                expList_red = result[1]
-            } else if (pos == 2) {
-                const result = shuffleArray2(fashuList_blue, fashuList_red, postab);
-                fashuList_blue = result[0]
-                fashuList_red = result[1]
-            } else if (pos == 3) {
-                const result = shuffleArray2(wuliList_blue, wuliList_red, postab);
-                wuliList_blue = result[0]
-                wuliList_red = result[1]
-            } else if (pos == 4) {
-                const result = shuffleArray2(cdList_blue, cdList_red, postab);
-                cdList_blue = result[0]
-                cdList_red = result[1]
-            } else if (pos == 5) {
-                const result = shuffleArray2(jinbiList_blue, jinbiList_red, postab);
-                jinbiList_blue = result[0]
-                jinbiList_red = result[1]
-            } else if (pos == 6) {
-                const result = shuffleArray2(ysList_blue, ysList_red, postab);
-                ysList_blue = result[0]
-                ysList_red = result[1]
-            } else if (pos == 7) {
-                bxList[0] = shuffleArray(bxList[0]);
-            } else if (pos == 8) {
-                bxList[1] = shuffleArray(bxList[1]);
-            } else if (pos == 9) {
-                bxList[2] = shuffleArray(bxList[2]);
-            } else if (pos == 10) {
-                bxList[3] = shuffleArray(bxList[3]);
-            } else if (pos == 11) {
-                bxList[4] = shuffleArray(bxList[4]);
-            } else if (pos == 12) {
-                bxList[5] = shuffleArray(bxList[5]);
-            } else if (pos == 13) {
-                ygList[0] = shuffleArray(ygList[0]);
-            } else if (pos == 14) {
-                ygList[1] = shuffleArray(ygList[1]);
-            } else if (pos == 15) {
-                fytList[0] = shuffleArray(fytList[0]);
-            } else if (pos == 16) {
-                fytList[1] = shuffleArray(fytList[1]);
-            } else if (pos == 17) {
-                fytList[2] = shuffleArray(fytList[2]);
-            } else if (pos == 18) {
-                sjList[0] = shuffleArray(sjList[0]);
-            } else if (pos == 19) {
-                sjList[1] = shuffleArray(sjList[1]);
-            }
+    function 判断随机打乱数据(pos, randomtab) {
+        if (pos == 1) {
+            const result = shuffleArray2(expList_blue, expList_red, randomtab);
+            expList_blue = result[0]
+            expList_red = result[1]
+        } else if (pos == 2) {
+            const result = shuffleArray2(fashuList_blue, fashuList_red, randomtab);
+            fashuList_blue = result[0]
+            fashuList_red = result[1]
+        } else if (pos == 3) {
+            const result = shuffleArray2(wuliList_blue, wuliList_red, randomtab);
+            wuliList_blue = result[0]
+            wuliList_red = result[1]
+        } else if (pos == 4) {
+            const result = shuffleArray2(cdList_blue, cdList_red, randomtab);
+            cdList_blue = result[0]
+            cdList_red = result[1]
+        } else if (pos == 5) {
+            const result = shuffleArray2(jinbiList_blue, jinbiList_red, randomtab);
+            jinbiList_blue = result[0]
+            jinbiList_red = result[1]
+        } else if (pos == 6) {
+            const result = shuffleArray2(ysList_blue, ysList_red, randomtab);
+            ysList_blue = result[0]
+            ysList_red = result[1]
+        } else if (pos == 7) {
+            bxList[0] = shuffleArray(bxList[0]);
+        } else if (pos == 8) {
+            bxList[1] = shuffleArray(bxList[1]);
+        } else if (pos == 9) {
+            bxList[2] = shuffleArray(bxList[2]);
+        } else if (pos == 10) {
+            bxList[3] = shuffleArray(bxList[3]);
+        } else if (pos == 11) {
+            bxList[4] = shuffleArray(bxList[4]);
+        } else if (pos == 12) {
+            bxList[5] = shuffleArray(bxList[5]);
+        } else if (pos == 13) {
+            ygList[0] = shuffleArray(ygList[0]);
+        } else if (pos == 14) {
+            ygList[1] = shuffleArray(ygList[1]);
+        } else if (pos == 15) {
+            fytList[0] = shuffleArray(fytList[0]);
+        } else if (pos == 16) {
+            fytList[1] = shuffleArray(fytList[1]);
+        } else if (pos == 17) {
+            fytList[2] = shuffleArray(fytList[2]);
+        } else if (pos == 18) {
+            sjList[0] = shuffleArray(sjList[0]);
+        } else if (pos == 19) {
+            sjList[1] = shuffleArray(sjList[1]);
         }
     }
 
     if (sjsc != "" && isJSON(sjsc)) {
         var scgz = JSON.parse(sjsc)
-        scgz.forEach(element => {
-            var [menupos, randomtab, postab] = element.split(":")
-            if (randomtab) {
-                randomtab = randomtab.match(/\d+/g).map(Number);
-            } else {
-                return
-            }
-            if (postab) {
-                postab = postab.match(/\d+/g).map(Number);
-            }
-            const numberArray = menupos.match(/\d+/g).map(Number);
 
-            判断随机生成数据(numberArray, randomtab, postab)
-        });
+        for (item in scgz) {
+            // 使用闭包解决
+            (function (item_str) {
+                scgz[item_str].forEach(element => {
+                    var [randomtab, postab] = element.split(":")
+                    randomtab = randomtab.match(/\d+/g).map(Number);
+                    postab = postab.match(/\d+/g).map(Number);
+                    判断随机生成数据(item_str, randomtab, postab)
+                });
+            })(item);
+        }
+
     }
 
     if (sjdl != "" && isJSON(sjdl)) {
         var scgz1 = JSON.parse(sjdl)
-        scgz1.forEach(element => {
-            var [menupos, postab] = element.split(":")
-            if (postab) {
-                postab = postab.match(/\d+/g).map(Number);
-            } else {
-                return
-            }
-            const numberArray = menupos.match(/\d+/g).map(Number);
-            判断随机打乱数据(numberArray, postab)
-        });
+
+        for (item in scgz1) {
+            // 使用闭包解决
+            (function (item_str) {
+                scgz1[item_str].forEach(element => {
+                    let randomtab = element.match(/\d+/g).map(Number);
+                    判断随机打乱数据(item_str, randomtab)
+                });
+            })(item);
+        }
+
     }
 
 
@@ -2645,8 +2598,6 @@ function 选择自定义配置(json) {
         var ccc = json.adjson
         edittt[0].value = ccc[0]
         edittt[1].value = ccc[1]
-        edittt[2].value = ccc[2]
-        edittt[3].value = ccc[3]
     } else {
         edittt[0].value = ""
         edittt[1].value = ""
@@ -2679,7 +2630,6 @@ function 选择自定义配置(json) {
         var myjson2 = json_yglist
         设置自定义项目(0, 5, myjson, mduiDoc)
         var myvalue = myjson[myjson.length - 1][0]
-
         mduiDoc[5].value = bxjsonMap[myvalue];
         设置自定义项目(6, 8, myjson2, mduiDoc)
     } else if (bxvalue == "zhenying") {
@@ -2688,10 +2638,10 @@ function 选择自定义配置(json) {
         var myjson = json_bxlist
         var myjson2 = json_yglist
         设置自定义项目2(0, 5, myjson, bluedoc, reddoc)
-        var myvalue = myjson[myjson.length - 1][0] - 1
+        var myvalue = myjson[myjson.length - 1][0]
         bluedoc[5].value = bxjsonMap[myvalue];
-        var myvalue = myjson[myjson2.length - 1][1] - 1
-        //reddoc[5].value = bxjsonMap[myvalue];
+        var myvalue = myjson[myjson.length - 1][1]
+        reddoc[5].value = bxjsonMap[myvalue];
         设置自定义项目2(6, 8, json_yglist, bluedoc, reddoc)
     }
 
@@ -2826,8 +2776,9 @@ customButton[2].onclick = function () {
         yxtype: document.getElementsByClassName("setmode")[0].value,
         bxtype: document.getElementsByClassName("setmode")[1].value,
         sjtype: document.getElementsByClassName("setmode")[2].value,
-        adjson: [edittt[0].value, edittt[1].value, edittt[2].value, edittt[3].value]
     }
+    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][0] = edittt[0].value
+    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][1] = edittt[1].value
     复制文本(JSON.stringify(custom_json))
 }
 
@@ -2873,8 +2824,6 @@ customButton[4].onclick = function () {
                     document.querySelectorAll(".myedit")[2].value = ""
                     edittt[0].value = ""
                     edittt[1].value = ""
-                    edittt[2].value = ""
-                    edittt[3].value = ""
                     mdui_snackbar({
                         message: "删除配置成功",
                         action: "我知道了",
@@ -2984,11 +2933,12 @@ customButton[7].onclick = function () {
                     edittt = document.getElementsByClassName("suijitest")[0].getElementsByTagName("mdui-text-field")
                     custom_json[editvalue] = {
                         myjson: 自定义名,
-                        adjson: [edittt[0].value, edittt[1].value, edittt[2].value, edittt[3].value],
                         yxtype: document.getElementsByClassName("setmode")[0].value,
                         bxtype: document.getElementsByClassName("setmode")[1].value,
                         sjtype: document.getElementsByClassName("setmode")[2].value,
                     }
+                    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][0] = edittt[0].value
+                    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][1] = edittt[1].value
                     localStorage.setItem("custom_cof", JSON.stringify(custom_json))
                     mdui_snackbar({
                         message: "保存配置成功",
@@ -3054,8 +3004,33 @@ function isJSON(str) {
     console.log('It is not a string!')
 }
 
+edittt = document.getElementsByClassName("suijitest")[0].getElementsByTagName("mdui-text-field")
+
+function checkpeiload() {
+    peiedit = document.getElementsByClassName("peiedit")[0]
+    const createcustom_tab = window.createcustom_tab
+    if (createcustom_tab == true) {
+        peiedit.open = true
+    } else {
+        mdui_snackbar({
+            message: "加载中",
+            action: "我知道了",
+            onActionClick: () => console.log("click action button")
+        });
+        createcustom_tab(peiedit)
+    }
+}
+
+edittt[2].onclick = function () {
+    window.peimode = 2
+    checkpeiload()
+}
+edittt[3].onclick = function () {
+    window.peimode = 3
+    checkpeiload()
+}
+
 function entclick() {
-    edittt = document.getElementsByClassName("suijitest")[0].getElementsByTagName("mdui-text-field")
     var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
     if (edittt[0].value != "" && typeof mydatajson[0][edittt[0].value] == "undefined") {
         mdui.alert({
@@ -3067,16 +3042,8 @@ function entclick() {
         return
     }
 
-    if ((edittt[2].value != "" && isJSON(edittt[2].value) != true) || (edittt[3].value != "" && isJSON(edittt[3].value) != true)) {
-        mdui.alert({
-            headline: "提示",
-            description: "错误的配置",
-            confirmText: "我知道了",
-            onConfirm: () => console.log("confirmed"),
-        });
-        return
-    }
-    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"] = [edittt[0].value, edittt[1].value, edittt[2].value, edittt[3].value]
+    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][0] = edittt[0].value
+    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][1] = edittt[1].value
     localStorage.setItem("custom_cof", JSON.stringify(custom_json))
     document.getElementsByClassName("suijitest")[0].open = false;
     mdui_snackbar({
@@ -3265,38 +3232,423 @@ function mdui_snackbar(args) {
     mysnackbar = mdui.snackbar(args);
 }
 
-function createcustom_tab() {
-    var menu_limit = []
-    var allputonng = document.getElementsByClassName("putong")
-    var i = 1
-    var allstr = ""
-    for (let index = 0; index < allputonng.length; index++) {
-        const putongelement = allputonng[index];
+function createcheckbox(array, ele, defvalue, menu_item) {
+    defvalue = defvalue.split(',')
+    if (menu_item == null) {
+        menu_item = Array.from({ length: array.length }, (_, index) => `${index + 1}`);
+    }
+    for (let index = 0; index < array.length; index++) {
+        // 创建 mdui-checkbox
+        var checkbox = document.createElement('mdui-checkbox');
+        const value = menu_item[index].toString()
+        checkbox.setAttribute('value', value);
+        const element = array[index];
+        checkbox.innerText = element;
+        if (defvalue.includes(value)) {
+            checkbox.checked = true
+        }
+        ele.appendChild(checkbox);
+    }
+}
 
-        var name = putongelement.getElementsByTagName("mdui-list-subheader")[0].textContent
-        allstr += name + "\n"
-        var select = putongelement.getElementsByTagName("mdui-select")
-        for (let index = 0; index < select.length; index++) {
-            const element = select[index];
-            const ele_maxvalue = element.menuItems.length
-            menu_limit.push(ele_maxvalue)
+function getIndexByTagName(element, parent) {
+    if (!parent) parent = element.parentElement;
 
-            const ele_label = element.label
-            console.log(allstr)
-            allstr += i.toString() + ":" + ele_label + " "
-            i++
+
+    // 过滤出具有指定tagName的子元素
+    const siblingsWithTag = parent.getElementsByTagName(element.tagName.toLowerCase());
+
+    // 找到当前元素在筛选后数组中的索引
+    const index = [...siblingsWithTag].indexOf(element);
+
+    return index !== -1 ? index : undefined; // 如果找到了就返回索引，否则返回undefined
+}
+
+
+function showeditdia(textv, func, ele) {
+    let tabPanel = textv.parentElement.parentElement;
+    let mindex = 0
+    let radiodiv
+    let result = ""
+    let value
+
+
+    let allnum = textv.allnum || tabPanel.allnum
+
+    let step
+
+    let allstr = []
+
+    if (peimode == 2) {
+        step = [
+            "随机生成范围", function () {
+                createcheckbox(textv.menu, radiodiv, value[0], textv.menu_item)
+            },
+        ]
+    } else if (peimode == 3) {
+
+        var customjson = JSON.parse(localStorage.getItem("custom_cof"))
+        var myjson = JSON.parse(customjson[document.querySelectorAll(".myedit")[2].value].myjson)
+        var json_herolist = myjson[0]
+        var json_bxlist = myjson[1]
+        var json_yglist = myjson[2]
+        var json_fytlist = myjson[3]
+        var json_sjlist = myjson[4]
+        let list_pos = getIndexByTagName(textv.parentElement, tabPanel.parentElement);
+        let textv_pos = getIndexByTagName(textv.parentElement);
+        let alltab = []
+
+        if (list_pos == 0) {
+            //位置 属性的对应关系
+            let blue = json_herolist[0][textv_pos]
+            let red = json_herolist[1][textv_pos]
+            alltab = [...blue, ...red]
+        } else if (list_pos == 1) {
+            let mydata = json_bxlist[textv_pos]
+            //属性 位置的对应关系
+            alltab = [mydata[0], mydata[1]]
+        } else if (list_pos == 2) {
+            let mydata = json_yglist[textv_pos]
+            //属性 位置的对应关系
+            alltab = [mydata[0], mydata[1]]
+        } else if (list_pos == 3) {
+            let mydata = json_fytlist[textv_pos]
+            //属性 位置的对应关系
+            alltab = [mydata[0], mydata[1]]
+        } else if (list_pos == 4) {
+            let mydata = json_sjlist[textv_pos]
+            //属性 位置的对应关系
+            alltab = [mydata[0], mydata[1]]
+        } else if (list_pos == 5) {
+            //胜利条件
+            let mydata = json_sjlist[textv_pos]
+            //属性 位置的对应关系
+            alltab = [mydata]
         }
 
-        allstr += "\n"
+        allstr = alltab.map((char, index) => allnum[index] + " " + textv.menu[char - 1]);
 
-
+        step = [
+            "随机打乱范围", function () {
+                createcheckbox(allstr, radiodiv, value[0])
+                //跳过第二项的设置
+                mindex++
+            },
+        ]
     }
 
-    menu_limit.push(document.querySelector("#mytiao").menuItems.length)
-    allstr += i.toString() + ":" + document.querySelector("#mytiao").label
+    if (ele && ele.data) {
+        value = ele.data.split(":")
+    } else {
+        value = ["", ""]
+    }
 
-    console.log(JSON.stringify(menu_limit))
-    console.log(allstr)
+    let dia = mdui.dialog({
+        headline: "提示",
+        description: step[0],
+        body: '<div class="radiodiv"></div>',
+        onOpen: (dia) => {
+            radiodiv = dia.getElementsByClassName("radiodiv")[0]
+            step[1]()
+        },
+        actions: [
+            {
+                text: "返回",
+                onClick: () => {
+                    return true;
+                },
+            },
+            {
+                text: "删除",
+                onClick: () => {
+                    if (ele == null) {
+                        mdui_snackbar({
+                            message: "你必须要创建配置后才能删除",
+                            action: "我知道了",
+                            onActionClick: () => console.log("click action button")
+                        });
+                        return false
+                    }
+                    ele.remove()
+                    return true;
+                },
+            },
+            {
+                text: "全选",
+                onClick: () => {
+                    var childnodes = radiodiv.childNodes
+                    for (let index = 0; index < childnodes.length; index++) {
+                        const element = childnodes[index];
+                        element.checked = true
+                    }
+                    return false;
+                },
+            },
+            {
+                text: "下一步",
+                onClick: () => {
+                    var childnodes = radiodiv.childNodes
+                    let valuetab = []
+                    let localstr
 
-    return allstr
+                    for (let index = 0; index < childnodes.length; index++) {
+                        const element = childnodes[index];
+                        if (element.checked == true) {
+                            valuetab.push(element.value);
+                        }
+                    }
+
+                    if (mindex == 0 && valuetab.length < 2) {
+                        mdui_snackbar({
+                            message: "你必须至少选择两个选项",
+                            action: "我知道了",
+                            onActionClick: () => console.log("click action button")
+                        });
+                        return false
+                    } else if (valuetab.length == 0) {
+                        mdui_snackbar({
+                            message: "你必须至少选择一个选项",
+                            action: "我知道了",
+                            onActionClick: () => console.log("click action button")
+                        });
+                        return false
+                    }
+
+                    mindex++
+                    for (let index = 0; index < childnodes.length; index++) {
+                        const element = childnodes[index];
+                        element.remove()
+                        index--
+                    }
+
+                    localstr = valuetab.join(',');
+                    if (mindex == 1) {
+                        dia.description = "作用位置设置"
+                        result = localstr
+                        createcheckbox(allnum, radiodiv, value[1])
+                        return false
+                    } else {
+
+                        if (result == "") {
+                            result = localstr
+                        } else {
+                            result = result + ":" + localstr
+                        }
+
+                        func(result)
+                    }
+                },
+            }
+        ],
+    })
+
+}
+
+function addchipitem(data, textv, ele) {
+    const listItem = document.createElement('mdui-chip');
+    listItem.elevated = true;
+    listItem.className = "mychip";
+    listItem.textContent = "一个配置";
+    listItem.data = data;
+    listItem.onclick = function () {
+        showeditdia(textv, function (result) {
+            listItem.data = result
+        }, listItem)
+    }
+    ele.appendChild(listItem)
+}
+
+function createcustom_tab(ele) {
+    var customdia = document.getElementsByClassName("custom-dialog")[0]
+    var tabs = customdia.getElementsByTagName("mdui-tabs")[0]
+
+
+    // 创建tabs容器
+    var tabsContainer = document.createElement('mdui-tabs');
+    tabsContainer.value = tabs.value;
+
+    var alltab = tabs.getElementsByTagName("mdui-tab")
+    let pos = 1
+
+    for (let index = 0; index < alltab.length; index++) {
+        let tabele = alltab[index]
+
+        var tab = document.createElement('mdui-tab');
+        tab.setAttribute('value', tabele.value);
+        tab.textContent = tabele.textContent;
+
+        tabpanel = tabs.getElementsByTagName("mdui-tab-panel")[index]
+
+        // 创建mdui-tab-panel元素
+        var tabPanel = document.createElement('mdui-tab-panel');
+        tabPanel.setAttribute('slot', 'panel');
+        tabPanel.setAttribute('value', tabele.value);
+
+
+        const orilist = tabpanel.getElementsByClassName("putong")[0];
+
+        var newlist = orilist.cloneNode(true);
+
+        //循环到第三页时添加胜利条件
+        if (index == 2) {
+            let endlist = document.querySelector("#mytiao").parentElement.cloneNode(true)
+            newlist.appendChild(endlist)
+        }
+
+
+        // 获取所有的mdui-select元素
+        var selects = newlist.querySelectorAll('mdui-select');
+
+        selects.forEach(function (select) {
+            // 创建一个新的mdui-text-field元素
+            var textField = document.createElement('mdui-text-field');
+
+            textField.className = "myedit";
+            textField.label = select.label;
+            textField.variant = select.variant;
+            textField.value = "点击编辑配置";
+            textField.readonly = true
+
+            const select_menu = select.querySelectorAll("mdui-menu-item")
+            const menu = []
+
+            select_menu.forEach(element => {
+                const text = element.textContent
+                menu.push(text)
+            });
+
+            textField.menu = menu
+            textField.menu_item = Array.from({ length: menu.length }, (_, index) => `${index + 1}`);
+            //出兵路线特殊判断
+            if (select.label == "出兵路线") {
+                textField.menu = [
+                    ["不出兵"],
+                    ["对抗路"],
+                    ["中路"],
+                    ["对抗路 中路"],
+                    ["发育路"],
+                    ["对抗路 发育路"],
+                    ["中路 发育路"],
+                    ["对抗路 中路 发育路"],
+                ];
+                textField.menu_item = [0, 1, 2, 3, 4, 5, 6, "null"]
+            } else if (select.label == "胜利条件") {
+                textField.allnum = ["全体"]
+            }
+            textField.pos = pos
+            pos++
+
+
+            textField.onclick = function () {
+                const textv = textField
+                var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
+                let peiz
+                try {
+                    peiz = JSON.parse(custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode])[textv.pos]
+                } catch {
+                    if (typeof custom_json[document.querySelectorAll(".myedit")[2].value].adjson == "undefined") {
+                        custom_json[document.querySelectorAll(".myedit")[2].value].adjson = ["", "", "", ""]
+                    }
+                }
+                if (typeof peiz == "undefined") {
+                    peiz = []
+                }
+
+                let oridia = mdui.dialog({
+                    headline: "提示",
+                    description: "你可新建或点击配置卡片编辑配置",
+                    body: '<mdui-button variant="filled" class="mdia" full-width>点击新建</mdui-button>',
+                    onOpen: (dia) => {
+
+                        for (let index = 0; index < peiz.length; index++) {
+                            const element = peiz[index];
+                            addchipitem(element, textv, oridia)
+                        }
+
+                        let mdia = dia.getElementsByClassName("mdia")[0]
+                        mdia.onclick = function () {
+                            showeditdia(textv, function (result) {
+                                addchipitem(result, textv, oridia)
+                            })
+                        }
+
+                    },
+                    actions: [
+                        {
+                            text: "返回",
+                            onClick: () => {
+                                return true;
+                            },
+                        },
+                        {
+                            text: "保存",
+                            onClick: () => {
+
+                                var chips = oridia.getElementsByTagName("mdui-chip")
+                                var results = []
+                                for (let index = 0; index < chips.length; index++) {
+                                    const element = chips[index];
+                                    results.push(element.data)
+                                }
+                                let pos = (textv.pos).toString()
+
+                                try {
+                                    let oridata = JSON.parse(custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode])
+                                    if (results.length == 0) {
+                                        delete oridata[pos]
+                                    } else {
+                                        oridata[pos] = results
+                                    }
+                                    let result = JSON.stringify(oridata)
+                                    custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode] = result
+                                } catch {
+                                    let json = {}
+                                    if (results.length == 0) {
+                                        delete json[pos]
+                                    } else {
+                                        json[pos] = results
+                                    }
+                                    let result = JSON.stringify(json)
+                                    custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode] = result
+                                }
+
+                                localStorage.setItem("custom_cof", JSON.stringify(custom_json))
+                                console.log(custom_json[document.querySelectorAll(".myedit")[2].value].adjson)
+                            },
+                        }
+                    ],
+                })
+            }
+
+
+
+            // 将textField替换select
+            select.parentNode.replaceChild(textField, select);
+        })
+
+        var alllist = newlist.getElementsByTagName("mdui-list")
+
+        for (let i = 0; i < alllist.length; i++) {
+            const element = alllist[i];
+            tabPanel.appendChild(element)
+            //getElementsByTagName返回的会动态更改 appendChild会删除原元素 必须减一
+            i--
+        }
+
+
+        if (tabpanel.querySelector(".xvanshou") != null) {
+            const array = Array.from({ length: 10 }, (_, index) => `位置${index + 1}`);
+            tabPanel.allnum = array
+        } else if (tabpanel.querySelector(".zhenying") != null) {
+            tabPanel.allnum = ["蓝方", "红方"]
+        } else {
+            tabPanel.allnum = ["全体"]
+        }
+        tabsContainer.appendChild(tab);
+        tabsContainer.appendChild(tabPanel);
+    }
+    ele.appendChild(tabsContainer)
+    tabsContainer.getElementsByTagName("mdui-tab-panel")[2]
+    window.createcustom_tab = true
+    ele.open = true
 }
