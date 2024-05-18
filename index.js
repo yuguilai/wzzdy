@@ -1308,6 +1308,13 @@ heroButton[4].onclick = function () {
                     localStorage.setItem("custom_heros", JSON.stringify(heros_json))
                     localStorage.setItem("banheros", "")
                     document.querySelectorAll(".myedit")[1].value = ""
+
+                    var childnodes = document.getElementsByClassName("myherolist")[0].childNodes
+                    childnodes.forEach(element => {
+                        element.selected = false
+                    });
+                    herodialog.bodyRef.value.scroll({ top: 0, behavior: 'smooth' });
+
                     mdui_snackbar({
                         message: "删除配置成功",
                         action: "我知道了",
@@ -2822,10 +2829,9 @@ customButton[4].onclick = function () {
                     localStorage.setItem("custom_cof", JSON.stringify(custom_json))
                     localStorage.setItem("customs", "")
                     document.querySelectorAll(".myedit")[2].value = ""
-                    edittt[0].value = ""
-                    edittt[1].value = ""
-                    edittt[2].data = ""
-                    edittt[3].data = ""
+
+                    还原自定义配置()
+
                     mdui_snackbar({
                         message: "删除配置成功",
                         action: "我知道了",
@@ -2966,6 +2972,19 @@ customButton[7].onclick = function () {
 }
 
 
+function 还原自定义配置() {
+    var alldoc = customdialog.getElementsByTagName("mdui-select")
+    for (let index = 0; index < alldoc.length; index++) {
+        alldoc[index].value = alldoc[index].defvalue
+    }
+    edittt[0].value = ""
+    edittt[1].value = ""
+    edittt[2].data = ""
+    edittt[3].data = ""
+    customdialog.querySelector("mdui-tab").click()
+    customdialog.bodyRef.value.scroll({ top: 0, behavior: 'smooth' });
+}
+
 customButton[8].onclick = function () {
     mdui.confirm({
         headline: "提示",
@@ -2973,10 +2992,7 @@ customButton[8].onclick = function () {
         confirmText: "确认",
         cancelText: "取消",
         onConfirm: () => {
-            var alldoc = customdialog.getElementsByTagName("mdui-select")
-            for (let index = 0; index < alldoc.length; index++) {
-                alldoc[index].value = alldoc[index].defvalue
-            }
+            还原自定义配置()
             mdui_snackbar({
                 message: "还原成功",
                 action: "我知道了",
@@ -3399,7 +3415,15 @@ function showeditdia(textv, func, ele) {
                         }
                     }
 
-                    if (mindex == 0 && valuetab.length < 2) {
+                    if ((mindex == 0 || peimode == 3) && valuetab.length < 2) {
+                        if (childnodes.length == 1) {
+                            mdui_snackbar({
+                                message: "该项不支持设置该操作 请返回选择其他选项",
+                                action: "我知道了",
+                                onActionClick: () => console.log("click action button")
+                            });
+                            return false
+                        }
                         mdui_snackbar({
                             message: "你必须至少选择两个选项",
                             action: "我知道了",
@@ -3466,7 +3490,6 @@ function createcustom_tab(ele) {
 
     // 创建tabs容器
     var tabsContainer = document.createElement('mdui-tabs');
-    tabsContainer.value = tabs.value;
 
     var alltab = tabs.getElementsByTagName("mdui-tab")
     let pos = 1
@@ -3653,4 +3676,11 @@ function createcustom_tab(ele) {
     tabsContainer.getElementsByTagName("mdui-tab-panel")[2]
     window.createcustom_tab = true
     ele.open = true
+    ele.addEventListener("open", function () {
+        ele.querySelector("mdui-tab").click()
+        ele.updateComplete.then(() => {
+            ele.bodyRef.value.scrollTop = 0;
+        })
+    })
+
 }
