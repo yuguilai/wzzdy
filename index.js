@@ -1585,7 +1585,6 @@ function loadmenu() {
             }
 
 
-            document.querySelector(".extratip").innerText = "你可点击下方编辑"
             try {
                 选择自定义配置(custom_json[document.querySelectorAll(".myedit")[2].value])
             } catch (e) {
@@ -2598,6 +2597,8 @@ function 选择自定义配置(json) {
         var ccc = json.adjson
         edittt[0].value = ccc[0]
         edittt[1].value = ccc[1]
+        edittt[2].data = ccc[2]
+        edittt[3].data = ccc[3]
     } else {
         edittt[0].value = ""
         edittt[1].value = ""
@@ -2776,9 +2777,8 @@ customButton[2].onclick = function () {
         yxtype: document.getElementsByClassName("setmode")[0].value,
         bxtype: document.getElementsByClassName("setmode")[1].value,
         sjtype: document.getElementsByClassName("setmode")[2].value,
+        adjson: [edittt[0].value, edittt[1].value, edittt[2].data, edittt[3].data]
     }
-    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][0] = edittt[0].value
-    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][1] = edittt[1].value
     复制文本(JSON.stringify(custom_json))
 }
 
@@ -2824,6 +2824,8 @@ customButton[4].onclick = function () {
                     document.querySelectorAll(".myedit")[2].value = ""
                     edittt[0].value = ""
                     edittt[1].value = ""
+                    edittt[2].data = ""
+                    edittt[3].data = ""
                     mdui_snackbar({
                         message: "删除配置成功",
                         action: "我知道了",
@@ -2936,9 +2938,8 @@ customButton[7].onclick = function () {
                         yxtype: document.getElementsByClassName("setmode")[0].value,
                         bxtype: document.getElementsByClassName("setmode")[1].value,
                         sjtype: document.getElementsByClassName("setmode")[2].value,
+                        adjson: [edittt[0].value, edittt[1].value, edittt[2].data, edittt[3].data]
                     }
-                    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][0] = edittt[0].value
-                    custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][1] = edittt[1].value
                     localStorage.setItem("custom_cof", JSON.stringify(custom_json))
                     mdui_snackbar({
                         message: "保存配置成功",
@@ -3612,6 +3613,7 @@ function createcustom_tab(ele) {
                                     custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode] = result
                                 }
 
+                                edittt[peimode].data = custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode]
                                 localStorage.setItem("custom_cof", JSON.stringify(custom_json))
                                 console.log(custom_json[document.querySelectorAll(".myedit")[2].value].adjson)
                             },
