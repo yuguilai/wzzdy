@@ -3347,7 +3347,7 @@ function showeditdia(textv, func, ele) {
     let dia = mdui.dialog({
         headline: "提示",
         description: step[0],
-        body: '<div class="radiodiv"></div>',
+        body: '<p>如显示不全可向下滑动查看更多内容</p><div class="radiodiv"></div>',
         onOpen: (dia) => {
             radiodiv = dia.getElementsByClassName("radiodiv")[0]
             step[1]()
