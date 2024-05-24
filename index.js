@@ -1,6 +1,6 @@
 window.onload = function () {
     document.getElementsByTagName("mdui-card")[0].style.visibility = "unset"
-    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 3.8"
+    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 4.0"
 }
 
 const tip1 = "没有配置 请先点击管理配置新建配置"
@@ -291,6 +291,57 @@ function 生成链接(func) {
         return
     }
 
+    if (alljson.mapType != 1) {
+        var myalljson = {
+            "createType": "2",
+            "mapID": "待填入mapid",
+            "ullRoomid": "待填入roomid",
+            "mapType": "待填入roomid",
+            "ullExternUid": "待填入roomid",
+            "roomName": "1",
+            "platType": "1",
+            "campid": "1",
+            "AddPos": "0",
+            "AddType": "2"
+        }
+
+        myalljson.mapID = mapid[0]
+        myalljson.mapType = mapid[1]
+
+        var Rand = Math.random()
+        var mineId = Math.round(Rand * 1000000000000000000)
+
+        myalljson.ullExternUid = mineId
+        myalljson.ullRoomid = mineId
+
+        var alljson_str = JSON.stringify(myalljson)
+        console.log(alljson_str)
+        var openurl = url + btoa(alljson_str)
+        var tiptext = "此地图仅提供开房间，不可无CD哦 确认启动？"
+
+        if (func) {
+            func(openurl, tiptext)
+            return
+        }
+
+        mdui.confirm({
+            headline: "提示",
+            description: tiptext,
+            confirmText: "继续",
+            cancelText: "取消",
+            onConfirm: () => {
+                window.openurl = openurl
+                打开链接(openurl)
+            },
+            onCancel: () => console.log("canceled"),
+        });
+
+        window.myheros = "无禁用英雄"
+
+        return
+
+    }
+
 
     var heros = edittab[1].value.replace(/\s+/g, "");
 
@@ -305,6 +356,12 @@ function 生成链接(func) {
         }
     }
 
+    window.myheros = heros
+
+    if (myheros == "") {
+        window.myheros = "无禁用英雄"
+    }
+
     for (item in mydatajson[1]) {
         if (heros.includes(item)) {
             //提取json内容中第一个|前的内容
@@ -315,7 +372,6 @@ function 生成链接(func) {
     }
 
     alljson.firstCountDownTime = "6666666666"
-
 
     var Rand = Math.random()
     var mineId = Math.round(Rand * 1000000000000000000)
@@ -490,15 +546,46 @@ function replaceContent(str, replaceurl, replacepos, openurl) {
         return replaceurl
     }
 
+    var customjson = JSON.parse(localStorage.getItem("custom_cof"))
+    if (customjson[document.querySelectorAll(".myedit")[2].value]) {
+        if (customjson[document.querySelectorAll(".myedit")[2].value].myjson) {
+            mysjson = customjson[document.querySelectorAll(".myedit")[2].value].adjson
+            if (typeof mysjson == "undefined") {
+                mysjson = ["", "", "", ""]
+            }
+            console.log(mysjson)
+            let modename = mysjson[0]
+            if (modename != "") {
+                str = str.replace(/mode/g, modename);
+            }
+            let banheros = mysjson[1]
+            if (banheros != "") {
+                //如果存在ban就替换hero
+                if (str.includes("ban")) {
+                    str = str.replace(/hero/g, "无禁用英雄配置名");
+                } else {
+                    str = str.replace(/hero/g, "禁用英雄:"+myheros);
+                }
+                mdui.alert({
+                    headline: "提示",
+                    description: "当前配置包含高级配置的英雄配置 无法获取配置名 已自动替换为禁用英雄配置 配置中的ban(禁用英雄配置) 将会在本次自动被替换为空 防止重复",
+                    confirmText: "我知道了",
+                });
+            }
+        }
+    }
+
     //转换法需要特殊判断
     if (replacepos == 1) {
         str = str.replace(/mode/g, GetModeStr(openurl));
     } else {
         str = str.replace(/mode/g, document.querySelectorAll(".myedit")[0].value);
     }
+
     str = str.replace(/hero/g, document.querySelectorAll(".myedit")[1].value);
     str = str.replace(/custom/g, document.querySelectorAll(".myedit")[2].value);
     str = str.replace(/url/g, replaceurl);
+    str = str.replace(/ban/g, myheros);
 
     let mode
     if (openurl.includes("tencentmsdk1104466820")) {
@@ -668,7 +755,7 @@ allbutton[1].onclick = function () {
                 },
             }
         ],
-        body: '<mdui-text-field class="copydialog_edit" variant="filled" type="text" name="" style="padding-top: 10px;" label="生成规则"></mdui-text-field>\n<p><br>如显示不全可向下滑动查看更多内容<br>当生成规则包括以下字符 会自动被替换为指定字符 默认生成规则为url<br>mode --> 模式名<br>hero --> 当前禁用英雄配置名<br>custom --> 当前自定义配置名<br>url --> 最终生成链接<br>gametype --> 游戏类型 例如正式服<br>\\n --> 换行<br>如不做特别标记 链接法和转换法复制规则默认相同 如想精准设置 请将配置与配置间直接使用|||分割即可 例如 map url|||gametype map url</p>',
+        body: '<mdui-text-field class="copydialog_edit" variant="filled" type="text" name="" style="padding-top: 10px;" label="生成规则"></mdui-text-field>\n<p><br>如显示不全可向下滑动查看更多内容<br>当生成规则包括以下字符 会自动被替换为指定字符 默认生成规则为url<br>mode --> 模式名<br>hero --> 当前禁用英雄配置名 ban --> 当前禁用英雄配置<br>custom --> 当前自定义配置名<br>url --> 最终生成链接<br>gametype --> 游戏类型 例如正式服<br>\\n --> 换行<br>如不做特别标记 链接法和转换法复制规则默认相同 如想精准设置 请将配置与配置间直接使用|||分割即可 例如 map url|||gametype map url</p>',
         onOpen: () => {
             myedit = document.getElementsByClassName("copydialog_edit")[0]
             myedit.value = localStorage.getItem("wzzdy_copyrule")
@@ -2759,6 +2846,7 @@ customButton[1].onclick = function () {
                 yxtype: document.getElementsByClassName("setmode")[0].value,
                 bxtype: document.getElementsByClassName("setmode")[1].value,
                 sjtype: document.getElementsByClassName("setmode")[2].value,
+                adjson: [edittt[0].value, edittt[1].value, edittt[2].data, edittt[3].data]
             }
             console.log(custom_json)
             localStorage.setItem("custom_cof", JSON.stringify(custom_json))
@@ -3638,6 +3726,7 @@ function createcustom_tab(ele) {
 
                                 edittt[peimode].data = custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode]
                                 localStorage.setItem("custom_cof", JSON.stringify(custom_json))
+                                textv.value = "点击编辑配置 共有" + results.length + "个配置"
                                 console.log(custom_json[document.querySelectorAll(".myedit")[2].value].adjson)
                             },
                         }
@@ -3678,9 +3767,65 @@ function createcustom_tab(ele) {
     ele.open = true
     ele.addEventListener("open", function () {
         ele.querySelector("mdui-tab").click()
+
+        // 获取所有的mdui-text-field元素
+        var textFields = ele.querySelectorAll('mdui-text-field');
+        let index = 0
+
+        textFields.forEach(function (textField) {
+
+            edittt = document.getElementsByClassName("suijitest")[0].getElementsByTagName("mdui-text-field")
+            var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
+            try {
+                var adjson = JSON.parse(custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode])
+                textField.value = "点击编辑配置 共有" + adjson[index + 1].length + "个配置"
+            } catch {
+                textField.value = "点击编辑配置 共有0个配置"
+            }
+            index++
+
+        })
+
         ele.updateComplete.then(() => {
             ele.bodyRef.value.scrollTop = 0;
         })
     })
 
+    ele.addEventListener("close", function () {
+
+        edittt = document.getElementsByClassName("suijitest")[0].getElementsByTagName("mdui-text-field")
+        var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
+        try {
+            let adstr = custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode]
+            if (adstr == "{}") {
+                custom_json[document.querySelectorAll(".myedit")[2].value].adjson[peimode] = ""
+                localStorage.setItem("custom_cof", JSON.stringify(custom_json))
+            }
+            edittt = document.getElementsByClassName("suijitest")[0].getElementsByTagName("mdui-text-field")
+            edittt[peimode].value = "点击编辑配置 共有" + Object.keys(JSON.parse(adstr)).length + "个配置"
+        } catch {
+            edittt[peimode].value = "点击编辑配置 共有" + Object.keys(JSON.parse(adstr)).length + "个配置"
+        }
+
+    })
+
 }
+
+document.getElementsByClassName("suijitest")[0].addEventListener("open", function () {
+    edittt = document.getElementsByClassName("suijitest")[0].getElementsByTagName("mdui-text-field")
+    var custom_json = JSON.parse(localStorage.getItem("custom_cof"))
+    var adjson = custom_json[document.querySelectorAll(".myedit")[2].value].adjson
+
+    try {
+        edittt[2].value = "点击编辑配置 共有" + Object.keys(JSON.parse(adjson[2])).length + "个配置"
+    } catch {
+        edittt[2].value = "点击编辑配置 共有0个配置"
+    }
+
+    try {
+        edittt[3].value = "点击编辑配置 共有" + Object.keys(JSON.parse(adjson[3])).length + "个配置"
+    } catch {
+        edittt[3].value = "点击编辑配置 共有0个配置"
+    }
+
+})
