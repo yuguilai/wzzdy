@@ -356,20 +356,25 @@ function 生成链接(func) {
         }
     }
 
-    window.myheros = heros
-
-    if (myheros == "") {
-        window.myheros = "无禁用英雄"
-    }
+    const banheros = []
 
     for (item in mydatajson[1]) {
         if (heros.includes(item)) {
             //提取json内容中第一个|前的内容
             var hero = mydatajson[1][item].split('|')[0]
-            alljson.banHerosCamp1.push(hero)
-            alljson.banHerosCamp2.push(hero)
+            banheros.push(hero)
         }
     }
+
+    if (banheros.length == 0) {
+        window.myheros = "无禁用英雄"
+    } else {
+        window.myheros = heros
+        alljson.banHerosCamp1=banheros
+        alljson.banHerosCamp2=banheros
+    }
+
+
 
     alljson.firstCountDownTime = "6666666666"
 
@@ -564,7 +569,7 @@ function replaceContent(str, replaceurl, replacepos, openurl) {
                 if (str.includes("ban")) {
                     str = str.replace(/hero/g, "无禁用英雄配置名");
                 } else {
-                    str = str.replace(/hero/g, "禁用英雄:"+myheros);
+                    str = str.replace(/hero/g, "禁用英雄:" + myheros);
                 }
                 mdui.alert({
                     headline: "提示",
@@ -3147,6 +3152,9 @@ function entclick() {
         return
     }
 
+    if (typeof custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"] == "undefined") {
+        custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"] = ["", "", "", ""]
+    }
     custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][0] = edittt[0].value
     custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][1] = edittt[1].value
     localStorage.setItem("custom_cof", JSON.stringify(custom_json))
