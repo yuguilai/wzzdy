@@ -484,6 +484,7 @@ function GetModeStr(openurl) {
 
     mapnametable[5121] = ["觉醒之战", 10]
     mapnametable[5153] = ["多重施法", 10]
+    mapnametable[5155] = ["双人同舞", 10]
 
 
 
