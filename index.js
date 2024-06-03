@@ -18,7 +18,7 @@ if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
         headline: "提示",
         description: span,
         confirmText: "我知道了",
-        onConfirm: () => window.location.href = "https://www.bilibili.com/video/BV16A4m1G7JJ/",
+        onConfirm: () => window.location.href = "https://yuguilai.github.io/wzzdy",
     });
     localStorage.setItem("wzzdy_xgluatip", "0.1")
 }
@@ -31,7 +31,7 @@ if (localStorage.getItem("wzzdy_freetip") != "0.2") {
             {
                 text: "复制开源链接",
                 onClick: () => {
-                    复制文本("https://gitee.com/huajicloud/wzzdy")
+                    复制文本("https://github.com/yuguilai/wzzdy")
                     return true;
                 },
             },
