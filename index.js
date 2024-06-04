@@ -820,7 +820,7 @@ allbutton[4].onclick = function () {
 allbutton[5].onclick = function () {
     mdui.prompt({
         headline: "提示",
-        description: "源码可到http://mtw.so/5Fog8o 下载 搭建后修改myapiurl变量为自己搭建即可 该功能可防止赛宝卡房 输入赛宝链接即可 链接获取点击赛宝房间页面下方分享按钮复制链接即可 访问可能较慢 请耐心等待 该功能使用bug实现 随时可能失效",
+        description: "源码可到github.com/yuguilai/wzzdy 下载 搭建后修改myapiurl变量为自己搭建即可 该功能可防止赛宝卡房 输入赛宝链接即可 链接获取点击赛宝房间页面下方分享按钮复制链接即可 访问可能较慢 请耐心等待 该功能使用bug实现 随时可能失效",
         confirmText: "确认",
         cancelText: "取消",
         onConfirm: (value) => {
