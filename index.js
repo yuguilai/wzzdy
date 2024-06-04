@@ -13,13 +13,11 @@ if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
     // 创建<span>元素  
     var span = document.createElement('span');
     // 设置<span>元素的文本内容  
-    span.innerHTML = '<span slot="description">全新版的lua修改脚本已经上线 使用脚本可以实现直接邀请好友(不用滴滴) 以及不用10人开房间 添加人机 以及可以像主播一样实时在游戏内设置房间自定义配置 完全免费 点击下方我知道了 查看教程<br>提示 ：开启脚本有风险 请酌情开启 仅支持安卓</span>';
+    span.innerHTML = '<span slot="description">全新版的lua修改脚本已经上线 使用脚本可以实现直接邀请好友(不用滴滴) 以及不用10人开房间 添加人机 以及可以像主播一样实时在游戏内设置房间自定义配置 完全免费 有条件的请加入交流群943960501询问<br>提示 ：开启脚本有风险 请酌情开启 仅支持安卓</span>';
     mdui.alert({
         headline: "提示",
         description: span,
         confirmText: "我知道了",
-        onConfirm: () => window.location.href = "https://yuguilai.github.io/wzzdy",
-    });
     localStorage.setItem("wzzdy_xgluatip", "0.1")
 }
 
