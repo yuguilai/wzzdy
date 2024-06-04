@@ -66,7 +66,13 @@
             margin: 0;
             background-image: linear-gradient(rgba(255, 255, 255, 0.09) 74%, rgba(0, 156, 238, 0.3));
         }
-
+        @font-face {
+            font-family: 'MyFont';
+            src: url('fzzzh.ttf') format('truetype');
+        }
+        body {
+            font-family: 'MyFont', Arial, sans-serif;
+        }
         .mytext {
             font-size: 1.5rem;
             font-weight: 300;
@@ -97,13 +103,7 @@
         .button:hover {
             background-color: #1976D2;
         }
-        @font-face {
-            font-family: 'MyFont';
-            src: url('fzzzh.ttf') format('truetype');
-        }
-        body {
-            font-family: 'MyFont', Arial, sans-serif;
-        }
+        
     </style>
 </head>
 
