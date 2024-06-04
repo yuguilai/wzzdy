@@ -18,6 +18,8 @@ if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
         headline: "提示",
         description: span,
         confirmText: "我知道了",
+        onConfirm: () => window.location.href = "https://yuguilai.github.io/wzzdy",
+    });
     localStorage.setItem("wzzdy_xgluatip", "0.1")
 }
 
