@@ -67,7 +67,7 @@
                 // 替换最后一个字符为其他字符
                 url = url.slice(0, -1);
             }
-            url = url.replace(/\./g, '/');
+            url = url.replace(/\./g, '/wzzdy/');
             url = "https://aiu.pub/" + url
             iframe = document.querySelector("iframe")
             iframe.src = url
@@ -88,13 +88,13 @@
                 setTimeout(function () {
                     if (receivedMessage == false) {
                         alert("超时未跳转 请检查链接或网络情况 正在跳转至主页")
-                        window.location.replace(window.location.origin + "/")
+                        window.location.replace(window.location.origin + "/wzzdy/")
                     }
                 }, 2000);
             };
 
         } else {
-            window.location.replace(window.location.origin + "/")
+            window.location.replace(window.location.origin + "/wzzdy/")
         }
 
     </script>
