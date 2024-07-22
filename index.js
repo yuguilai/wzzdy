@@ -761,7 +761,7 @@ allbutton[1].onclick = function () {
                 onClick: () => {
                     if (window.openurl) {
                         var openurl = window.openurl
-                        getShortLink(window.location.origin + "/Smoba.html?data=" + openurl)
+                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
                             .then(shortLink => {
                                 murl = processLink(shortLink);
                                 work_message = "null"
@@ -791,7 +791,7 @@ allbutton[1].onclick = function () {
                             });
                     } else {
                         生成链接(function (openurl, tiptext) {
-                            getShortLink(window.location.origin + "/Smoba.html?data=" + openurl)
+                            getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
                                 .then(shortLink => {
                                     murl = processLink(shortLink);
                                     work_message = "null"
@@ -845,7 +845,7 @@ allbutton[1].onclick = function () {
                                 return false
                             }
                             let openurl = "tencentmsdk" + appid + "://?gamedata=" + gamedata
-                            getShortLink(window.location.origin + "/opengame.html?data=" + openurl)
+                            getShortLink(window.location.origin + "/wzzdy/opengame.html?data=" + openurl)
                                 .then(shortLink => {
                                     murl = processLink(shortLink);
                                     work_message = "null"
