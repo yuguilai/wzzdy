@@ -771,7 +771,7 @@ allbutton[1].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        let url = replaceContent(myedit.value, window.location.origin + "/data.html?" + murl, 0, openurl)
+                                        let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
                                         showqr(url, function () {
                                             复制文本(url)
                                         })
@@ -801,7 +801,7 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            let url = replaceContent(myedit.value, window.location.origin + "/data.html?" + murl, 0, openurl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
                                             showqr(url, function () {
                                                 复制文本(url)
                                                 打开链接(openurl)
@@ -855,7 +855,7 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            let url = replaceContent(myedit.value, window.location.origin + "/data.html?" + murl, 1, openurl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 1, openurl)
                                             复制文本(url)
                                         },
                                         onCancel: () => console.log("canceled"),
@@ -1031,7 +1031,7 @@ allbutton[5].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        复制文本(window.location.origin + "/data.html?" + murl + "\n该链接由原王者赛宝房间链接" + value + "转换 可防止卡房 本链接由https://huajiqaq.github.io/的 赛宝还原 转换")
+                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl + "\n该链接由原王者赛宝房间链接" + value + "转换 可防止卡房 本链接由https://huajiqaq.github.io/的 赛宝还原 转换")
                                     },
                                     onCancel: () => console.log("canceled"),
                                 });

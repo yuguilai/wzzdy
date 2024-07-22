@@ -4,12 +4,12 @@
     "description": "自由创建王者自定义房间",
     "icons": [
         {
-            "src": "./logo-200x200.png",
+            "src": "/wzzdy/logo-200x200.png",
             "type": "image/png",
             "sizes": "200x200"
         }
     ],
-    "start_url": "https://wzzdy.zeabur.app/",
+    "start_url": "https://yuguilai.github.io/wzzdy",
     "background_color": "#FFFFFF",
     "theme_color": "#FFFFFF",
     "display": "fullscreen"
