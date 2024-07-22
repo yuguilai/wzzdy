@@ -1,4 +1,4 @@
-const cacheName = 'my-pwa-v4.29';
+const cacheName = 'my-pwa-v4.42';
 const urlsToCache = [
     './',
     './index.html',
@@ -8,12 +8,12 @@ const urlsToCache = [
     './data.html',
     './Smoba.html',
     './opengame.html',
-    './zb.html',
     './logo-200x200.png',
-    'https://unpkg.zhimg.com/mdui@2.1.1/mdui.css',
-    'https://unpkg.zhimg.com/mdui@2.1.1/mdui.global.js',
+    'https://unpkg.zhimg.com/mdui@2.1.2/mdui.css',
+    'https://unpkg.zhimg.com/mdui@2.1.2/mdui.global.js',
     './index.js',
-    './myjson.js'
+    './myjson.js',
+    './qrcode.min.js'
 ];
 
 self.addEventListener('install', function (event) {

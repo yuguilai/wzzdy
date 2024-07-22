@@ -15,13 +15,11 @@
             });
         }
 
- if (navigator.userAgent.indexOf("MicroMessenger") !== -1) {
+        if (navigator.userAgent.indexOf("MicroMessenger") !== -1) {
             document.write('<iframe id="fullscreen-iframe" src="about:blank" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 999999;"></iframe>');
             const iframe = document.getElementById("fullscreen-iframe");
-            iframe.src = window.location.origin + "/wzzdy/openurl.html";
+            iframe.src = window.location.origin + "/openurl.html";
         }
-
-
 
         var url = window.location.href.split(/\?data=(.+)/)[1];
 
@@ -38,14 +36,14 @@
             if (navigator.userAgent.indexOf("QQ/") !== -1) {
                 document.write('<iframe id="fullscreen-iframe" src="about:blank" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 999999;"></iframe>');
                 const iframe = document.getElementById("fullscreen-iframe");
-                iframe.src = window.location.origin + "/wzzdy/openurl.html";
+                iframe.src = window.location.origin + "/openurl.html";
             }
         }
 
         
     </script>
 
-    <title>自定义房间加入</title>
+    <title>王者房间加入</title>
     <style data-emotion="css" data-s="">
         body {
             display: flex;
@@ -56,13 +54,7 @@
             margin: 0;
             background-image: linear-gradient(rgba(255, 255, 255, 0.09) 74%, rgba(0, 156, 238, 0.3));
         }
-        @font-face {
-            font-family: 'MyFont';
-            src: url('fzzzh.ttf') format('truetype');
-        }
-        body {
-            font-family: 'MyFont', Arial, sans-serif;
-        }
+
         .mytext {
             font-size: 1.5rem;
             font-weight: 300;
@@ -202,7 +194,7 @@
 
 
         function home() {
-            window.top.location.replace(window.location.origin + "/wzzdy/")
+            window.top.location.replace(window.location.origin + "/")
         }
 
     </script>

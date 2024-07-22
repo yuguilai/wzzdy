@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 页面不存在</title>
+    <style>
+        :root {
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #fff;
+            --md-sys-color-surface: #fff;
+            --md-sys-color-on-surface: #000;
+            --md-sys-color-error: #BA1A1A;
+            --md-sys-color-on-error: #fff;
+            --md-sys-color-background: #F4EFF4;
+            --md-sys-color-on-background: #1E1C24;
+            --md-sys-color-inverse-on-surface: #fff;
+            --md-sys-color-inverse-surface: #313033;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 2rem;
+            background-color: var(--md-sys-color-surface);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1), 0px 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: var(--md-sys-color-primary);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.5em 1em;
+            border: none;
+            border-radius: 1rem;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            text-decoration: none;
+            transition: background-color 0.3s;
+            cursor: none;
+        }
+
+        .button:hover,
+        .button:focus {
+            background-color: #52388D;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .button:active {
+            background-color: #463379;
+            box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>404 - 页面不存在</h1>
+        <p>对不起，您查找的页面似乎已经移动或不存在。</p>
+        <a href="/" class="button">返回首页</a>
+    </div>
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 window.onload = function () {
     document.getElementsByTagName("mdui-card")[0].style.visibility = "unset"
-    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 4.0"
+    document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 4.2"
 }
 
 const tip1 = "没有配置 请先点击管理配置新建配置"
@@ -9,19 +9,22 @@ const tip3 = "导入成功 请自行保存方案"
 const tip4 = "请输入想要修改的方案名"
 const tip5 = "你必须要选择一个方案"
 
+/*
 if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
     // 创建<span>元素  
     var span = document.createElement('span');
     // 设置<span>元素的文本内容  
-    span.innerHTML = '<span slot="description">全新版的lua修改脚本已经上线 使用脚本可以实现直接邀请好友(不用滴滴) 以及不用10人开房间 添加人机 以及可以像主播一样实时在游戏内设置房间自定义配置 完全免费 有条件的请加入交流群943960501询问<br>提示 ：开启脚本有风险 请酌情开启 仅支持安卓</span>';
+    span.innerHTML = '<span slot="description">全新版的lua修改脚本已经上线 使用脚本可以实现直接邀请好友(不用滴滴) 以及不用10人开房间 添加人机 以及可以像主播一样实时在游戏内设置房间自定义配置 完全免费 点击下方我知道了 查看教程<br>提示 ：开启脚本有风险 请酌情开启 仅支持安卓</span>';
     mdui.alert({
         headline: "提示",
         description: span,
         confirmText: "我知道了",
-        onConfirm: () => window.location.href = "",
+        onConfirm: () => window.location.href = "https://www.bilibili.com/video/BV16A4m1G7JJ/",
     });
     localStorage.setItem("wzzdy_xgluatip", "0.1")
 }
+*/
+
 
 if (localStorage.getItem("wzzdy_freetip") != "0.2") {
     mdui.dialog({
@@ -31,7 +34,7 @@ if (localStorage.getItem("wzzdy_freetip") != "0.2") {
             {
                 text: "复制开源链接",
                 onClick: () => {
-                    复制文本("https://github.com/yuguilai/wzzdy")
+                    复制文本("https://gitee.com/huajicloud/wzzdy")
                     return true;
                 },
             },
@@ -90,6 +93,22 @@ var allbutton = document.querySelectorAll(".mybutton")
 var work_message = "null"
 
 function 打开链接(url) {
+    var zsfappsdk = "tencentmsdk1104466820://"
+    var tyfappsdk = "tencentmsdk1104791911://"
+    if (navigator.userAgent.indexOf("QQ/") !== -1) {
+        //正式服
+        if (url.includes(zsfappsdk)) {
+            url = url.replace(new RegExp(zsfappsdk, 'g'), 'https://h5.nes.smoba.qq.com/pvpesport.web.user/#/launch-game-mp-qq');
+        } else if ((url.includes(tyfappsdk))) {
+            mdui.alert({
+                headline: "提示",
+                description: "QQ内无法打开体验服的房间 如想打开请尝试在浏览器打开",
+                confirmText: "我知道了",
+                onConfirm: () => console.log("confirmed"),
+            });
+            return
+        }
+    }
     window.location.href = url
     mdui_snackbar({
         message: "启动成功 如没反应请检查是否安装相关应用或尝试在浏览器打开",
@@ -174,6 +193,17 @@ function checkGameMode(modeName, serverType) {
     }
 }
 
+function getRandomElements(arr, n) {
+    arr = arr.slice(); //创建原始数组的副本，避免修改原数组
+
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]]; //交换元素
+    }
+
+    return arr.slice(0, n);
+}
+
 function 生成链接(func) {
     var mode = document.getElementsByTagName("mdui-segmented-button-group")[0].value
     var url
@@ -214,15 +244,12 @@ function 生成链接(func) {
     }
 
     var edittab = document.querySelectorAll(".myedit")
-    var mapid = edittab[0].value.replace(/\s+/g, "");
-
-    var modename = mapid
-
+    var mapname = edittab[0].value.replace(/\s+/g, "");
 
     var custom = edittab[2].value
 
     var oheros
-    var omapid
+    var omapname
 
     if (isJSON(custom)) {
         var custom_json = JSON.parse(custom)
@@ -244,7 +271,7 @@ function 生成链接(func) {
                 }
                 console.log(mysjson)
                 if (mysjson[0] != "") {
-                    omapid = mysjson[0]
+                    omapname = mysjson[0]
                 }
                 if (mysjson[1] != "") {
                     oheros = mysjson[1]
@@ -265,12 +292,12 @@ function 生成链接(func) {
         }
     }
 
-    if (omapid) {
-        mapid = omapid
+    if (omapname) {
+        mapname = omapname
     }
 
-    if (isNaN(mapid)) {
-        mapid = mydatajson[0][mapid]
+    if (isNaN(mapname)) {
+        mapid = mydatajson[0][mapname]
     } else {
         mdui.alert({
             headline: "提示",
@@ -287,11 +314,11 @@ function 生成链接(func) {
     alljson.mapType = mapid[1]
     alljson.teamerNum = mapid[2]
 
-    if (checkGameMode(modename, mode)) {
+    if (checkGameMode(mapname, mode)) {
         return
     }
 
-    if (alljson.mapType != 1) {
+    if (mapname.includes("仅开房")) {
         var myalljson = {
             "createType": "2",
             "mapID": "待填入mapid",
@@ -319,6 +346,8 @@ function 生成链接(func) {
         var openurl = url + btoa(alljson_str)
         var tiptext = "此地图仅提供开房间，不可无CD哦 确认启动？"
 
+        window.myheros = "无禁用英雄"
+
         if (func) {
             func(openurl, tiptext)
             return
@@ -336,7 +365,6 @@ function 生成链接(func) {
             onCancel: () => console.log("canceled"),
         });
 
-        window.myheros = "无禁用英雄"
 
         return
 
@@ -345,10 +373,6 @@ function 生成链接(func) {
 
     var heros = edittab[1].value.replace(/\s+/g, "");
 
-    if (oheros) {
-        heros = oheros
-    }
-
     if (localStorage.getItem("custom_heros")) {
         var herojson = JSON.parse(localStorage.getItem("custom_heros"))
         if (herojson[edittab[1].value]) {
@@ -356,13 +380,42 @@ function 生成链接(func) {
         }
     }
 
-    const banheros = []
+    if (oheros) {
+        heros = oheros
+    }
 
-    for (item in mydatajson[1]) {
-        if (heros.includes(item)) {
-            //提取json内容中第一个|前的内容
-            var hero = mydatajson[1][item].split('|')[0]
-            banheros.push(hero)
+    let banheros = []
+
+    if (heros.includes("suiji")) {
+        let allbanheros = []
+        let [tag, num, name] = heros.split("|")
+        let myheros = Object.values(mydatajson[1])
+        name = name.split(",").map(function (item) {
+            //分割符号 | 防止英雄id也包含指定的数字
+            return '|' + item;
+        });
+        // 构建关键词的正则表达式
+        const keywordPattern = new RegExp(name.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i');
+        // 使用 filter 方法过滤数组
+        banheros = getRandomElements(myheros.filter(item => keywordPattern.test(item)), num)
+        let banheros_str = banheros.join(",")
+
+        for (item in mydatajson[1]) {
+            let value = mydatajson[1][item]
+            if (banheros_str.includes(value)) {
+                allbanheros.push(item)
+            }
+        }
+
+        heros = allbanheros.join(" ")
+        banheros = banheros.map(item => item.split('|')[0]);
+    } else {
+        for (item in mydatajson[1]) {
+            if (heros.includes(item)) {
+                //提取json内容中第一个|前的内容
+                var hero = mydatajson[1][item].split('|')[0]
+                banheros.push(hero)
+            }
         }
     }
 
@@ -370,8 +423,8 @@ function 生成链接(func) {
         window.myheros = "无禁用英雄"
     } else {
         window.myheros = heros
-        alljson.banHerosCamp1=banheros
-        alljson.banHerosCamp2=banheros
+        alljson.banHerosCamp1 = banheros
+        alljson.banHerosCamp2 = banheros
     }
 
 
@@ -415,8 +468,8 @@ function 生成链接(func) {
 }
 
 function processLink(link) {
-    // 截取 api.s1f.top/ 后的内容
-    const afterDomain = link.split('//api.s1f.top/')[1];
+    // 截取内容
+    const afterDomain = link.split('//aiu.pub/')[1];
     // 将所有 / 替换为.
     const replacedContent = afterDomain.replace(/\//g, ".");
     return replacedContent;
@@ -424,7 +477,7 @@ function processLink(link) {
 
 //从 https://api.aa1.cn/ 找的api链接
 function getShortLink(longUrl) {
-    const requestUrl = `https://api.s1f.top/short_link?url=${encodeURIComponent(longUrl)}`;
+    const requestUrl = `https://aiu.pub/api/link?url=${encodeURIComponent(longUrl)}`;
 
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -432,7 +485,7 @@ function getShortLink(longUrl) {
         xhr.onload = function () {
             if (this.status >= 200 && this.status < 300) {
                 const response = JSON.parse(this.responseText);
-                resolve(response.data.url);
+                resolve(response.data);
             } else {
                 reject(new Error(`HTTP error! status: ${this.status}`));
             }
@@ -509,6 +562,8 @@ function GetModeStr(openurl) {
     return mapname + roomtype
 }
 
+
+
 function replaceContent(str, replaceurl, replacepos, openurl) {
 
     console.log("未处理前:" + str)
@@ -528,6 +583,20 @@ function replaceContent(str, replaceurl, replacepos, openurl) {
     // 如果数组长度大于1，说明包含分隔符，返回左右两侧的数据
     if (parts.length > 1) {
         str = parts[replacepos]
+
+        //转换法不支持属性的提示
+        if (replacepos == 1) {
+            let keywords = ['hero', 'ban', 'custom'];
+            if (keywords.some(keyword => str.includes(keyword))) {
+                mdui.alert({
+                    headline: "提示",
+                    description: "针对转换法 暂不支持以下内容 建议删除以下配置 " + keywords.join(" "),
+                    confirmText: "我知道了",
+                    onConfirm: () => console.log("confirmed"),
+                });
+            }
+        }
+
         if (str == "") {
             str = "url"
             parts[replacepos] = str
@@ -553,7 +622,7 @@ function replaceContent(str, replaceurl, replacepos, openurl) {
     }
 
     var customjson = JSON.parse(localStorage.getItem("custom_cof"))
-    if (customjson[document.querySelectorAll(".myedit")[2].value]) {
+    if (document.querySelectorAll(".myedit")[2].value != "" && customjson[document.querySelectorAll(".myedit")[2].value]) {
         if (customjson[document.querySelectorAll(".myedit")[2].value].myjson) {
             mysjson = customjson[document.querySelectorAll(".myedit")[2].value].adjson
             if (typeof mysjson == "undefined") {
@@ -581,17 +650,7 @@ function replaceContent(str, replaceurl, replacepos, openurl) {
         }
     }
 
-    //转换法需要特殊判断
-    if (replacepos == 1) {
-        str = str.replace(/mode/g, GetModeStr(openurl));
-    } else {
-        str = str.replace(/mode/g, document.querySelectorAll(".myedit")[0].value);
-    }
 
-    str = str.replace(/hero/g, document.querySelectorAll(".myedit")[1].value);
-    str = str.replace(/custom/g, document.querySelectorAll(".myedit")[2].value);
-    str = str.replace(/url/g, replaceurl);
-    str = str.replace(/ban/g, myheros);
 
     let mode
     if (openurl.includes("tencentmsdk1104466820")) {
@@ -599,8 +658,21 @@ function replaceContent(str, replaceurl, replacepos, openurl) {
     } else if (openurl.includes("tencentmsdk1104791911")) {
         mode = "体验服"
     }
-
+    str = str.replace(/url/g, replaceurl);
     str = str.replace(/gametype/g, mode);
+
+    //转换法需要特殊判断
+    if (replacepos == 1) {
+        str = str.replace(/mode/g, GetModeStr(openurl));
+        return str
+    }
+
+    str = str.replace(/mode/g, document.querySelectorAll(".myedit")[0].value);
+
+    str = str.replace(/hero/g, document.querySelectorAll(".myedit")[1].value);
+    str = str.replace(/ban/g, myheros);
+    str = str.replace(/custom/g, document.querySelectorAll(".myedit")[2].value);
+
 
     str = str.replace(/\\n/g, '\n');
 
@@ -622,8 +694,48 @@ allbutton[0].onclick = function () {
     生成链接()
 }
 
+function showqr(url, func) {
+    let handleResize
+    mdui.confirm({
+        headline: "通过二维码进入王者房间",
+        description: "提示：如果你是房间的创建者 你可以点击确认打开游戏",
+        body: '<img>',
+        confirmText: "确定",
+        cancelText: "取消",
+        onConfirm: () => func(),
+        onCancel: () => console.log("canceled"),
+        onOpen: (dia) => {
+            // 添加一个img元素
+            dia.bodyRef.value.appendChild(document.createElement('img'))
+            let timeoutId;
+            handleResize = function () {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    dia.updateComplete.then(() => {
+                        let img = dia.bodyRef.value.querySelector("img")
+                        let div = document.createElement("div");
+                        let size = dia.bodyRef.value.clientWidth
+                        var qrcode = new QRCode(div, {
+                            width: size,
+                            height: size
+                        });
+                        qrcode.makeCode(url);
+                        let dataurl = div.querySelector("canvas").toDataURL()
+                        img.src = dataurl
+                    })
+                }, 100);
+            }
+            window.addEventListener('resize', handleResize);
+            handleResize()
+        },
+        onClose: () => {
+            window.removeEventListener('resize', handleResize);
+        },
+    });
+}
+
+
 allbutton[1].onclick = function () {
-    let value = document.getElementsByTagName("mdui-segmented-button-group")[0].value
     if (work_message != "null") {
         mdui_snackbar({
             message: work_message,
@@ -649,7 +761,7 @@ allbutton[1].onclick = function () {
                 onClick: () => {
                     if (window.openurl) {
                         var openurl = window.openurl
-                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
+                        getShortLink(window.location.origin + "/Smoba.html?data=" + openurl)
                             .then(shortLink => {
                                 murl = processLink(shortLink);
                                 work_message = "null"
@@ -659,8 +771,10 @@ allbutton[1].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
-                                        复制文本(url)
+                                        let url = replaceContent(myedit.value, window.location.origin + "/data.html?" + murl, 0, openurl)
+                                        showqr(url, function () {
+                                            复制文本(url)
+                                        })
                                     },
                                     onCancel: () => console.log("canceled"),
                                 });
@@ -677,7 +791,7 @@ allbutton[1].onclick = function () {
                             });
                     } else {
                         生成链接(function (openurl, tiptext) {
-                            getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
+                            getShortLink(window.location.origin + "/Smoba.html?data=" + openurl)
                                 .then(shortLink => {
                                     murl = processLink(shortLink);
                                     work_message = "null"
@@ -687,9 +801,11 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
-                                            复制文本(url)
-                                            打开链接(openurl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "/data.html?" + murl, 0, openurl)
+                                            showqr(url, function () {
+                                                复制文本(url)
+                                                打开链接(openurl)
+                                            })
                                         },
                                         onCancel: () => console.log("canceled"),
                                     });
@@ -726,10 +842,10 @@ allbutton[1].onclick = function () {
                                     action: "我知道了",
                                     onActionClick: () => console.log("click action button")
                                 });
-                                return
+                                return false
                             }
                             let openurl = "tencentmsdk" + appid + "://?gamedata=" + gamedata
-                            getShortLink(window.location.origin + "/wzzdy/opengame.html?data=" + openurl)
+                            getShortLink(window.location.origin + "/opengame.html?data=" + openurl)
                                 .then(shortLink => {
                                     murl = processLink(shortLink);
                                     work_message = "null"
@@ -739,7 +855,7 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 1, openurl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "/data.html?" + murl, 1, openurl)
                                             复制文本(url)
                                         },
                                         onCancel: () => console.log("canceled"),
@@ -762,25 +878,32 @@ allbutton[1].onclick = function () {
             }
         ],
         body: '<mdui-text-field class="copydialog_edit" variant="filled" type="text" name="" style="padding-top: 10px;" label="生成规则"></mdui-text-field>\n<p><br>如显示不全可向下滑动查看更多内容<br>当生成规则包括以下字符 会自动被替换为指定字符 默认生成规则为url<br>mode --> 模式名<br>hero --> 当前禁用英雄配置名 ban --> 当前禁用英雄配置<br>custom --> 当前自定义配置名<br>url --> 最终生成链接<br>gametype --> 游戏类型 例如正式服<br>\\n --> 换行<br>如不做特别标记 链接法和转换法复制规则默认相同 如想精准设置 请将配置与配置间直接使用|||分割即可 例如 map url|||gametype map url</p>',
-        onOpen: () => {
-            myedit = document.getElementsByClassName("copydialog_edit")[0]
+        onOpen: (dia) => {
+            myedit = dia.getElementsByClassName("copydialog_edit")[0]
             myedit.value = localStorage.getItem("wzzdy_copyrule")
             myedit.addEventListener("input", function () {
                 localStorage.setItem("wzzdy_copyrule", myedit.value)
             })
+            let mdui_buttons = dia.querySelectorAll("mdui-button")
+            mdui_buttons.forEach(mdui_button => {
+                let button = mdui_button.shadowRoot.querySelector("button")
+                button.style.padding = "0 0.3rem"
+            });
         },
     });
 
 }
 
 allbutton[2].onclick = function () {
-    // 创建<span>元素  
-    var span = document.createElement('span');
     // 设置<span>元素的文本内容  
+    // 创建<span>元素  
+    //var span = document.createElement('span');
+    /*
     span.innerHTML = '<span slot="description">提示：共有六种方法 显示不全可手动向下滑动查看<br>方法一：解除/添加人机/不满人无法开启限制<br>打开游戏训练营 选择英雄后 进入加载页 打开网页 启动即可<br>方法二：链接邀请<br>请点击复制链接按钮查看具体方法<br>方法三：游戏内邀请<br>账号A启动 账号B在游戏大厅展开好友列表 点击账号A头像 点击滴滴 滴滴后过一会即可在账号A显示邀请按钮 账号A点击邀请即可(账号B不可是组队状态)<br>方法四：QQ内邀请<br>在普通房间对离线好友点击qq邀请，开好自定义房间后再点确定邀请。随后可将发送给qq好友的qq邀请链接转发至各群中。<br>缺点：对一个qq好友每天只能点击5次qq邀请按钮，链接不能实时显示人数<br>方法五：持久化可在游戏内邀请指定人<br>让好友邀请你进任意房间（非队伍），点击拒绝。开好无cd房间，在邮箱中点击发起邀请，显示"加入失败"不用管，回到房间即自动邀请那个好友。一次卡邮箱长期可邀请<br>方法六：显示附近的人/最近的人<br>返回大厅展开好友列表，即可邀请到开黑车队/附近的人/<br></span>';
+    */
     mdui.alert({
         headline: "分享房间教程",
-        description: span,
+        description: "点击复制链接后 即可分享房间",
         confirmText: "我知道了",
         onConfirm: () => console.log("confirmed"),
     });
@@ -820,7 +943,7 @@ allbutton[4].onclick = function () {
 allbutton[5].onclick = function () {
     mdui.prompt({
         headline: "提示",
-        description: "源码可到github.com/yuguilai/wzzdy 下载 搭建后修改myapiurl变量为自己搭建即可 该功能可防止赛宝卡房 输入赛宝链接即可 链接获取点击赛宝房间页面下方分享按钮复制链接即可 访问可能较慢 请耐心等待 该功能使用bug实现 随时可能失效",
+        description: "源码可到http://mtw.so/5Fog8o 下载 搭建后修改myapiurl变量为自己搭建即可 该功能可防止赛宝卡房 输入赛宝链接即可 链接获取点击赛宝房间页面下方分享按钮复制链接即可 访问可能较慢 请耐心等待 该功能使用bug实现 随时可能失效",
         confirmText: "确认",
         cancelText: "取消",
         onConfirm: (value) => {
@@ -835,7 +958,7 @@ allbutton[5].onclick = function () {
                     action: "我知道了",
                     onActionClick: () => console.log("click action button")
                 });
-                return
+                return false
             }
             var myapiurl = "https://ouwhiy7vaifi44w6ee26vxikny0bzigt.lambda-url.ap-east-1.on.aws"
             apiurl = myapiurl + "/getroom_smoba?id=" + roomID + "&t=" + Date.now()
@@ -898,7 +1021,7 @@ allbutton[5].onclick = function () {
 
                         var openurl = "tencentmsdk1104466820://?gamedata=" + game_data
 
-                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
+                        getShortLink(window.location.origin + "/Smoba.html?data=" + openurl)
                             .then(shortLink => {
                                 murl = processLink(shortLink);
                                 work_message = "null"
@@ -908,7 +1031,7 @@ allbutton[5].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl + "\n该链接由原王者赛宝房间链接" + value + "转换 可防止卡房 本链接由https://huajiqaq.github.io/wzzdy/的 赛宝还原 转换")
+                                        复制文本(window.location.origin + "/data.html?" + murl + "\n该链接由原王者赛宝房间链接" + value + "转换 可防止卡房 本链接由https://huajiqaq.github.io/的 赛宝还原 转换")
                                     },
                                     onCancel: () => console.log("canceled"),
                                 });
@@ -1130,6 +1253,14 @@ document.getElementsByClassName("heromode")[0].addEventListener("change", functi
 var heroButton = document.getElementsByClassName("herobutton")
 
 function 获取选择英雄名() {
+    var editvalue = document.querySelectorAll(".myedit")[1].value
+    if (editvalue && JSON.parse(localStorage.getItem("custom_heros"))[editvalue]) {
+        var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
+        if (heros_json[editvalue].includes("suiji")) {
+            return heros_json[editvalue]
+        }
+    }
+
     var childnodes = document.getElementsByClassName("myherolist")[0].childNodes
     var heroscof = ""
     childnodes.forEach(element => {
@@ -1144,10 +1275,28 @@ function 获取选择英雄名() {
     return heroscof
 }
 
+function 检测英雄随机禁用(str) {
+    if (str.includes("suiji")) {
+        let num = str.split("|")[1]
+        mdui.alert({
+            headline: "提示",
+            description: "该禁用配置为随机禁用配置 随机禁用" + num + "个英雄",
+            confirmText: "我知道了",
+        });
+        return true
+    }
+    return false
+}
+
 function 选择英雄名(str) {
     if (typeof str == "undefined") {
         return
     }
+
+    if (检测英雄随机禁用(str) == true) {
+        return
+    }
+
     var childnodes = document.getElementsByClassName("myherolist")[0].childNodes
     childnodes.forEach(element => {
         element.selected = false
@@ -1389,7 +1538,7 @@ heroButton[3].onclick = function () {
 heroButton[4].onclick = function () {
     if (localStorage.getItem("custom_heros")) {
         var editvalue = document.querySelectorAll(".myedit")[1].value
-        if (editvalue) {
+        if (JSON.parse(localStorage.getItem("custom_heros"))[editvalue]) {
             mdui.confirm({
                 headline: "提示",
                 description: "是否删除该配置",
@@ -1435,15 +1584,26 @@ heroButton[4].onclick = function () {
 heroButton[5].onclick = function () {
     if (localStorage.getItem("custom_heros")) {
         var editvalue = document.querySelectorAll(".myedit")[1].value
-        if (editvalue) {
+        if (JSON.parse(localStorage.getItem("custom_heros"))[editvalue]) {
+
+            var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
+
+            if (heros_json[editvalue].includes("suiji")) {
+                mdui.alert({
+                    headline: "提示",
+                    description: "该禁用配置为随机禁用配置 暂不支持该操作",
+                    confirmText: "我知道了",
+                });
+                return
+            }
+
             mdui.prompt({
                 headline: "提示",
                 description: tip4,
                 confirmText: "确认",
                 cancelText: "取消",
                 onConfirm: (value) => {
-                    var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
-                    var heros_json = 修改键名(heros_json, editvalue, value);
+                    heros_json = 修改键名(heros_json, editvalue, value);
                     localStorage.setItem("custom_heros", JSON.stringify(heros_json))
                     localStorage.setItem("banheros", value)
                     document.querySelectorAll(".myedit")[1].value = value
@@ -1499,7 +1659,18 @@ heroButton[7].onclick = function () {
 heroButton[8].onclick = function () {
     if (localStorage.getItem("custom_heros")) {
         var editvalue = document.querySelectorAll(".myedit")[1].value
-        if (editvalue) {
+        if (JSON.parse(localStorage.getItem("custom_heros"))[editvalue]) {
+
+            var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
+            if (heros_json[editvalue].includes("suiji")) {
+                mdui.alert({
+                    headline: "提示",
+                    description: "该禁用配置为随机禁用配置 暂不支持该操作",
+                    confirmText: "我知道了",
+                });
+                return
+            }
+
             mdui.confirm({
                 headline: "提示",
                 description: "是否保存该配置",
@@ -1507,7 +1678,6 @@ heroButton[8].onclick = function () {
                 cancelText: "取消",
                 onConfirm: () => {
                     var 英雄名 = 获取选择英雄名()
-                    var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
                     heros_json[editvalue] = 英雄名;
                     localStorage.setItem("custom_heros", JSON.stringify(heros_json))
                     mdui_snackbar({
@@ -1533,6 +1703,124 @@ heroButton[8].onclick = function () {
         });
     }
 }
+
+
+heroButton[9].onclick = function () {
+
+    let myarr = {}
+    let myheronum = []
+    let newp
+    let newdiv
+
+
+    mdui.prompt({
+        headline: "输入随机禁用数量",
+        body: '<div class="radiodiv"></div>',
+        description: "输入后 将创建一个新的配置 该配置为随机禁用的配置 你可选择生效的定位",
+        confirmText: "确认",
+        cancelText: "取消",
+        onOpen: (dia) => {
+            myedit = dia.querySelector("mdui-text-field")
+            newdiv = document.createElement("div")
+            radios = document.querySelector(".heromode").cloneNode(true).querySelectorAll('mdui-radio');
+            let myheros = Object.values(mydatajson[1])
+            radios.forEach(function (radio) {
+                if (radio.innerText == "全部") return
+                myarr[radio.value] = radio.innerText
+                //分割符号 | 防止英雄id也包含指定的数字
+                let name = ['|' + radio.value];
+                // 构建关键词的正则表达式
+                const keywordPattern = new RegExp(name.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i');
+                // 使用 filter 方法过滤数组
+                num = myheros.filter(item => keywordPattern.test(item)).length;
+                myheronum.push(radio.textContent + num + "个")
+                let checkbox = document.createElement('mdui-checkbox');
+                checkbox.setAttribute('value', radio.value);
+                checkbox.innerText = radio.innerText;
+                checkbox.setAttribute('value', radio.value);
+                checkbox.checked = true
+                newdiv.appendChild(checkbox);
+            })
+            myedit.parentElement.insertBefore(newdiv, myedit);
+            newp = document.createElement("p");
+            let allheronum = Object.values(mydatajson[1]).length
+            heronum = allheronum
+            newp.textContent = "英雄数量 " + myheronum.join(" ")
+            newdiv.parentElement.insertBefore(newp, newdiv);
+        },
+        onConfirm: (value) => {
+
+            let name = []
+            let children = newdiv.children
+            Array.from(children).forEach(element => {
+                if (element.checked == true) {
+                    name.push(element.value)
+                }
+            });
+
+            if (name.length == 0) {
+                mdui_snackbar({
+                    message: "请至少选择一个",
+                    action: "我知道了",
+                    onActionClick: () => console.log("click action button")
+                });
+                return false
+            }
+
+            let num = Number(value)
+            if (isNaN(num)) {
+                mdui_snackbar({
+                    message: "请检查输入是否为数字",
+                    action: "我知道了",
+                    onActionClick: () => console.log("click action button")
+                });
+                return false
+            }
+            if (num < 1) {
+                mdui_snackbar({
+                    message: "必须输入大于0的数字",
+                    action: "我知道了",
+                    onActionClick: () => console.log("click action button")
+                });
+                return false
+            }
+
+            var heros_json
+            if (localStorage.getItem("custom_heros")) {
+                heros_json = JSON.parse(localStorage.getItem("custom_heros"))
+            } else {
+                heros_json = {}
+            }
+
+            let myname = name.map(function (item) {
+                return myarr[item];
+            }).join(",")
+
+            if (name.length == Object.keys(myarr).length) {
+                myname = "全部"
+            }
+
+            value = "随机禁" + num + "个 " + myname
+
+            heros_json[value] = "suiji|" + num + "|" + name.join(",");
+
+            localStorage.setItem("custom_heros", JSON.stringify(heros_json))
+
+            localStorage.setItem("banheros", value)
+            document.querySelectorAll(".myedit")[1].value = value;
+
+            加载英雄配置()
+            mdui_snackbar({
+                message: "新建配置成功",
+                action: "我知道了",
+                onActionClick: () => console.log("click action button")
+            });
+
+        },
+        onCancel: () => console.log("canceled"),
+    });
+}
+
 
 function createMenuItems(settingsDoc, values, isdata) {
 
@@ -1878,7 +2166,13 @@ function shuffleArray3(Arr1, Arr2, randomtab, postab) {
 }
 
 function shuffleArray4(Arr, randomtab, postab) {
-    const combinedArr = [...Arr];
+    if (Array.isArray(Arr) == false) {
+        let random = getRandomElementFromArray(randomtab)
+        console.log("随机生成前:", Arr);
+        console.log("随机生成后的:", randomtab);
+        return random
+    }
+    const combinedArr = [...Arr]
     // 打乱合并后的数组
     for (let index = 0; index < postab.length; index++) {
         const pos = postab[index] - 1
@@ -2852,7 +3146,7 @@ customButton[1].onclick = function () {
                 yxtype: document.getElementsByClassName("setmode")[0].value,
                 bxtype: document.getElementsByClassName("setmode")[1].value,
                 sjtype: document.getElementsByClassName("setmode")[2].value,
-                adjson: [edittt[0].value, edittt[1].value, edittt[2].data, edittt[3].data]
+                adjson: ["", "", "", ""]
             }
             console.log(custom_json)
             localStorage.setItem("custom_cof", JSON.stringify(custom_json))
@@ -2911,7 +3205,7 @@ customButton[3].onclick = function () {
 customButton[4].onclick = function () {
     if (localStorage.getItem("custom_cof")) {
         var editvalue = document.querySelectorAll(".myedit")[2].value
-        if (editvalue) {
+        if (JSON.parse(localStorage.getItem("custom_cof"))[editvalue]) {
             mdui.confirm({
                 headline: "提示",
                 description: "是否删除该配置",
@@ -2953,7 +3247,7 @@ customButton[4].onclick = function () {
 customButton[5].onclick = function () {
     if (localStorage.getItem("custom_cof")) {
         var editvalue = document.querySelectorAll(".myedit")[2].value
-        if (editvalue) {
+        if (JSON.parse(localStorage.getItem("custom_cof"))[editvalue]) {
             mdui.prompt({
                 headline: "提示",
                 description: tip4,
@@ -3002,7 +3296,7 @@ customButton[5].onclick = function () {
 customButton[6].onclick = function () {
     if (localStorage.getItem("custom_cof")) {
         var editvalue = document.querySelectorAll(".myedit")[2].value
-        if (editvalue) {
+        if (JSON.parse(localStorage.getItem("custom_cof"))[editvalue]) {
             document.getElementsByClassName("suijitest")[0].open = true
         } else {
             mdui_snackbar({
@@ -3023,7 +3317,7 @@ customButton[6].onclick = function () {
 customButton[7].onclick = function () {
     if (localStorage.getItem("custom_cof")) {
         var editvalue = document.querySelectorAll(".myedit")[2].value
-        if (editvalue) {
+        if (JSON.parse(localStorage.getItem("custom_cof"))[editvalue]) {
             mdui.confirm({
                 headline: "提示",
                 description: "是否保存该配置",
@@ -3158,6 +3452,7 @@ function entclick() {
     }
     custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][0] = edittt[0].value
     custom_json[document.querySelectorAll(".myedit")[2].value]["adjson"][1] = edittt[1].value
+    检测英雄随机禁用(edittt[1].value)
     localStorage.setItem("custom_cof", JSON.stringify(custom_json))
     document.getElementsByClassName("suijitest")[0].open = false;
     mdui_snackbar({
@@ -3813,7 +4108,7 @@ function createcustom_tab(ele) {
             edittt = document.getElementsByClassName("suijitest")[0].getElementsByTagName("mdui-text-field")
             edittt[peimode].value = "点击编辑配置 共有" + Object.keys(JSON.parse(adstr)).length + "个配置"
         } catch {
-            edittt[peimode].value = "点击编辑配置 共有" + Object.keys(JSON.parse(adstr)).length + "个配置"
+            edittt[peimode].value = "点击编辑配置 共有0个配置"
         }
 
     })
