@@ -29,12 +29,12 @@ if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
 if (localStorage.getItem("wzzdy_freetip") != "0.2") {
     mdui.dialog({
         headline: "提示",
-        description: "本网页完全免费且开源 如果你是购买得到的 你可能被骗了",
+        description: "1.本网页完全免费且开源 如果你是购买得到的 你可能被骗了\n可以复制一下我简单编辑的链接规则，配置好模式禁用英雄以及加成之后点击 复制链接，先将复制的规则填入，然后选择链接法",
         actions: [
             {
-                text: "复制开源链接",
+                text: "复制链接规则",
                 onClick: () => {
-                    复制文本("https://gitee.com/huajicloud/wzzdy")
+                    复制文本("无cd组队\ngametype modecustomhero\n禁用ban\n加入房间url")
                     return true;
                 },
             },
