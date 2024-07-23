@@ -34,7 +34,8 @@ if (localStorage.getItem("wzzdy_freetip") != "0.2") {
             {
                 text: "复制链接规则",
                 onClick: () => {
-                    复制文本("无cd组队\ngametype modecustomhero\n禁用ban\n加入房间url")
+                    复制文本("自定义房间组队
+\ngametype modecustomhero\n禁用ban\n加入房间url")
                     return true;
                 },
             },
