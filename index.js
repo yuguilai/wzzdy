@@ -760,25 +760,21 @@ allbutton[1].onclick = function () {
             {
                 text: "链接法",
                 onClick: () => {
-    if (window.openurl) {
-        let openurl = window.openurl;
-        
-        // 调用短链接生成 API
-        axios.post('https://aiu.pub/api/link', {'url': window.location.origin + "/wzzdy/Smoba.html?data=" + openurl})
-            .then(response => {
-                let shortLink = response.data;
-                let murl = processLink(shortLink);
-                let work_message = "null";
-                
-                mdui.confirm({
-                    headline: "提示",
-                    description: "已获取到数据 是否立即复制链接",
-                    confirmText: "确认",
-                    cancelText: "取消",
-                    onConfirm: () => {
-                        let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl);
-                        showqr(url, () => {
-                            复制文本(url);
+                    if (window.openurl) {
+                        var openurl = window.openurl
+                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
+                            .then(shortLink => {
+                                murl = processLink(shortLink);
+                                work_message = "null"
+                                mdui.confirm({
+                                    headline: "提示",
+                                    description: "已获取到数据 是否立即复制链接",
+                                    confirmText: "确认",
+                                    cancelText: "取消",
+                                    onConfirm: () => {
+                                        let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
+                                        showqr(url, function () {
+                                            复制文本(url)
                                         })
                                     },
                                     onCancel: () => console.log("canceled"),
