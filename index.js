@@ -758,72 +758,73 @@ allbutton[1].onclick = function () {
             },
             {
                 text: "链接法",
-                onClick: () => {
-                    if (window.openurl) {
-                        var openurl = window.openurl
-                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
-                            .then(shortLink => {
-                                murl = processLink(shortLink);
-                                work_message = "null"
-                                mdui.confirm({
-                                    headline: "提示",
-                                    description: "已获取到数据 是否立即复制链接",
-                                    confirmText: "确认",
-                                    cancelText: "取消",
-                                    onConfirm: () => {
-                                        let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
-                                        showqr(url, function () {
-                                            复制文本(url)
-                                        })
-                                    },
-                                    onCancel: () => console.log("canceled"),
-                                });
-                            })
-                            .catch(error => {
-                                work_message = "null"
-                                mdui.alert({
-                                    headline: "提示",
-                                    description: "出现错误 无法请求 请检查网络",
-                                    confirmText: "我知道了",
-                                    onConfirm: () => console.log("confirmed"),
-                                });
-                                console.log(error)
+onClick: () => {
+    if (window.openurl) {
+        var openurl = window.openurl;
+        axios.post('https://aiu.pub/api/link', {'url': window.location.origin + "/wzzdy/Smoba.html?data=" + openurl})
+            .then(response => {
+                let shortLink = response.data;
+                murl = processLink(shortLink);
+                work_message = "null";
+                mdui.confirm({
+                    headline: "提示",
+                    description: "已获取到数据 是否立即复制链接",
+                    confirmText: "确认",
+                    cancelText: "取消",
+                    onConfirm: () => {
+                        let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl);
+                        showqr(url, function () {
+                            复制文本(url);
+                        });
+                    },
+                    onCancel: () => console.log("canceled"),
+                });
+            })
+            .catch(error => {
+                work_message = "null";
+                mdui.alert({
+                    headline: "提示",
+                    description: "出现错误 无法请求 请检查网络",
+                    confirmText: "我知道了",
+                    onConfirm: () => console.log("confirmed"),
+                });
+                console.log(error);
+            });
+    } else {
+        生成链接(function (openurl, tiptext) {
+            axios.post('https://aiu.pub/api/link', {'url': window.location.origin + "/wzzdy/Smoba.html?data=" + openurl})
+                .then(response => {
+                    let shortLink = response.data;
+                    murl = processLink(shortLink);
+                    work_message = "null";
+                    mdui.confirm({
+                        headline: "提示",
+                        description: tiptext + " 已获取到数据 是否复制链接并打开游戏？",
+                        confirmText: "确认",
+                        cancelText: "取消",
+                        onConfirm: () => {
+                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl);
+                            showqr(url, function () {
+                                复制文本(url);
+                                打开链接(openurl);
                             });
-                    } else {
-                        生成链接(function (openurl, tiptext) {
-                            getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
-                                .then(shortLink => {
-                                    murl = processLink(shortLink);
-                                    work_message = "null"
-                                    mdui.confirm({
-                                        headline: "提示",
-                                        description: tiptext + " 已获取到数据 是否复制链接并打开游戏？",
-                                        confirmText: "确认",
-                                        cancelText: "取消",
-                                        onConfirm: () => {
-                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
-                                            showqr(url, function () {
-                                                复制文本(url)
-                                                打开链接(openurl)
-                                            })
-                                        },
-                                        onCancel: () => console.log("canceled"),
-                                    });
-                                })
-                                .catch(error => {
-                                    work_message = "null"
-                                    mdui.alert({
-                                        headline: "提示",
-                                        description: "出现错误 无法请求 请检查网络",
-                                        confirmText: "我知道了",
-                                        onConfirm: () => console.log("confirmed"),
-                                    });
-                                    console.log(error)
-                                });
-                        })
-                    }
-                },
-            },
+                        },
+                        onCancel: () => console.log("canceled"),
+                    });
+                })
+                .catch(error => {
+                    work_message = "null";
+                    mdui.alert({
+                        headline: "提示",
+                        description: "出现错误 无法请求 请检查网络",
+                        confirmText: "我知道了",
+                        onConfirm: () => console.log("confirmed"),
+                    });
+                    console.log(error);
+                });
+        });
+    }
+},
             {
                 text: "转换法",
                 onClick: () => {
