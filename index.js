@@ -1,5 +1,5 @@
 window.onload = function () {
-    document.getElementsByTagName("mdui-card")[0].style.visibility = "unset"
+    document.querySelector("mdui-layout-main").querySelector("mdui-card").style.visibility = "unset"
     document.querySelector("body > mdui-layout > mdui-top-app-bar > mdui-top-app-bar-title").innerText = "王者自定义房间 4.2"
 }
 
@@ -29,13 +29,12 @@ if (localStorage.getItem("wzzdy_xgluatip") != "0.1") {
 if (localStorage.getItem("wzzdy_freetip") != "0.2") {
     mdui.dialog({
         headline: "提示",
-        description: "1.本网页完全免费且开源 如果你是购买得到的，你可能被骗了\n2.可以复制一下我简单编辑的链接规则，配置好模式禁用英雄以及加成之后点击 复制链接，先将复制的规则填入，然后选择链接法",
+        description: "本网页完全免费且开源 如果你是购买得到的 你可能被骗了",
         actions: [
             {
-                text: "复制链接规则",
+                text: "复制开源链接",
                 onClick: () => {
-                    复制文本("自定义房间组队
-\ngametype modecustomhero\n禁用ban\n加入房间url")
+                    复制文本("https://gitee.com/huajicloud/wzzdy")
                     return true;
                 },
             },
@@ -50,7 +49,7 @@ if (localStorage.getItem("wzzdy_freetip") != "0.2") {
 if (localStorage.getItem("wzzdy_createtip") != "0.2") {
     mdui.alert({
         headline: "提示",
-        description: "建议点击网页内「分享房间教程」按钮来查看文字教程 现在又可在训练营内加载界面打开网页建房来绕过开房限制了 如果使用赛宝开房遇到恶意卡房 可尝试 在训练营卡房后进入赛宝房间 这样可以邀请QQ好友 或尝试本网页内的赛宝还原 将赛宝链接转换为网页链接分享",
+        description: "建议点击网页内「使用教程」按钮来查看文字教程 现在又可在训练营内加载界面打开网页建房来绕过开房限制了 如果使用赛宝开房遇到恶意卡房 可尝试 在训练营卡房后进入赛宝房间 这样可以邀请QQ好友 或尝试本网页内的赛宝还原 将赛宝链接转换为网页链接分享",
         confirmText: "我知道了",
         onConfirm: () => localStorage.setItem("wzzdy_createtip", "0.2"),
     });
@@ -762,7 +761,7 @@ allbutton[1].onclick = function () {
                 onClick: () => {
                     if (window.openurl) {
                         var openurl = window.openurl
-                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
+                        getShortLink(window.location.origin + "wzzdy/Smoba.html?data=" + openurl)
                             .then(shortLink => {
                                 murl = processLink(shortLink);
                                 work_message = "null"
@@ -772,7 +771,7 @@ allbutton[1].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
+                                        let url = replaceContent(myedit.value, window.location.origin + "wzzdy/data.html?" + murl, 0, openurl)
                                         showqr(url, function () {
                                             复制文本(url)
                                         })
@@ -792,7 +791,7 @@ allbutton[1].onclick = function () {
                             });
                     } else {
                         生成链接(function (openurl, tiptext) {
-                            getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
+                            getShortLink(window.location.origin + "wzzdy/Smoba.html?data=" + openurl)
                                 .then(shortLink => {
                                     murl = processLink(shortLink);
                                     work_message = "null"
@@ -802,7 +801,7 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "wzzdy/data.html?" + murl, 0, openurl)
                                             showqr(url, function () {
                                                 复制文本(url)
                                                 打开链接(openurl)
@@ -846,7 +845,7 @@ allbutton[1].onclick = function () {
                                 return false
                             }
                             let openurl = "tencentmsdk" + appid + "://?gamedata=" + gamedata
-                            getShortLink(window.location.origin + "/wzzdy/opengame.html?data=" + openurl)
+                            getShortLink(window.location.origin + "/opengame.html?data=" + openurl)
                                 .then(shortLink => {
                                     murl = processLink(shortLink);
                                     work_message = "null"
@@ -856,7 +855,7 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 1, openurl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "wzzdy/data.html?" + murl, 1, openurl)
                                             复制文本(url)
                                         },
                                         onCancel: () => console.log("canceled"),
@@ -878,7 +877,7 @@ allbutton[1].onclick = function () {
                 },
             }
         ],
-        body: '<mdui-text-field class="copydialog_edit" variant="filled" type="text" name="" style="padding-top: 10px;" label="生成规则"></mdui-text-field>\n<p><br>如显示不全可向下滑动查看更多内容<br>当生成规则包括以下字符 会自动被替换为指定字符 默认生成规则为url<br>mode --> 模式名<br>hero --> 当前禁用英雄配置名 ban --> 当前禁用英雄配置<br>custom --> 当前自定义配置名<br>url --> 最终生成链接<br>gametype --> 游戏类型 例如正式服<br>\\n --> 换行<br>如不做特别标记 链接法和转换法复制规则默认相同 如想精准设置 请将配置与配置间直接使用|||分割即可 例如 map url|||gametype map url</p>',
+        body: '<mdui-text-field class="copydialog_edit" variant="filled"  name="" style="padding-top: 10px;" label="生成规则"></mdui-text-field>\n<p><br>如显示不全可向下滑动查看更多内容<br>当生成规则包括以下字符 会自动被替换为指定字符 默认生成规则为url<br>mode --> 模式名<br>hero --> 当前禁用英雄配置名 ban --> 当前禁用英雄配置<br>custom --> 当前自定义配置名<br>url --> 最终生成链接<br>gametype --> 游戏类型 例如正式服<br>\\n --> 换行<br>如不做特别标记 链接法和转换法复制规则默认相同 如想精准设置 请将配置与配置间直接使用|||分割即可 例如 map url|||gametype map url</p>',
         onOpen: (dia) => {
             myedit = dia.getElementsByClassName("copydialog_edit")[0]
             myedit.value = localStorage.getItem("wzzdy_copyrule")
@@ -903,8 +902,8 @@ allbutton[2].onclick = function () {
     span.innerHTML = '<span slot="description">提示：共有六种方法 显示不全可手动向下滑动查看<br>方法一：解除/添加人机/不满人无法开启限制<br>打开游戏训练营 选择英雄后 进入加载页 打开网页 启动即可<br>方法二：链接邀请<br>请点击复制链接按钮查看具体方法<br>方法三：游戏内邀请<br>账号A启动 账号B在游戏大厅展开好友列表 点击账号A头像 点击滴滴 滴滴后过一会即可在账号A显示邀请按钮 账号A点击邀请即可(账号B不可是组队状态)<br>方法四：QQ内邀请<br>在普通房间对离线好友点击qq邀请，开好自定义房间后再点确定邀请。随后可将发送给qq好友的qq邀请链接转发至各群中。<br>缺点：对一个qq好友每天只能点击5次qq邀请按钮，链接不能实时显示人数<br>方法五：持久化可在游戏内邀请指定人<br>让好友邀请你进任意房间（非队伍），点击拒绝。开好无cd房间，在邮箱中点击发起邀请，显示"加入失败"不用管，回到房间即自动邀请那个好友。一次卡邮箱长期可邀请<br>方法六：显示附近的人/最近的人<br>返回大厅展开好友列表，即可邀请到开黑车队/附近的人/<br></span>';
     */
     mdui.alert({
-        headline: "分享房间教程",
-        description: "点击复制链接后 即可分享房间",
+        headline: "教程",
+        description: "打开游戏训练营 选择英雄后 进入加载页 打开网页 启动即可解除不满人无法开启 无法添加人机的限制 但还是只能通过链接进入 你可通过「复制链接」复制链接分享他人 他人进入链接即可进入你的房间",
         confirmText: "我知道了",
         onConfirm: () => console.log("confirmed"),
     });
@@ -1022,7 +1021,7 @@ allbutton[5].onclick = function () {
 
                         var openurl = "tencentmsdk1104466820://?gamedata=" + game_data
 
-                        getShortLink(window.location.origin + "/Smoba.html?data=" + openurl)
+                        getShortLink(window.location.origin + "wzzdy/Smoba.html?data=" + openurl)
                             .then(shortLink => {
                                 murl = processLink(shortLink);
                                 work_message = "null"
@@ -1032,7 +1031,7 @@ allbutton[5].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl + "\n该链接由原王者赛宝房间链接" + value + "转换 可防止卡房 本链接由https://huajiqaq.github.io/的 赛宝还原 转换")
+                                        复制文本(window.location.origin + "wzzdy/data.html?" + murl + "\n该链接由原王者赛宝房间链接" + value + "转换 可防止卡房 本链接由https://yuguilai.github.io/wzzdy的 赛宝还原 转换")
                                     },
                                     onCancel: () => console.log("canceled"),
                                 });
@@ -1193,19 +1192,108 @@ document.querySelectorAll(".myedit")[2].onclick = function () {
 function loadherolist(batchSize = 10) {
     const items = Object.keys(mydatajson[1]);
     let currentIndex = 0;
-
     const targetList = document.getElementsByClassName('myherolist')[0];
+    targetList.style.display = "flex"
+    targetList.style.flexDirection = "row"
+    targetList.style.flexWrap = "wrap"
+    targetList.style.justifyContent = "space-around"
 
 
     function processNextBatch() {
         const batchItems = [];
         for (let i = currentIndex; i < Math.min(currentIndex + batchSize, items.length); i++) {
             const item_str = items[i];
-            const listItem = document.createElement('mdui-chip');
-            listItem.textContent = item_str;
-            listItem.selectable = true;
-            listItem.className = "mychip";
-            batchItems.push(listItem);
+            const imgurl = `https://game.gtimg.cn/images/yxzj/img201606/heroimg/${mydatajson[1][item_str].split("|")[0]}/${mydatajson[1][item_str].split("|")[0]}.jpg`
+
+            // 创建mdui-card元素
+            var mduiCard = document.createElement('mdui-card');
+            mduiCard.className = "mychip"
+            mduiCard.style.width = "60px";
+            mduiCard.style.height = "60px";
+            mduiCard.clickable = true;
+            mduiCard.variant = 'elevated';
+            mduiCard.style.userSelect = "none"
+            // 居中
+            mduiCard.style.display = "flex"
+            mduiCard.style.flexDirection = "column"
+            mduiCard.style.justifyContent = "center"
+            // 设置颜色
+            mduiCard.style.backgroundColor = "rgb(var(--mdui-color-surface))"
+
+            // 创建img元素
+            var img = document.createElement('img');
+            img.style.width = "30px"
+            img.style.height = "30px"
+            img.style.display = "block"
+            img.style.margin = "0 auto"
+            img.style.borderRadius = "12px"
+            img.src = imgurl;
+            img.loading = "lazy"
+            img.onerror = function () {
+                this.onerror = null
+                this.src = 'data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMHB4IiBoZWlnaHQ9IjMwcHgiPgogICAgICAgIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNCREJEQkQiPjwvcmVjdD4KICAgIDwvc3ZnPg=='
+            }
+
+            // 创建mdui-icon-check元素
+            var iconCheck = document.createElement('mdui-icon-check');
+            iconCheck.style.position = 'absolute';
+            iconCheck.style.fontSize = '19px';
+            iconCheck.style.right = '0';
+            iconCheck.style.bottom = '0';
+            iconCheck.style.color = 'red';
+            // 会遮挡文字 注释掉
+            // iconCheck.style.backgroundColor = 'rgb(var(--mdui-color-secondary-container))';
+            iconCheck.style.visibility = "hidden"
+            iconCheck.style.borderTopLeftRadius = '0.25rem';
+            mduiCard.iconCheck = iconCheck
+
+            // 创建一个可监听的属性 实现mdui-chip selected特性
+            Object.defineProperty(mduiCard, 'selected', {
+                configurable: true,
+                enumerable: true,
+                get: function () {
+                    return this._selected;
+                },
+                set: function (newValue) {
+                    if (newValue !== this._selected) {
+                        if (typeof newValue == "boolean") {
+                            this._selected = newValue;
+                            if (newValue == true) {
+                                this.style.backgroundColor = "rgb(var(--mdui-color-secondary-container))"
+                                this.iconCheck.style.visibility = "unset"
+                            }
+                            else {
+                                this.style.backgroundColor = "rgb(var(--mdui-color-surface))"
+                                this.iconCheck.style.visibility = "hidden"
+                            }
+                        } else {
+                            this._selected = false;
+                        }
+                    }
+                }
+            });
+
+            mduiCard.addEventListener("click", function () {
+                if (this.selected == true) {
+                    this.selected = false
+                } else {
+                    this.selected = true
+                }
+            })
+
+
+            var div = document.createElement('div');
+            div.style.marginBottom = '5px';
+            div.style.textAlign = 'center';
+            div.textContent = item_str;
+            div.style.fontSize = "12px"
+            // 缩小line-height 防止挤压（临时解决方法 或许之后会有比元流之子更长名称的英雄?)
+            div.style.lineHeight = "1.05"
+
+            mduiCard.appendChild(img);
+            mduiCard.appendChild(iconCheck);
+            mduiCard.appendChild(div);
+            batchItems.push(mduiCard);
         }
 
         if (batchItems.length > 0 && targetList) {
@@ -1218,6 +1306,15 @@ function loadherolist(batchSize = 10) {
             requestAnimationFrame(processNextBatch);
         } else {
             window.loadherolist = true
+            herodialog.addEventListener("open", function () {
+                herodialog.updateComplete.then(() => {
+                    handleResize()
+                });
+                window.addEventListener('resize', handleResize);
+            })
+            herodialog.addEventListener("close", function () {
+                window.removeEventListener('resize', handleResize);
+            })
             herodialog.open = true
             var heros_json = JSON.parse(localStorage.getItem("custom_heros"))
             try {
@@ -1231,21 +1328,172 @@ function loadherolist(batchSize = 10) {
     requestAnimationFrame(processNextBatch);
 }
 
+function calculateCardsPerRow(flexContainerSelector) {
+    // 获取指定的 div 元素
+    const cardContainer = document.querySelector(flexContainerSelector);
+
+    // 获取所有的卡片
+    const cards = Array.from(cardContainer.getElementsByClassName('mychip'))
+        .filter(item => item.isshow != false && item.style.display != "none");
+    if (cards.length == 0) return false
+
+    // 获取容器的实际宽度
+    const containerWidth = cardContainer.offsetWidth;
+
+    // 获取第一个卡片的宽度
+    const firstCard = cards[0];
+
+    const cardStyle = window.getComputedStyle(firstCard);
+    const cardPadding = parseFloat(cardStyle.paddingLeft) + parseFloat(cardStyle.paddingRight);
+    const cardMargin = parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
+    const cardWidth = firstCard.offsetWidth + cardPadding + cardMargin;
+
+    // 计算每行可以容纳的卡片数量
+    const cardsPerRow = Math.floor(containerWidth / cardWidth);
+
+    // 计算最后一行的元素个数
+    let lastRowElements = 0;
+    // 获取最后一个元素offsetTop
+    let previousOffsetTop = cards[cards.length - 1].offsetTop;
+    for (let i = cards.length - 1; i >= 0; i--) {
+        const currentCard = cards[i];
+        const cardOffsetTop = currentCard.offsetTop;
+
+        if (previousOffsetTop === cardOffsetTop) {
+            lastRowElements++;
+        } else {
+            break;
+        }
+    }
+
+    // 获取原始元素的计算样式
+    const computedStyle = window.getComputedStyle(firstCard);
+
+    console.log(`容器宽度: ${containerWidth}px`);
+    console.log(`卡片宽度: ${cardWidth}px`);
+    console.log(`每行可以容纳的卡片数量: ${cardsPerRow}`);
+
+    return {
+        cardsPerRow,
+        lastRowElements,
+        computedStyle
+    };
+}
+
+function getItemsPerRow(flexContainerSelector) {
+    const flexItems = Array.from(document.querySelector(flexContainerSelector).children)
+        .filter(item => item.isshow != false && item.style.display != "none");
+    if (flexItems.length == 0) return false
+    const firstItem = flexItems[0];
+    const firstRow = firstItem.offsetTop;
+    const rowOffsets = [];
+    let lastOffset = firstRow;
+
+    // 查找所有行的起始点
+    flexItems.forEach((item, index) => {
+        if (item.offsetTop !== lastOffset) {
+            rowOffsets.push(index);
+            lastOffset = item.offsetTop;
+        }
+    });
+
+
+    // 如果最后一个不是等于flexItems的长度  push数组长度
+    if (rowOffsets[rowOffsets.length - 1] !== flexItems.length) {
+        rowOffsets.push(flexItems.length);
+    }
+
+    // 计算每行的元素数量
+    const itemsPerRow = rowOffsets.reduce((acc, cur, index) => {
+        const start = index === 0 ? 0 : rowOffsets[index - 1];
+        acc.push(cur - start);
+        return acc;
+    }, []);
+
+
+    // 获取原始元素的计算样式
+    const computedStyle = window.getComputedStyle(firstItem);
+
+    return {
+        firstRow: itemsPerRow[0],
+        lastRow: itemsPerRow[itemsPerRow.length - 1],
+        computedStyle: computedStyle,
+        itemsPerRow: itemsPerRow
+    };
+}
+
+/*
+// 旧版 有bug懒得修复 新版看下面
+// 定义一个处理窗口大小变化的函数
+function handleResize() {
+    document.querySelectorAll('.emptyhero').forEach(el => el.remove());
+    const itemsCountPerRow = getItemsPerRow(".myherolist");
+    let firstRow = itemsCountPerRow.firstRow
+    let lastRow = itemsCountPerRow.lastRow
+    let computedStyle = itemsCountPerRow.computedStyle
+    let width = computedStyle.width
+    let height = computedStyle.height
+    let padding = computedStyle.padding
+    let margin = computedStyle.margin
+    console.log(itemsCountPerRow)
+    if (firstRow > lastRow) {
+        const length = firstRow - lastRow
+        for (let index = 0; index < length; index++) {
+            const div = document.createElement('div');
+            div.style.width = width;
+            div.style.height = height;
+            div.style.padding = padding;
+            div.style.margin = margin;
+            div.className = "emptyhero"
+            document.querySelector(".myherolist").appendChild(div)
+        }
+    }
+}
+*/
+
+// 定义一个处理窗口大小变化的函数
+function handleResize() {
+    document.querySelectorAll('.emptyhero').forEach(el => el.remove());
+    const CardsPerRow = calculateCardsPerRow(".myherolist");
+    if (CardsPerRow == false) return
+    let count = CardsPerRow.cardsPerRow
+    let last_count = CardsPerRow.lastRowElements
+    let computedStyle = CardsPerRow.computedStyle
+    let width = computedStyle.width
+    let height = computedStyle.height
+    let padding = computedStyle.padding
+    let margin = computedStyle.margin
+    console.log(CardsPerRow)
+    if (count > last_count) {
+        const length = count - last_count
+        for (let index = 0; index < length; index++) {
+            const div = document.createElement('div');
+            div.style.width = width;
+            div.style.height = height;
+            div.style.padding = padding;
+            div.style.margin = margin;
+            div.className = "emptyhero"
+            document.querySelector(".myherolist").appendChild(div)
+        }
+    }
+}
+
 document.getElementsByClassName("heromode")[0].addEventListener("change", function () {
     //分割符号 | 防止英雄id也包含指定的数字
     let defvalue = "|" + this.value
-    var childnodes = document.getElementsByClassName("myherolist")[0].childNodes
-    childnodes.forEach(element => {
-        let value = element.textContent
+    var chips = Array.from(document.querySelectorAll(".mychip"))
+    chips.forEach(chip => {
+        let value = chip.textContent
         let mvalue = mydatajson[1][value]
         if (mvalue.includes(defvalue)) {
-            element.style.display = ""
-            element.isshow = true
+            chip.isshow = true
+            chip.style.display = "flex"
         } else {
-            element.style.display = "none"
-            element.isshow = false
+            chip.isshow = false
+            chip.style.display = "none"
         }
     });
+    handleResize()
 
     //清空数据
     search_heroedit.value = ""
@@ -3568,20 +3816,16 @@ document.getElementsByClassName('color-img')[0].addEventListener('input', functi
     }
 })
 
-document.getElementsByClassName("colorbutton")[0].onclick = function () {
 
-    if (color_message != "null") {
-        mdui_snackbar({
-            message: color_message,
-            action: "我知道了",
-            onActionClick: () => console.log("click action button")
-        });
-        return
-    }
+document.querySelector(".color-scheme").addEventListener("open", function () {
+    document.querySelector(".color_outlined").style.display = "none"
+    document.querySelector(".color_filled").style.display = "unset"
+})
 
-    localStorage.setItem("wzzdy_mythemecolor", "null")
-    mdui.removeColorScheme()
-}
+document.querySelector(".color-scheme").addEventListener("close", function () {
+    document.querySelector(".color_outlined").style.display = "unset"
+    document.querySelector(".color_filled").style.display = "none"
+})
 
 function bindsearch(view) {
     view.addEventListener("input", function () {
@@ -3627,11 +3871,12 @@ search_heroedit.addEventListener("input", function () {
         }
         let value = childnodes[i].textContent;
         if (value.includes(view.value)) {
-            childnodes[i].style.display = "";
+            childnodes[i].style.display = "flex";
         } else {
             childnodes[i].style.display = "none";
         }
     }
+    handleResize()
 })
 
 var mysnackbar = false;
