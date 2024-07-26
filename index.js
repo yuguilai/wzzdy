@@ -761,7 +761,7 @@ allbutton[1].onclick = function () {
                 onClick: () => {
                     if (window.openurl) {
                         var openurl = window.openurl
-                        getShortLink(window.location.origin + "wzzdy/Smoba.html?data=" + openurl)
+                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
                             .then(shortLink => {
                                 murl = processLink(shortLink);
                                 work_message = "null"
@@ -771,7 +771,7 @@ allbutton[1].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        let url = replaceContent(myedit.value, window.location.origin + "wzzdy/data.html?" + murl, 0, openurl)
+                                        let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
                                         showqr(url, function () {
                                             复制文本(url)
                                         })
@@ -791,7 +791,7 @@ allbutton[1].onclick = function () {
                             });
                     } else {
                         生成链接(function (openurl, tiptext) {
-                            getShortLink(window.location.origin + "wzzdy/Smoba.html?data=" + openurl)
+                            getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
                                 .then(shortLink => {
                                     murl = processLink(shortLink);
                                     work_message = "null"
@@ -801,7 +801,7 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            let url = replaceContent(myedit.value, window.location.origin + "wzzdy/data.html?" + murl, 0, openurl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 0, openurl)
                                             showqr(url, function () {
                                                 复制文本(url)
                                                 打开链接(openurl)
@@ -845,7 +845,7 @@ allbutton[1].onclick = function () {
                                 return false
                             }
                             let openurl = "tencentmsdk" + appid + "://?gamedata=" + gamedata
-                            getShortLink(window.location.origin + "/opengame.html?data=" + openurl)
+                            getShortLink(window.location.origin + "/wzzdy/opengame.html?data=" + openurl)
                                 .then(shortLink => {
                                     murl = processLink(shortLink);
                                     work_message = "null"
@@ -855,7 +855,7 @@ allbutton[1].onclick = function () {
                                         confirmText: "确认",
                                         cancelText: "取消",
                                         onConfirm: () => {
-                                            let url = replaceContent(myedit.value, window.location.origin + "wzzdy/data.html?" + murl, 1, openurl)
+                                            let url = replaceContent(myedit.value, window.location.origin + "/wzzdy/data.html?" + murl, 1, openurl)
                                             复制文本(url)
                                         },
                                         onCancel: () => console.log("canceled"),
@@ -1021,7 +1021,7 @@ allbutton[5].onclick = function () {
 
                         var openurl = "tencentmsdk1104466820://?gamedata=" + game_data
 
-                        getShortLink(window.location.origin + "wzzdy/Smoba.html?data=" + openurl)
+                        getShortLink(window.location.origin + "/wzzdy/Smoba.html?data=" + openurl)
                             .then(shortLink => {
                                 murl = processLink(shortLink);
                                 work_message = "null"
@@ -1031,7 +1031,7 @@ allbutton[5].onclick = function () {
                                     confirmText: "确认",
                                     cancelText: "取消",
                                     onConfirm: () => {
-                                        复制文本(window.location.origin + "wzzdy/data.html?" + murl + "\n该链接由原王者赛宝房间链接" + value + "转换 可防止卡房 本链接由https://yuguilai.github.io/wzzdy的 赛宝还原 转换")
+                                        复制文本(window.location.origin + "/wzzdy/data.html?" + murl + "\n该链接由原王者赛宝房间链接" + value + "转换 可防止卡房 本链接由https://yuguilai.github.io/wzzdy的 赛宝还原 转换")
                                     },
                                     onCancel: () => console.log("canceled"),
                                 });
