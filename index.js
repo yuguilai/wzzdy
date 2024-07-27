@@ -825,12 +825,14 @@ onClick: () => {
                         description: "出现错误 无法请求 请检查网络",
                         confirmText: "我知道了",
                         onConfirm: () => console.log("confirmed"),
-                    });
-                    console.log(error);
-                });
-        });
-    }
-},
+                                    });
+                                    console.log(error)
+                                });
+                        })
+                    }
+                },
+            },
+            {
                 text: "转换法",
                 onClick: () => {
                     mdui.prompt({
