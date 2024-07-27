@@ -141,7 +141,7 @@
             max-width: 50vw;
         }
 
-        mdui-card > mdui-dropdown > mdui-menu {
+        mdui-card>mdui-dropdown>mdui-menu {
             margin-top: -10px !important;
         }
 
@@ -274,9 +274,9 @@
 
 </head>
 
-<body style="margin:auto;width:100vmin">
+<body>
 
-    <mdui-layout>
+    <mdui-layout style="margin:auto;max-width:100vmin">
         <mdui-top-app-bar class="example-top-app-bar" variant="small"
             style="position: absolute; top: 0px; right: 0px; left: 0px;">
             <mdui-top-app-bar-title>加载中</mdui-top-app-bar-title>
@@ -309,247 +309,245 @@
         </mdui-top-app-bar>
 
 
-        <mdui-layout-main class="example-layout-main" style="padding: 64px 0px 0px;">
+        <mdui-layout-main class="example-layout-main" style="padding: 64px 0px 0px">
 
-            <div style="display: grid;">
-                <mdui-card style="visibility:hidden" variant="outlined" style="margin: 20px 0 20px 0">
+            <mdui-card style="visibility:hidden" variant="outlined" style="margin: 20px 0 20px 0">
 
-                    <mdui-segmented-button-group full-width selects="single" style="margin: 10px 10px;">
-                        <mdui-segmented-button value="zsf" type="button"
-                            class="mdui-segmented-button-first">正式服</mdui-segmented-button>
-                        <mdui-segmented-button value="tyf" type="button"
-                            class="mdui-segmented-button-last">体验服</mdui-segmented-button>
-                    </mdui-segmented-button-group>
+                <mdui-segmented-button-group full-width selects="single" style="margin: 10px 10px;">
+                    <mdui-segmented-button value="zsf" type="button"
+                        class="mdui-segmented-button-first">正式服</mdui-segmented-button>
+                    <mdui-segmented-button value="tyf" type="button"
+                        class="mdui-segmented-button-last">体验服</mdui-segmented-button>
+                </mdui-segmented-button-group>
 
-                    <mdui-dropdown trigger="click" placement="auto">
-                        <mdui-text-field slot="trigger" label="地图模式" readonly variant="outlined"
-                            class="myedit"></mdui-text-field>
-                        <mdui-menu class="mymenu" submenu-trigger="click hover">
-                            <mdui-text-field variant="outlined" label="搜索内容" class="search_edit"
-                                autosize></mdui-text-field></mdui-menu>
-                    </mdui-dropdown>
+                <mdui-dropdown trigger="click" placement="auto">
+                    <mdui-text-field slot="trigger" label="地图模式" readonly variant="outlined"
+                        class="myedit"></mdui-text-field>
+                    <mdui-menu class="mymenu" submenu-trigger="click hover">
+                        <mdui-text-field variant="outlined" label="搜索内容" class="search_edit"
+                            autosize></mdui-text-field></mdui-menu>
+                </mdui-dropdown>
 
-                    <mdui-dropdown trigger="click" placement="auto">
-                        <mdui-text-field slot="trigger" label="禁用英雄列表" readonly variant="outlined"
-                            class="myedit"></mdui-text-field>
-                        <mdui-menu class="mymenu" submenu-trigger="click hover">
-                            <mdui-text-field variant="outlined" label="搜索内容" class="search_edit"
-                                autosize></mdui-text-field></mdui-menu>
-                    </mdui-dropdown>
+                <mdui-dropdown trigger="click" placement="auto">
+                    <mdui-text-field slot="trigger" label="禁用英雄列表" readonly variant="outlined"
+                        class="myedit"></mdui-text-field>
+                    <mdui-menu class="mymenu" submenu-trigger="click hover">
+                        <mdui-text-field variant="outlined" label="搜索内容" class="search_edit"
+                            autosize></mdui-text-field></mdui-menu>
+                </mdui-dropdown>
 
-                    <mdui-dropdown trigger="click" placement="auto">
-                        <mdui-text-field slot="trigger" label="自定义配置" readonly variant="outlined"
-                            class="myedit"></mdui-text-field>
-                        <mdui-menu class="mymenu" submenu-trigger="click hover">
-                            <mdui-text-field variant="outlined" label="搜索内容" class="search_edit"
-                                autosize></mdui-text-field></mdui-menu>
-                    </mdui-dropdown>
+                <mdui-dropdown trigger="click" placement="auto">
+                    <mdui-text-field slot="trigger" label="自定义配置" readonly variant="outlined"
+                        class="myedit"></mdui-text-field>
+                    <mdui-menu class="mymenu" submenu-trigger="click hover">
+                        <mdui-text-field variant="outlined" label="搜索内容" class="search_edit"
+                            autosize></mdui-text-field></mdui-menu>
+                </mdui-dropdown>
 
-                    <div class="mydiv">
-                        <mdui-button class="mybutton" icon="games">启动</mdui-button>
-                        <mdui-button class="mybutton" icon="link">复制链接</mdui-button>
-                        <mdui-button class="mybutton" icon="book">分享教程</mdui-button>
-                        <mdui-button class="mybutton" icon="open_in_new">房间列表</mdui-button>
-                        <mdui-button class="mybutton" href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=T_eBRy-xQV9yPsEKwog_R4yrM6PuVF9O&authKey=2ZEXFqlAPcEBGKE2JEcdK6JFBJof1SeaO5zGtkfdWqZgYygyNHYC%2FoFTobeqJP3r&noverify=0&group_code=943960501">Q群</mdui-button>
+                <div class="mydiv">
+                    <mdui-button class="mybutton" icon="games">启动</mdui-button>
+                    <mdui-button class="mybutton" icon="link">复制链接</mdui-button>
+                    <mdui-button class="mybutton" icon="book">分享教程</mdui-button>
+                    <mdui-button class="mybutton" icon="open_in_new">房间列表</mdui-button>
+                    <mdui-button class="mybutton" href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=T_eBRy-xQV9yPsEKwog_R4yrM6PuVF9O&authKey=2ZEXFqlAPcEBGKE2JEcdK6JFBJof1SeaO5zGtkfdWqZgYygyNHYC%2FoFTobeqJP3r&noverify=0&group_code=943960501">Q群</mdui-button>
                         <mdui-button class="mybutton" icon="auto_awesome">赛宝还原</mdui-button>
                         <mdui-button   href="http://yuguilai.ysupan.com"  >其他资源</mdui-button>
+                </div>
 
+
+                <mdui-dialog close-on-overlay-click class="example-dialog" fullscreen>
+                    <mdui-top-app-bar slot="header" variant="small">
+
+                        <mdui-top-app-bar-title>禁用英雄</mdui-top-app-bar-title>
+                        <mdui-button variant="text">关闭</mdui-button>
+                    </mdui-top-app-bar>
+
+                    <div class="mydiv">
+                        <mdui-dropdown trigger="click" placement="auto">
+                            <mdui-button slot="trigger" variant="filled" class="herobutton">选择方案</mdui-button>
+                            <mdui-menu class="mymenu" submenu-trigger="click hover">
+                                <mdui-text-field variant="outlined" label="搜索内容" clearable class="search_edit"
+                                    autosize></mdui-text-field></mdui-menu>
+                        </mdui-dropdown>
+                        <mdui-button variant="filled" class="herobutton">新建方案</mdui-button>
+                        <mdui-button variant="filled" class="herobutton">复制方案</mdui-button>
+                        <mdui-button variant="filled" class="herobutton">导入方案</mdui-button>
+                        <mdui-button variant="filled" class="herobutton">删除方案</mdui-button>
+                        <mdui-button variant="filled" class="herobutton">重命名方案</mdui-button>
+                        <mdui-button variant="filled" class="herobutton">全选</mdui-button>
+                        <mdui-button variant="filled" class="herobutton">反选</mdui-button>
+                        <mdui-button variant="filled" class="herobutton">保存方案</mdui-button>
+                        <mdui-button variant="filled" class="herobutton">随机禁用</mdui-button>
                     </div>
 
+                    <mdui-text-field variant="outlined" label="搜索内容" clearable
+                        class="search_heroedit"></mdui-text-field>
 
-                    <mdui-dialog close-on-overlay-click class="example-dialog" fullscreen>
-                        <mdui-top-app-bar slot="header" variant="small">
+                    <p>如显示不全可向下滑动查看更多内容 点击选择方案选择保存的方案</p>
 
-                            <mdui-top-app-bar-title>禁用英雄</mdui-top-app-bar-title>
-                            <mdui-button variant="text">关闭</mdui-button>
-                        </mdui-top-app-bar>
+                    <mdui-radio-group value="" class="heromode">
+                        <mdui-radio value="">全部</mdui-radio>
+                        <mdui-radio value="1">战士</mdui-radio>
+                        <mdui-radio value="2">法师</mdui-radio>
+                        <mdui-radio value="3">坦克</mdui-radio>
+                        <mdui-radio value="4">刺客</mdui-radio>
+                        <mdui-radio value="5">射手</mdui-radio>
+                        <mdui-radio value="6">辅助</mdui-radio>
+                    </mdui-radio-group>
 
-                        <div class="mydiv">
-                            <mdui-dropdown trigger="click" placement="auto">
-                                <mdui-button slot="trigger" variant="filled" class="herobutton">选择方案</mdui-button>
-                                <mdui-menu class="mymenu" submenu-trigger="click hover">
-                                    <mdui-text-field variant="outlined" label="搜索内容" clearable class="search_edit"
-                                        autosize></mdui-text-field></mdui-menu>
-                            </mdui-dropdown>
-                            <mdui-button variant="filled" class="herobutton">新建方案</mdui-button>
-                            <mdui-button variant="filled" class="herobutton">复制方案</mdui-button>
-                            <mdui-button variant="filled" class="herobutton">导入方案</mdui-button>
-                            <mdui-button variant="filled" class="herobutton">删除方案</mdui-button>
-                            <mdui-button variant="filled" class="herobutton">重命名方案</mdui-button>
-                            <mdui-button variant="filled" class="herobutton">全选</mdui-button>
-                            <mdui-button variant="filled" class="herobutton">反选</mdui-button>
-                            <mdui-button variant="filled" class="herobutton">保存方案</mdui-button>
-                            <mdui-button variant="filled" class="herobutton">随机禁用</mdui-button>
-                        </div>
+                    <div class="myherolist"></div>
 
-                        <mdui-text-field variant="outlined" label="搜索内容" clearable
-                            class="search_heroedit"></mdui-text-field>
+                </mdui-dialog>
 
-                        <p>如显示不全可向下滑动查看更多内容 点击选择方案选择保存的方案</p>
+                <mdui-dialog close-on-overlay-click class="custom-dialog" fullscreen>
+                    <mdui-top-app-bar slot="header" variant="small">
 
-                        <mdui-radio-group value="" class="heromode">
-                            <mdui-radio value="">全部</mdui-radio>
-                            <mdui-radio value="1">战士</mdui-radio>
-                            <mdui-radio value="2">法师</mdui-radio>
-                            <mdui-radio value="3">坦克</mdui-radio>
-                            <mdui-radio value="4">刺客</mdui-radio>
-                            <mdui-radio value="5">射手</mdui-radio>
-                            <mdui-radio value="6">辅助</mdui-radio>
-                        </mdui-radio-group>
+                        <mdui-top-app-bar-title>自定义配置</mdui-top-app-bar-title>
+                        <mdui-button variant="text">关闭</mdui-button>
+                    </mdui-top-app-bar>
 
-                        <div class="myherolist"></div>
+                    <div class="mydiv">
+                        <mdui-dropdown trigger="click" placement="auto">
+                            <mdui-button slot="trigger" variant="filled" name value
+                                class="custombutton">选择方案</mdui-button>
+                            <mdui-menu class="mymenu" submenu-trigger="click hover">
+                                <mdui-text-field variant="outlined" label="搜索内容" clearable class="search_edit"
+                                    autosize></mdui-text-field></mdui-menu>
+                        </mdui-dropdown>
+                        <mdui-button variant="filled" class="custombutton">新建方案</mdui-button>
+                        <mdui-button variant="filled" class="custombutton">复制方案</mdui-button>
+                        <mdui-button variant="filled" class="custombutton">导入方案</mdui-button>
+                        <mdui-button variant="filled" class="custombutton">删除方案</mdui-button>
+                        <mdui-button variant="filled" class="custombutton">重命名方案</mdui-button>
+                        <mdui-button variant="filled" class="custombutton">高级设置</mdui-button>
+                        <mdui-button variant="filled" class="custombutton">保存方案</mdui-button>
+                        <mdui-button variant="filled" class="custombutton">还原</mdui-button>
+                    </div>
 
+                    <p>如显示不全可向下滑动查看更多内容 点击选择方案选择保存的方案</p>
+
+                    <mdui-tabs value="tab-1">
+                        <mdui-tab value="tab-1">英雄属性</mdui-tab>
+                        <mdui-tab value="tab-2">兵线与野怪</mdui-tab>
+                        <mdui-tab value="tab-3">防御塔与水晶</mdui-tab>
+
+                        <mdui-tab-panel slot="panel" value="tab-1" class="CustomSettings">
+                            <mdui-radio-group value="all" class="setmode">
+                                <mdui-radio value="all">全局统一</mdui-radio>
+                                <mdui-radio value="zhenying">按阵营</mdui-radio>
+                                <mdui-radio value="xvanshou">按选手</mdui-radio>
+                            </mdui-radio-group>
+                            <mdui-radio-group value="blue" style="width: 100%;display:none" class="zhenying_xz">
+                                <mdui-radio value="blue" checked tabindex="0">蓝方</mdui-radio>
+                                <mdui-radio value="red" checked tabindex="0">红方</mdui-radio>
+                            </mdui-radio-group>
+
+
+                            <div class="putong">
+                            </div>
+
+                            <div class="zhenying" style="display:none">
+                                <div class="zhenying_blue"></div>
+                                <div class="zhenying_red"></div>
+                            </div>
+
+                            <div class="xvanshou" style="display:none">
+                                <div class="xvanshou_blue">
+                                    <mdui-radio-group style="width: 100%" class="blueheronum">
+                                        <mdui-radio value="1" checked tabindex="0">1号</mdui-radio>
+                                        <mdui-radio value="2" checked tabindex="0">2号</mdui-radio>
+                                        <mdui-radio value="3" checked tabindex="0">3号</mdui-radio>
+                                        <mdui-radio value="4" checked tabindex="0">4号</mdui-radio>
+                                        <mdui-radio value="5" checked tabindex="0">5号</mdui-radio>
+                                    </mdui-radio-group>
+                                </div>
+                                <div class="xvanshou_red">
+                                    <mdui-radio-group style="width: 100%" class="redheronum">
+                                        <mdui-radio value="1" checked tabindex="0">1号</mdui-radio>
+                                        <mdui-radio value="2" checked tabindex="0">2号</mdui-radio>
+                                        <mdui-radio value="3" checked tabindex="0">3号</mdui-radio>
+                                        <mdui-radio value="4" checked tabindex="0">4号</mdui-radio>
+                                        <mdui-radio value="5" checked tabindex="0">5号</mdui-radio>
+                                    </mdui-radio-group>
+                                </div>
+                            </div>
+
+
+
+                        </mdui-tab-panel>
+                        <mdui-tab-panel slot="panel" value="tab-2" class="CustomSettings">
+
+
+                            <mdui-radio-group value="all" class="setmode">
+                                <mdui-radio value="all">全局统一</mdui-radio>
+                                <mdui-radio value="zhenying">按阵营</mdui-radio>
+                            </mdui-radio-group>
+                            <mdui-radio-group value="blue" style="width: 100%;display:none" class="zhenying_xz">
+                                <mdui-radio value="blue" checked tabindex="0">蓝方</mdui-radio>
+                                <mdui-radio value="red" checked tabindex="0">红方</mdui-radio>
+                            </mdui-radio-group>
+
+                            <div class="putong">
+                            </div>
+
+                            <div class="zhenying" style="display:none">
+                                <div class="zhenying_blue"></div>
+                                <div class="zhenying_red"></div>
+                            </div>
+
+                        </mdui-tab-panel>
+                        <mdui-tab-panel slot="panel" value="tab-3" class="CustomSettings">
+
+                            <mdui-radio-group value="all" class="setmode">
+                                <mdui-radio value="all">全局统一</mdui-radio>
+                                <mdui-radio value="zhenying">按阵营</mdui-radio>
+                            </mdui-radio-group>
+                            <mdui-radio-group value="blue" style="width: 100%;display:none" class="zhenying_xz">
+                                <mdui-radio value="blue" checked tabindex="0">蓝方</mdui-radio>
+                                <mdui-radio value="red" checked tabindex="0">红方</mdui-radio>
+                            </mdui-radio-group>
+
+                            <div class="putong">
+                            </div>
+
+                            <div class="zhenying" style="display:none">
+                                <div class="zhenying_blue"></div>
+                                <div class="zhenying_red"></div>
+                            </div>
+
+                        </mdui-tab-panel>
+                    </mdui-tabs>
+
+                    <mdui-dialog class="suijitest" headline="提示"
+                        description='本弹窗一共四个输入框可供输入 如显示不全可向下滑动查看更多内容'><mdui-text-field variant="filled" name=""
+                            style="padding-top: 10px;" clearable label="地图模式"></mdui-text-field><mdui-text-field
+                            variant="filled" name="" clearable style="padding-top: 10px;"
+                            label="禁用英雄"></mdui-text-field>
+
+                        <mdui-text-field variant="filled" name="" style="padding-top: 10px;" readonly value="点击编辑配置"
+                            label="随机生成数据"></mdui-text-field><mdui-text-field variant="filled" name="" readonly
+                            value="点击编辑配置" style="padding-top: 10px;" label="随机打乱数据"></mdui-text-field><mdui-button
+                            slot="action" variant="text" name="" value=""
+                            onclick='document.getElementsByClassName("suijitest")[0].open = false'
+                            type="button">取消</mdui-button><mdui-button slot="action" variant="text" name="" value=""
+                            onclick='entclick()' type="button">确认</mdui-button>
                     </mdui-dialog>
 
-                    <mdui-dialog close-on-overlay-click class="custom-dialog" fullscreen>
-                        <mdui-top-app-bar slot="header" variant="small">
 
-                            <mdui-top-app-bar-title>自定义配置</mdui-top-app-bar-title>
-                            <mdui-button variant="text">关闭</mdui-button>
-                        </mdui-top-app-bar>
-
-                        <div class="mydiv">
-                            <mdui-dropdown trigger="click" placement="auto">
-                                <mdui-button slot="trigger" variant="filled" name value
-                                    class="custombutton">选择方案</mdui-button>
-                                <mdui-menu class="mymenu" submenu-trigger="click hover">
-                                    <mdui-text-field variant="outlined" label="搜索内容" clearable class="search_edit"
-                                        autosize></mdui-text-field></mdui-menu>
-                            </mdui-dropdown>
-                            <mdui-button variant="filled" class="custombutton">新建方案</mdui-button>
-                            <mdui-button variant="filled" class="custombutton">复制方案</mdui-button>
-                            <mdui-button variant="filled" class="custombutton">导入方案</mdui-button>
-                            <mdui-button variant="filled" class="custombutton">删除方案</mdui-button>
-                            <mdui-button variant="filled" class="custombutton">重命名方案</mdui-button>
-                            <mdui-button variant="filled" class="custombutton">高级设置</mdui-button>
-                            <mdui-button variant="filled" class="custombutton">保存方案</mdui-button>
-                            <mdui-button variant="filled" class="custombutton">还原</mdui-button>
-                        </div>
-
-                        <p>如显示不全可向下滑动查看更多内容 点击选择方案选择保存的方案</p>
-
-                        <mdui-tabs value="tab-1">
-                            <mdui-tab value="tab-1">英雄属性</mdui-tab>
-                            <mdui-tab value="tab-2">兵线与野怪</mdui-tab>
-                            <mdui-tab value="tab-3">防御塔与水晶</mdui-tab>
-
-                            <mdui-tab-panel slot="panel" value="tab-1" class="CustomSettings">
-                                <mdui-radio-group value="all" class="setmode">
-                                    <mdui-radio value="all">全局统一</mdui-radio>
-                                    <mdui-radio value="zhenying">按阵营</mdui-radio>
-                                    <mdui-radio value="xvanshou">按选手</mdui-radio>
-                                </mdui-radio-group>
-                                <mdui-radio-group value="blue" style="width: 100%;display:none" class="zhenying_xz">
-                                    <mdui-radio value="blue" checked tabindex="0">蓝方</mdui-radio>
-                                    <mdui-radio value="red" checked tabindex="0">红方</mdui-radio>
-                                </mdui-radio-group>
-
-
-                                <div class="putong">
-                                </div>
-
-                                <div class="zhenying" style="display:none">
-                                    <div class="zhenying_blue"></div>
-                                    <div class="zhenying_red"></div>
-                                </div>
-
-                                <div class="xvanshou" style="display:none">
-                                    <div class="xvanshou_blue">
-                                        <mdui-radio-group style="width: 100%" class="blueheronum">
-                                            <mdui-radio value="1" checked tabindex="0">1号</mdui-radio>
-                                            <mdui-radio value="2" checked tabindex="0">2号</mdui-radio>
-                                            <mdui-radio value="3" checked tabindex="0">3号</mdui-radio>
-                                            <mdui-radio value="4" checked tabindex="0">4号</mdui-radio>
-                                            <mdui-radio value="5" checked tabindex="0">5号</mdui-radio>
-                                        </mdui-radio-group>
-                                    </div>
-                                    <div class="xvanshou_red">
-                                        <mdui-radio-group style="width: 100%" class="redheronum">
-                                            <mdui-radio value="1" checked tabindex="0">1号</mdui-radio>
-                                            <mdui-radio value="2" checked tabindex="0">2号</mdui-radio>
-                                            <mdui-radio value="3" checked tabindex="0">3号</mdui-radio>
-                                            <mdui-radio value="4" checked tabindex="0">4号</mdui-radio>
-                                            <mdui-radio value="5" checked tabindex="0">5号</mdui-radio>
-                                        </mdui-radio-group>
-                                    </div>
-                                </div>
-
-
-
-                            </mdui-tab-panel>
-                            <mdui-tab-panel slot="panel" value="tab-2" class="CustomSettings">
-
-
-                                <mdui-radio-group value="all" class="setmode">
-                                    <mdui-radio value="all">全局统一</mdui-radio>
-                                    <mdui-radio value="zhenying">按阵营</mdui-radio>
-                                </mdui-radio-group>
-                                <mdui-radio-group value="blue" style="width: 100%;display:none" class="zhenying_xz">
-                                    <mdui-radio value="blue" checked tabindex="0">蓝方</mdui-radio>
-                                    <mdui-radio value="red" checked tabindex="0">红方</mdui-radio>
-                                </mdui-radio-group>
-
-                                <div class="putong">
-                                </div>
-
-                                <div class="zhenying" style="display:none">
-                                    <div class="zhenying_blue"></div>
-                                    <div class="zhenying_red"></div>
-                                </div>
-
-                            </mdui-tab-panel>
-                            <mdui-tab-panel slot="panel" value="tab-3" class="CustomSettings">
-
-                                <mdui-radio-group value="all" class="setmode">
-                                    <mdui-radio value="all">全局统一</mdui-radio>
-                                    <mdui-radio value="zhenying">按阵营</mdui-radio>
-                                </mdui-radio-group>
-                                <mdui-radio-group value="blue" style="width: 100%;display:none" class="zhenying_xz">
-                                    <mdui-radio value="blue" checked tabindex="0">蓝方</mdui-radio>
-                                    <mdui-radio value="red" checked tabindex="0">红方</mdui-radio>
-                                </mdui-radio-group>
-
-                                <div class="putong">
-                                </div>
-
-                                <div class="zhenying" style="display:none">
-                                    <div class="zhenying_blue"></div>
-                                    <div class="zhenying_red"></div>
-                                </div>
-
-                            </mdui-tab-panel>
-                        </mdui-tabs>
-
-                        <mdui-dialog class="suijitest" headline="提示"
-                            description='本弹窗一共四个输入框可供输入 如显示不全可向下滑动查看更多内容'><mdui-text-field variant="filled" name=""
-                                style="padding-top: 10px;" clearable label="地图模式"></mdui-text-field><mdui-text-field
-                                variant="filled" name="" clearable style="padding-top: 10px;"
-                                label="禁用英雄"></mdui-text-field>
-
-                            <mdui-text-field variant="filled" name="" style="padding-top: 10px;" readonly value="点击编辑配置"
-                                label="随机生成数据"></mdui-text-field><mdui-text-field variant="filled" name="" readonly
-                                value="点击编辑配置" style="padding-top: 10px;" label="随机打乱数据"></mdui-text-field><mdui-button
-                                slot="action" variant="text" name="" value=""
-                                onclick='document.getElementsByClassName("suijitest")[0].open = false'
-                                type="button">取消</mdui-button><mdui-button slot="action" variant="text" name="" value=""
-                                onclick='entclick()' type="button">确认</mdui-button>
-                        </mdui-dialog>
-
-
-                        <mdui-dialog class="peiedit" headline="高级功能设置" description='点击下方即可编辑'>
-                            <mdui-button slot="action" variant="text" name="" value=""
-                                onclick='document.getElementsByClassName("peiedit")[0].open = false'
-                                type="button">返回</mdui-button>
-                        </mdui-dialog>
-
+                    <mdui-dialog class="peiedit" headline="高级功能设置" description='点击下方即可编辑'>
+                        <mdui-button slot="action" variant="text" name="" value=""
+                            onclick='document.getElementsByClassName("peiedit")[0].open = false'
+                            type="button">返回</mdui-button>
                     </mdui-dialog>
 
-                </mdui-card>
+                </mdui-dialog>
 
-            </div>
+            </mdui-card>
+
 
         </mdui-layout-main>
     </mdui-layout>
+
 
     <script src="myjson.js"></script>
     <script defer src="index.js"></script>
